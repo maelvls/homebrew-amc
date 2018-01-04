@@ -438,11 +438,13 @@ class AutoMultipleChoice < Formula
       s.gsub! /DOCBOOK_XHTML_XSL *=.*/, "DOCBOOK_XHTML_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/xhtml/docbook.xsl"
       s.gsub! /DOCBOOK_DTD *=.*/, "DOCBOOK_DTD = #{Formula["docbook"].prefix}/docbook/xml/4.5/docbookx.dtd"
     end
-    # I had issues with _cvConvertImage not being found (opencv). Actually,
-    # opencv >= 3.1.0 moved cvConvertImage from libopencv_highgui to
-    # libopencv_imgcodecs. So we have to add -lopencv_imgcodecs.
+    # I had issues (new resolved in 1.3.0.2132) with _cvConvertImage not being
+    # found (opencv). Actually, opencv >= 3.1.0 moved cvConvertImage from
+    # libopencv_highgui to libopencv_imgcodecs. So we have to add -lopencv_imgcodecs.
     # See https://stackoverflow.com/questions/27552217/cvloadimage-undefined-symbols-linking-issue
-    inreplace "Makefile-macports.conf", /GCC_OPENCV_LIBS.*=/, "GCC_OPENCV_LIBS = -lopencv_imgcodecs "
+
+    # This is just in case anything goes wrong in pdflatex; by default,
+    # it hangs indefenitely.
     inreplace ["doc/Makefile","doc/sty/Makefile"], "pdflatex", "pdflatex -halt-on-error -interaction=nonstopmode"
     inreplace ["doc/Makefile"], "xelatex", "xelatex -halt-on-error -interaction=nonstopmode"
 
@@ -735,3 +737,32 @@ end
 #         print "end\n";
 #     }
 # }
+
+__END__
+diff -r 698b50715961 AMC-perl/AMC/Basic.pm.in
+--- a/AMC-perl/AMC/Basic.pm.in	Tue Jan 02 18:04:21 2018 +0100
++++ b/AMC-perl/AMC/Basic.pm.in	Thu Jan 04 15:32:09 2018 +0100
+@@ -91,6 +91,7 @@
+     'icons'=>"@/ICONSDIR/@",
+     'models'=>"@/MODELSDIR/@",
+     'doc/auto-multiple-choice'=>"@/DOCDIR/@",
++    'locale' => "@/LOCALEDIR/@"
+     );
+ 
+ sub amc_specdir {
+@@ -570,14 +571,7 @@
+ 
+ sub use_gettext {
+     $localisation=Locale::gettext->domain("auto-multiple-choice");
+-    # For portable installs
+-    if(! -f ($localisation->dir()."/fr/LC_MESSAGES/auto-multiple-choice.mo")) {
+-	$localisation->dir(amc_adapt_path(
+-			       'locals'=>['locale'],
+-			       'alt'=>[$localisation->dir()],
+-			   ));
+-    }
+-
++    $localisation->dir(amc_specdir('locale'));
+     init_translations();
+ }
+ 
