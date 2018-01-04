@@ -23,8 +23,13 @@ Notes:
          mkdir -p $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC
          ln -s $(brew --prefix auto-multiple-choice)/share/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
 
-- the PDF documentation and .tex templates (_models_) are not built by default. Use `--with-doc` to them (I disabled it as it didn't work because of a problem with the japanese fonts)
-- ~~you can install the dev version using `--HEAD`~~ installing with `--HEAD` is not working for now because of a [`brew` bug](https://github.com/Homebrew/brew/issues/3628)
+3. the PDF documentation and .tex templates (_models_) are not built by
+   default. Use `--with-doc` to them (I disabled it as it didn't work
+   because of a problem with the japanese fonts). But you can download every
+   PDF at https://download.auto-multiple-choice.net.
+4. ~~you can install the dev version using `--HEAD`~~ installing with
+   `--HEAD` is not working for now because of a [`brew`
+   bug](https://github.com/Homebrew/brew/issues/3628)
 
 [macports]: https://github.com/macports/macports-ports/blob/d894802c28bda4045d956f327b3d5af89576bb22/x11/auto-multiple-choice/Portfile
 
