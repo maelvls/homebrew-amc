@@ -6,7 +6,8 @@ class AutoMultipleChoice < Formula
   version "1.3.0.2132"
   head "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice", :using => :hg
 
-  option "with-doc", "Also generate PDF documentation and .tex templates (i.e., models)"
+  option "with-doc", "Also generate documentation (available online)"
+
   depends_on :tex
   depends_on :x11
   depends_on "perl"
@@ -17,7 +18,6 @@ class AutoMultipleChoice < Formula
   depends_on "netpbm"
   depends_on "poppler"
   depends_on "opencv"
-  # depends_on "graphicsmagick" # apparently, you can use either imagemagick or graphicsmagick
   depends_on "imagemagick@6" # for Image::Magick (perl)
   depends_on "glib" # for Glib (perl)
   depends_on "libffi" # for Glib::Object::Introspection (perl)
@@ -25,11 +25,13 @@ class AutoMultipleChoice < Formula
   depends_on "libxml2" => :build # for XML::LibXML (perl) which is only used during build
   depends_on "libnotify" # for Desktop::Notify (perl)
   depends_on "dbus" # for Desktop::Notify (perl)
-  depends_on :python => :build if build.with?("doc")
-  depends_on "docbook" => :build if build.with?("doc") # for doc
-  depends_on "docbook-xsl" => :build if build.with?("doc") # for doc
-  depends_on "gnu-sed" => :build if build.with?("doc")
-  depends_on "shared-mime-info"
+  depends_on :python => :build if build.with?("doc") # for dblatex
+  depends_on "docbook" => :build if build.with?("doc") # for dblatex
+  depends_on "docbook-xsl" => :build if build.with?("doc") # for dblatex
+  depends_on "gnu-sed" => :build if build.with?("doc") # for doc/Makefile
+
+  # Note that there will be warnings about 'shared-mime-info' missing,
+  # but this is normal: macos cannot handle these.
 
   patch :DATA
 
@@ -411,13 +413,18 @@ class AutoMultipleChoice < Formula
     ENV["PERL_MM_USE_DEFAULT"] = "1" # for preventing cpan from asking questions
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].opt_lib}/pkgconfig" # for Glib::Object::Introspection
 
+    # Because of bug with sed (GNU/non-GNU?) the .tex files have a missing '\'
+    # ('usepackage{xeCJK}' instead of '\usepackage{xeCJK}').
+    inreplace "doc/Makefile", "\\\\usepackage{xeCJK}", "\\\\\\usepackage{xeCJK}"
+
+    # The Libertine font provided by 'brew cask' is 'Linux Libertine' (no O)
+    inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
+      "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
+
     if build.with? "doc"
-      # Because of bug with sed (GNU/non-GNU?) the .tex files have a missing '\'
-      # ('usepackage{xeCJK}' instead of '\usepackage{xeCJK}').
-      inreplace "doc/Makefile", "\\\\usepackage{xeCJK}", "\\\\\\usepackage{xeCJK}"
+      # Install dblatex which is required for building the documentation
       ENV.prepend_path "PATH", buildpath/"bin" # for using 'dblatex' during build
       ENV.prepend_create_path "TEXMFHOME", buildpath/"texmf"
-      ENV.prepend_path "PATH", buildpath/"bin" # for dblatex during the build
       resource("dblatex").stage do
         # The 'dblatex' python script is only useful during build. Requires XML::LibXML.
         system "python", "setup.py", "install", "--prefix=#{buildpath}", "--install-scripts=#{buildpath}/bin"
@@ -426,14 +433,16 @@ class AutoMultipleChoice < Formula
         mv Dir[buildpath/"share/dblatex/latex/{style,misc}/*"], buildpath/"texmf/tex/latex/dblatex"
       end
     else
-      inreplace "Makefile" do |s|
-        s.gsub! /^install:(.*)install_doc(.*)/, 'install: \1 \2'
+      # Remove the documentation (pdf, html) from the things to be produced
+      inreplace ["Makefile"] do |s|
         s.gsub! /FROM_IN *=.*/, "FROM_IN = auto-multiple-choice $(GLADE_FROMIN) AMC-gui.pl AMC-latex-link.pl AMC-perl/AMC/Basic.pm $(DTX)"
-        s.gsub! /\$\(MAKE\) -C doc$/, ""
       end
     end
+
     # Make sure we do not miss any silent error by setting 'set -e'.
-    inreplace "doc/Makefile", "export TEXINPUTS=", "set -e; export TEXINPUTS="
+    inreplace ["doc/Makefile"], "export TEXINPUTS=", "set -e; export TEXINPUTS="
+
+    # Adapt Makefile-macports.conf for homebrew use
     inreplace ["Makefile-macports.conf"] do |s|
       s.gsub! /PERLPATH=.*/, "PERLPATH=#{Formula["perl"].bin}/perl"
       s.gsub! /PERLDIR=.*/, "PERLDIR=#{libexec/"lib/perl5"}"
@@ -453,6 +462,9 @@ class AutoMultipleChoice < Formula
     inreplace ["doc/Makefile","doc/sty/Makefile"], "pdflatex", "pdflatex -halt-on-error -interaction=nonstopmode"
     inreplace ["doc/Makefile"], "xelatex", "xelatex -halt-on-error -interaction=nonstopmode"
 
+    # Only build the models unless all the documentation is asked
+    inreplace ["doc/Makefile"], /^all:.*$/, "all: $(MODELS:.d=.tgz)" unless build.with?("doc")
+
     # Now we need to install XML::LibXML which is used during the build
     [ "XML::LibXML",
         "XML::SAX",
@@ -463,9 +475,12 @@ class AutoMultipleChoice < Formula
     end
 
     # The actual build
-    system "make", "version_files", "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
-    system "make", "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
-    system "make", "install", "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    make_opts = "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    system "make", "version_files", *make_opts
+    system "make", *make_opts
+    system "make", "install_models", *make_opts
+    system "make", "install_doc", *make_opts if build.with?("doc")
+    system "make", "install_nodoc", *make_opts
 
     mv bin/"auto-multiple-choice", libexec/"bin/auto-multiple-choice"
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
@@ -689,7 +704,13 @@ class AutoMultipleChoice < Formula
       1) Documentation and templates missing:
          - Doc is downloadable here: https://download.auto-multiple-choice.net
 
-      2) Issue of new windows in tabs:
+      2) The 'Linux Libertine O' font is not found!
+         If you want to use this font, you should install it:
+             brew cask install caskroom/fonts/font-linux-libertine
+         But the name is 'Linux Libertine' (no 'O'). In your AMC-TXT files:
+             Font: Linux Libertine
+
+      3) Issue of new windows in tabs:
          with Gtk3, new windows may open in tabs instead of
          in a new window. This is unwanted because Gtk3 has a bug making it
          hard to click on some buttons. Two workarounds:
@@ -697,7 +718,7 @@ class AutoMultipleChoice < Formula
            when opening documents
          - Or just un-tab manually by dragging the tab out or unable the feature
 
-      3) Where is automultiplechoice.sty?
+      4) Where is automultiplechoice.sty?
          In order to build latex files with \\usepackage{automultiplechoice},
          you will have to:
          - Either symlink automultiplechoice.sty to a place Mactex knows (you

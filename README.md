@@ -31,6 +31,20 @@ Notes:
    `--HEAD` is not working for now because of a [`brew`
    bug](https://github.com/Homebrew/brew/issues/3628)
 
+5. The font *Linux Libertine O* can be used in tex or amc-txt files or for
+   annotating marks. Note that if you install Libertine using brew, i.e.,
+
+       brew cask install caskroom/fonts/font-linux-libertine
+
+   the name has no 'O' in it. The command to use in tex files is:
+
+       \setmainfont{Linux Libertine}
+
+    and in amc-tex files:
+
+        Font: Linux Libertine
+
+
 [macports]: https://github.com/macports/macports-ports/blob/d894802c28bda4045d956f327b3d5af89576bb22/x11/auto-multiple-choice/Portfile
 
 <!--
