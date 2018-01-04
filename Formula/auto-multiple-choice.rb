@@ -685,8 +685,6 @@ class AutoMultipleChoice < Formula
   end
 
   def caveats
-    mactex_texmf_home = begin %x{#{find_mactex+"/"}kpsewhich -var-value=TEXMFHOME}.chomp; rescue; end
-    if mactex_texmf_home.nil? then mactex_texmf_home = "<Mactex TEXMFHOME path>" end
     s = <<~EOS
       1) Documentation and templates missing:
          - Doc is downloadable here: https://download.auto-multiple-choice.net
@@ -695,21 +693,20 @@ class AutoMultipleChoice < Formula
          with Gtk3, new windows may open in tabs instead of
          in a new window. This is unwanted because Gtk3 has a bug making it
          hard to click on some buttons. Two workarounds:
-         - either disable tabbing in System preferences > Dock > Prefer tabs
+         - Either disable tabbing in System preferences > Dock > Prefer tabs
            when opening documents
-         - or just un-tab manually by dragging the tab out or unable the feature
+         - Or just un-tab manually by dragging the tab out or unable the feature
 
       3) Where is automultiplechoice.sty?
          In order to build latex files with \\usepackage{automultiplechoice},
          you will have to:
+         - Either symlink automultiplechoice.sty to a place Mactex knows (you
+           may need to add 'sudo' but try without):
+               mkdir -p $(kpsewhich -var-value=TEXMFHOME)
+               ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
 
-         a) Either symlink automultiplechoice.sty to a place Mactex knows (you
-            may need to add 'sudo' but try without):
-                mkdir -p $(kpsewhich -var-value=TEXMFHOME)
-                ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
-
-         b) Or you can set TEXMFHOME in your ~/.zshrc or ~/.bashrc:
-                export TEXMFHOME=#{opt_share}/texmf-local
+         - Or you can set TEXMFHOME in your ~/.zshrc or ~/.bashrc:
+               export TEXMFHOME=#{opt_share}/texmf-local
     EOS
     s
   end
