@@ -715,28 +715,7 @@ class AutoMultipleChoice < Formula
   end
 end
 
-# ./list_to_resources.pl:
-#################################################################
-# #!/usr/bin/env perl
-# # Lines must be of form (spaces and the comma are ignored):
-# #     "XML::Simple",
-# use MetaCPAN::Client;
-# my $mcpan  = MetaCPAN::Client->new();
-# my %already_seen = ();
-# foreach $line ( <STDIN> ) {
-#     chomp($line);
-#     $line =~ s/^.*"([A-Za-z:0-9]*)".*$/\1/;
-#     my $package = $mcpan->package($line);
-#     if (! exists($already_seen{$line})) {
-#         $already_seen{$line} = 1;
-#         my $url = "https://cpan.metacpan.org/authors/id/".$package->file();
-#         chomp(my $sha256 = `curl -sSL $url | sha256sum | cut -d' ' -f1`);
-#         print "resource \"$line\" do\n";
-#         print "  url \"".$url."\"\n";
-#         print "  sha256 \"".$sha256."\"\n";
-#         print "end\n";
-#     }
-# }
+
 
 __END__
 diff -r 698b50715961 AMC-perl/AMC/Basic.pm.in

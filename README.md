@@ -36,3 +36,46 @@ Notes:
 2. The GTK issue talking about this: https://bugzilla.gnome.org/show_bug.cgi?id=776602
 3. Also, how Mozilla disabled that: https://bugzilla.mozilla.org/show_bug.cgi?id=1280546
 -->
+
+### How I managed to vendor the many perl dependencies
+I went to http://deps.cpantesters.org and I copy-pasted the tree of dependencies
+(except for 'Core modules') into a Ruby array. For example:
+```ruby
+      "XML::Simple",
+        "XML::SAX",
+          "XML::NamespaceSupport",
+          "XML::SAX::Base",
+```
+
+I then gather all the ruby array with all dependencies (for example the
+previous example) into a file `list_of_deps`.
+
+Then I run
+
+    ./list_to_resources.pl < list_of_deps > resources
+
+and I copy everything in `resources` to the formula.
+
+Here is `list_to_resources.pl`:
+```perl
+#!/usr/bin/env perl
+# Lines must be of form (spaces and the comma are ignored):
+#     "XML::Simple",
+use MetaCPAN::Client;
+my $mcpan  = MetaCPAN::Client->new();
+my %already_seen = ();
+foreach $line ( <STDIN> ) {
+    chomp($line);
+    $line =~ s/^.*"([A-Za-z:0-9]*)".*$/\1/;
+    my $package = $mcpan->package($line);
+    if (! exists($already_seen{$line})) {
+        $already_seen{$line} = 1;
+        my $url = "https://cpan.metacpan.org/authors/id/".$package->file();
+        chomp(my $sha256 = `curl -sSL $url | sha256sum | cut -d' ' -f1`);
+        print "resource \"$line\" do\n";
+        print "  url \"".$url."\"\n";
+        print "  sha256 \"".$sha256."\"\n";
+        print "end\n";
+    }
+}
+```
