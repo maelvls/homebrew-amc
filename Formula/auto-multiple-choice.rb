@@ -688,40 +688,30 @@ class AutoMultipleChoice < Formula
     mactex_texmf_home = begin %x{#{find_mactex+"/"}kpsewhich -var-value=TEXMFHOME}.chomp; rescue; end
     if mactex_texmf_home.nil? then mactex_texmf_home = "<Mactex TEXMFHOME path>" end
     s = <<~EOS
-      1) In order to build latex files with \\usepackage{automultiplechoice},
-         you will have to install the .sty files to your Mactex path using
-         a symlink (you may need to add 'sudo' but try without):
+      1) Documentation and templates missing:
+         - Doc is downloadable here: https://download.auto-multiple-choice.net
 
-          mkdir -p #{mactex_texmf_home}/tex/latex/AMC
-          ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty #{mactex_texmf_home}/tex/latex/AMC/automultiplechoice.sty
+      2) Issue of new windows in tabs:
+         with Gtk3, new windows may open in tabs instead of
+         in a new window. This is unwanted because Gtk3 has a bug making it
+         hard to click on some buttons. Two workarounds:
+         - either disable tabbing in System preferences > Dock > Prefer tabs
+           when opening documents
+         - or just un-tab manually by dragging the tab out or unable the feature
 
-      2) You will also need the font Linux Libertine font in order to annotate
-         the papers (AMC-annotate.pl):
+      3) Where is automultiplechoice.sty?
+         In order to build latex files with \\usepackage{automultiplechoice},
+         you will have to:
 
-          brew cask install caskroom/fonts/font-linux-libertine
+         a) Either symlink automultiplechoice.sty to a place Mactex knows (you
+            may need to add 'sudo' but try without):
+                mkdir -p $(kpsewhich -var-value=TEXMFHOME)
+                ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
 
-      3) Documentation (PDF, HTML) is available here:
-
-          https://www.auto-multiple-choice.net/doc
-
-      Note that when opening files (and generally when new windows try to
-      open from the main window), the new windows will be "tabbed" inside the
-      main window, making it hard to click on some buttons. The workaround
-      is to un-tab manually by dragging the tab out.
+         b) Or you can set TEXMFHOME in your ~/.zshrc or ~/.bashrc:
+                export TEXMFHOME=#{opt_share}/texmf-local
     EOS
     s
-  end
-  # The article about "Automatic NSWindow Tabbing" in macOS Sierra:
-  # https://developer.apple.com/library/content/releasenotes/AppKit/RN-AppKit/index.html
-  # The GTK issue talking about this:
-  # https://bugzilla.gnome.org/show_bug.cgi?id=776602
-  # Also, how Mozilla disabled that:
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1280546
-
-  def find_mactex
-    ["/Library/TeX/texbin", "/usr/texbin"].each do |path|
-      break path if File.executable?(path+"/kpsewhich")
-    end
   end
 end
 

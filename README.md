@@ -1,3 +1,5 @@
+## Brew formula for auto-multiple-choice
+
 I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. To try it:
 
     brew install maelvalais/amc/auto-mutiple-choice
@@ -25,3 +27,12 @@ Notes:
 - ~~you can install the dev version using `--HEAD`~~ installing with `--HEAD` is not working for now because of a [`brew` bug](https://github.com/Homebrew/brew/issues/3628)
 
 [macports]: https://github.com/macports/macports-ports/blob/d894802c28bda4045d956f327b3d5af89576bb22/x11/auto-multiple-choice/Portfile
+
+<!--
+### Notes in the Gtk3/window tabbing issue
+
+1. The article about "Automatic NSWindow Tabbing" in macOS Sierra:
+   https://developer.apple.com/library/content/releasenotes/AppKit/RN-AppKit/index.html
+2. The GTK issue talking about this: https://bugzilla.gnome.org/show_bug.cgi?id=776602
+3. Also, how Mozilla disabled that: https://bugzilla.mozilla.org/show_bug.cgi?id=1280546
+-->
