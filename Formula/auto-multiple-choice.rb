@@ -4,6 +4,7 @@ class AutoMultipleChoice < Formula
   url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/get/15d39fd2d4aa.tar.gz"
   sha256 "6c19ac832039b22ca266310c471aeff744c0e547d148e537969e6ba7668179dc"
   version "1.3.0.2132"
+  revision 1
   head "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice", :using => :hg
 
   option "with-doc", "Also generate documentation (available online)"
@@ -13,7 +14,7 @@ class AutoMultipleChoice < Formula
   depends_on "perl"
   depends_on "gtk+3"
   depends_on "pango"
-  depends_on "adwaita-icon-theme"
+  depends_on "adwaita-icon-theme" # icons used in AMC
   depends_on "librsvg" # I don't know what this is; copied from macports'
   depends_on "netpbm"
   depends_on "poppler"
@@ -21,17 +22,24 @@ class AutoMultipleChoice < Formula
   depends_on "imagemagick@6" # for Image::Magick (perl)
   depends_on "glib" # for Glib (perl)
   depends_on "libffi" # for Glib::Object::Introspection (perl)
-  depends_on "gettext" # for runtime and build (msgfmt)
+  depends_on "gettext" # runtime (Locale::gettext needs libintl) and build (msgfmt)
+
   depends_on "libxml2" => :build # for XML::LibXML (perl) which is only used during build
-  depends_on "libnotify" # for Desktop::Notify (perl)
-  depends_on "dbus" # for Desktop::Notify (perl)
   depends_on :python => :build if build.with?("doc") # for dblatex
   depends_on "docbook" => :build if build.with?("doc") # for dblatex
   depends_on "docbook-xsl" => :build if build.with?("doc") # for dblatex
   depends_on "gnu-sed" => :build if build.with?("doc") # for doc/Makefile
+  depends_on "fontconfig" => :build if build.with?("doc") # for checking fonts
 
-  # Note that there will be warnings about 'shared-mime-info' missing,
-  # but this is normal: macos cannot handle these.
+  # What is missing in this brew-flavoured AMC:
+  # - shared-mime-info: there might be warnings about 'shared-mime-info'
+  #   missing. Purpose? I don't know. It could be installed with
+  #       brew install shared-mime-info
+  #   but I just skipped it.
+  # - libnotify: desktop notifications using libnotify + dbus cannot be used
+  #   on MacOS, we should rather use a Growl or native notifications. So I
+  #   removed the depends_on "libnotify" & "dbus" and the perl Desktop::Notify.
+  #   Also, I disabled the feature (notify_desktop parameter in Config.pm).
 
   patch :DATA
 
@@ -415,13 +423,29 @@ class AutoMultipleChoice < Formula
 
     # Because of bug with sed (GNU/non-GNU?) the .tex files have a missing '\'
     # ('usepackage{xeCJK}' instead of '\usepackage{xeCJK}').
-    inreplace "doc/Makefile", "\\\\usepackage{xeCJK}", "\\\\\\usepackage{xeCJK}"
+    inreplace "doc/Makefile", "usepackage{xeCJK}", "\\\\usepackage{xeCJK}"
 
     # The Libertine font provided by 'brew cask' is 'Linux Libertine' (no O)
     inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
       "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
     if build.with? "doc"
+      # Check presence of 'Dejavu Sans' and 'IPAexMincho' using fc-list (fontconfig)
+      # Brew changes the HOME directory which breaks codesign
+      home = `eval printf "~$USER"`
+      ["DejaVu Serif", "DejaVu Sans", "DejaVu Sans Mono"].each do |f|
+        if `HOME=#{home} fc-list '#{f}'`.empty? then
+          odie "Font '#{f}' not found in your Font Book. You can install it with
+            brew cask install caskroom/fonts/font-dejavu-sans"
+        end
+      end
+      ["IPAexMincho", "IPAexGothic"].each do |f|
+        if `HOME=#{home} fc-list '#{f}'`.empty? then
+          odie "Font '#{f}' not found in your Font Book. Download it at:
+            https://ipafont.ipa.go.jp"
+        end
+      end
+
       # Install dblatex which is required for building the documentation
       ENV.prepend_path "PATH", buildpath/"bin" # for using 'dblatex' during build
       ENV.prepend_create_path "TEXMFHOME", buildpath/"texmf"
@@ -465,6 +489,9 @@ class AutoMultipleChoice < Formula
     # Only build the models unless all the documentation is asked
     inreplace ["doc/Makefile"], /^all:.*$/, "all: $(MODELS:.d=.tgz)" unless build.with?("doc")
 
+    # Disable libnotify as it is not usable on mac
+    inreplace ["AMC-perl/AMC/Config.pm"], /notify_desktop *=> *1/, "notify_desktop => 0"
+
     # Now we need to install XML::LibXML which is used during the build
     [ "XML::LibXML",
         "XML::SAX",
@@ -475,7 +502,8 @@ class AutoMultipleChoice < Formula
     end
 
     # The actual build
-    make_opts = "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    make_opts = "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}",
+                "PERLPATH=#{Formula["perl"].opt_bin}/perl"
     system "make", "version_files", *make_opts
     system "make", *make_opts
     system "make", "install_models", *make_opts
@@ -517,7 +545,6 @@ class AutoMultipleChoice < Formula
       # - Text::CSV
       # - XML::Simple
       # - XML::Writer
-      # - Desktop::Notify (not in the macports deps??)
 
       # 1) To create the following array with a hierarchy-like indentation,
       #    I went to http://deps.cpantesters.org for each package and copied
@@ -637,8 +664,7 @@ class AutoMultipleChoice < Formula
               "WWW::RobotRules",
               "HTTP::Negotiate",
               "Net::HTTP",
-      "XML::Writer",
-      "Desktop::Notify"
+      "XML::Writer"
     ].reverse.each do |r|
       install_perl_package(r, installed)
     end
@@ -702,9 +728,11 @@ class AutoMultipleChoice < Formula
   def caveats
     s = <<~EOS
       1) Documentation and templates missing:
-         - Doc is downloadable here: https://download.auto-multiple-choice.net
+         The AMC and .sty doc are not built by default because they require
+         foreign fonts (DejaVu & IPAex Mincho). Enable it with --with-doc.
+         Anyway, doc PDFs are here: https://download.auto-multiple-choice.net
 
-      2) The 'Linux Libertine O' font is not found!
+      2) Issue of 'Linux Libertine O' not found:
          If you want to use this font, you should install it:
              brew cask install caskroom/fonts/font-linux-libertine
          But the name is 'Linux Libertine' (no 'O'). In your AMC-TXT files:
@@ -715,8 +743,8 @@ class AutoMultipleChoice < Formula
          in a new window. This is unwanted because Gtk3 has a bug making it
          hard to click on some buttons. Two workarounds:
          - Either disable tabbing in System preferences > Dock > Prefer tabs
-           when opening documents
-         - Or just un-tab manually by dragging the tab out or unable the feature
+           when opening documents;
+         - Or just un-tab manually by dragging the tab out.
 
       4) Where is automultiplechoice.sty?
          In order to build latex files with \\usepackage{automultiplechoice},
