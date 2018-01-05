@@ -1,12 +1,10 @@
 ## Brew formula for auto-multiple-choice
 
-I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. To try it:
+I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. The **only prerequisite** is to have Mactex (if you don't have it: `brew cask install mactex`). To install auto-mutiple-choice:
 
     brew install maelvalais/amc/auto-mutiple-choice
 
-Having Mactex is mandatory during the build (it is needed in order to build `automutiplechoice.sty`). One way to install it is:
 
-    brew cask install mactex
 
 Notes:
 1. because it is using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening as tabbed
@@ -22,7 +20,7 @@ Notes:
 
          mkdir -p $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC
          ln -s $(brew --prefix auto-multiple-choice)/share/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
-
+   
 3. the PDF documentation and .tex templates (_models_) are not built by
    default. Use `--with-doc` to them (I disabled it as it didn't work
    because of a problem with the japanese fonts). But you can download every
@@ -39,7 +37,7 @@ Notes:
    the name has no 'O' in it. The command to use in tex files is:
 
        \setmainfont{Linux Libertine}
-
+    
     and in amc-tex files:
 
         Font: Linux Libertine
