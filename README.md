@@ -1,10 +1,15 @@
-## Brew formula for auto-multiple-choice
+Brew formula for auto-multiple-choice
+=====================================
 
-I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. The **only prerequisite** is to have Mactex (if you don't have it: `brew cask install mactex`). To install auto-mutiple-choice:
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2195781/34616703-4ef9a912-f239-11e7-82ec-256acf855104.png">
+</p>
+
+Install it:
 
     brew install maelvalais/amc/auto-mutiple-choice
 
-
+How? I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. The **only prerequisite** is to have Mactex (if you don't have it: `brew cask install mactex`). To install auto-mutiple-choice:
 
 Notes:
 1. because it is using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening as tabbed
