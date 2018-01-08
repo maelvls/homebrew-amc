@@ -30,7 +30,7 @@ Notes:
    default. Use `--with-doc` to them (I disabled it as it didn't work
    because of a problem with the japanese fonts). But you can download every
    PDF at https://download.auto-multiple-choice.net.
-4. you can install the dev version using `--HEAD`
+4. you can install the dev version using `brew install maelvalais/amc/auto-mutiple-choice --HEAD`
 
 5. The font *Linux Libertine O* can be used in tex or amc-txt files or for
    annotating marks. Note that if you install Libertine using brew, i.e.,
