@@ -677,8 +677,7 @@ class AutoMultipleChoice < Formula
   end
 
   test do
-    # Test à écrire
-    system "false"
+    opoo "we should write some tests"
   end
 
   def install_perl_package(package, installed)
