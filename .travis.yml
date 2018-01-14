@@ -14,7 +14,7 @@ if: tag IS blank # build is disabled on tags (no rationale actually)
 env:
   global:
     - HOMEBREW_BINTRAY_USER=maelvalais
-    - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/touist
+    - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/maelvalais
     # Beyond these global variables, you also need to set some secret variables
     # in your travis-ci settings:
     # - AWS_ACCESS_KEY_ID
@@ -55,7 +55,7 @@ install:
   - git fetch --unshallow || true               # 4)
 
   - brew install awscli
-  - aws s3 sync s3://homebrew-touist-travis/${TRAVIS_BUILD_NUMBER} ~/shared || true
+  - aws s3 sync s3://homebrew-amc/${TRAVIS_BUILD_NUMBER} ~/shared || true
 
   # 'brew doctor' must be run under HOMEBREW_DEVELOPER=1. Otherwise,
   # it returns 1 with the message "this osx version is outdated" on old osx ver.
@@ -179,15 +179,15 @@ jobs:
               bottle=`ls ${json/bottle*/}*.tar.gz`;
               cp ${bottle} ${bottle/sierra/high_sierra};
             done;
-            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=touist --verbose;
+            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
       after_script:
         # Clean the bucket
-        #- aws s3 rm s3://homebrew-touist-travis/${TRAVIS_BUILD_NUMBER} --recursive
+        #- aws s3 rm s3://homebrew-amc/${TRAVIS_BUILD_NUMBER} --recursive
 
 after_script:
   # In case the AWS_SECRET_ACCESS_KEY and AWS_SECRET_ACCESS_KEY are not
   # available, we don't want the build to fail.
-  - aws s3 sync ~/shared s3://homebrew-touist-travis/${TRAVIS_BUILD_NUMBER} || true
+  - aws s3 sync ~/shared s3://homebrew-amc/${TRAVIS_BUILD_NUMBER} || true
