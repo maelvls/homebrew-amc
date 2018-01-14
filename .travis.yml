@@ -1,0 +1,187 @@
+# Inspired from the .travis.yml in
+# https://github.com/davidchall/homebrew-hep/
+
+# This script can be executed in three different modes:
+# - cron/api (api is when you select 'trigger build' in travis): in this mode,
+#   all the formulas are tested to make sure that there is no shared lib
+#   breakage
+# - push to master: in this mode, the updated formulas are built and bottled
+#   and the bottles are pushed to bintray, commited and pushed.
+# - pull-request: same as 'push on master' but without bintray and commit.
+
+language: ruby
+if: tag IS blank # build is disabled on tags (no rationale actually)
+env:
+  global:
+    - HOMEBREW_BINTRAY_USER=maelvalais
+    - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/touist
+    # Beyond these global variables, you also need to set some secret variables
+    # in your travis-ci settings:
+    # - AWS_ACCESS_KEY_ID
+    # - AWS_SECRET_ACCESS_KEY          (for the AWS S3 bucket)
+    # - GITHUB_TOKEN                   (for pushing bottle DSL commits)
+    # - HOMEBREW_BINTRAY_KEY           (for the Bintray repo)
+
+# Note: I removed $HOME/Library/Caches/Homebrew from the caches
+# because it was enormous (~2GB for the 4 jobs). This is because
+# this folder is already present on osx images and it is big.
+# Note2: I also removed $HOME/.cache/Homebrew (cache of Linuxbrew)
+# because it was also storing some logs, making the cache rebuilt
+# every time.
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+    - "$HOME/.gem/ruby"
+
+install:
+  # Fix travis log truncated (https://github.com/travis-ci/travis-ci/issues/8920)
+  - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
+  # the official test-bot won't let you run inside TravisCI, so we use
+  # davidchall's one. David's test-bot cannot push the commit using
+  # Oauth github + https (only ssh) so I use my own.
+  - brew tap maelvalais/test-bot
+
+  # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
+  # Step: 1) create the intermediate folders <user>/<repo> so that
+  # we can 2) remove <repo> and 3) replace it with a sym link
+  # that will point to the travis build folder.
+  # If we don't do that, the tap be cloned using the default master
+  # branch, and thus we cannot test our tap at the current pushed commit.
+  # We also need to unshallow in 4) because sometimes travis does not
+  # clone thouroughly but we need a deep clone.
+  - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
+  - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
+  - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
+  - git fetch --unshallow || true               # 4)
+
+  - brew install awscli
+  - aws s3 sync s3://homebrew-touist-travis/${TRAVIS_BUILD_NUMBER} ~/shared || true
+
+  # 'brew doctor' must be run under HOMEBREW_DEVELOPER=1. Otherwise,
+  # it returns 1 with the message "this osx version is outdated" on old osx ver.
+  - HOMEBREW_DEVELOPER=1 brew doctor
+  # Note on HOMEBREW_DEVELOPER: I don't want to put in env.global because
+  # it should be '1' only during test-bot. If it is '1' during
+  # brew cask uninstall... it will fail on the deprecation notice.
+  # Unless I am in 'brew test-bot', I don't want to fail on warnings.
+
+script:
+  - set -e;
+    if [ $TRAVIS_EVENT_TYPE = cron -o $TRAVIS_EVENT_TYPE = api ]; then
+      for f in Formula/*.rb; do
+        brew install $f;
+        brew linkage --test $f;
+      done;
+    else
+      brew test-bot;
+    fi
+  - cp *.bottle*.* ~/shared 2>/dev/null || echo "==> No bottle created here"
+
+jobs:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+      env: OS=sierra-10.12
+      rvm: system
+      before_install:
+        # Sometimes, brew update fails with the error `Homebrew must be run
+        # under Ruby 2.3! You are running 2.0.0' (althouth ruby-portable
+        # is there). Workaround (A): run double brew update (see
+        # https://github.com/Homebrew/brew/issues/3299). This seems to happen
+        # as soon as the macos image on Travis is 'too old'.
+        # The issue of broken symlink (B) also happens at the same time.
+        - brew update | grep "==>" || brew update   # (A)
+        # (brew doctor) fix some random broken symlinks
+        - brew prune                                # (B)
+        # (brew doctor) fix the missing deps
+        - brew missing | cut -d':' -f1 | xargs brew uninstall
+
+    - &run-on-osx-old-xcode # only for xcode6.4 and xcode7.3
+      os: osx
+      osx_image: xcode7.3
+      env: OS=el_capitan-10.11
+      rvm: system
+      before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
+        # Sometimes, brew update fails with the error `Homebrew must be run
+        # under Ruby 2.3! You are running 2.0.0' (althouth ruby-portable
+        # is there). Workaround (A): run double brew update (see
+        # https://github.com/Homebrew/brew/issues/3299). This seems to happen
+        # as soon as the macos image on Travis is 'too old'.
+        # The issue of broken symlink (B) also happens at the same time.
+        - brew update | grep "==>" || brew update   # (A)
+        # (brew doctor) fix some random broken symlinks
+        - brew prune                                # (B)
+        # (brew doctor) fix the many missing deps on gnupg and others
+        - brew missing | cut -d':' -f1 | xargs brew uninstall
+        # (brew doctor) fix "your XQuartz (2.7.9) is outdated" if it is installed
+        - brew cask uninstall xquartz || true
+        # (brew test-bot on travis) fix libyaml 0.1.6_1 already installed
+        - brew uninstall libyaml || true; brew uninstall md5deep || true
+
+#    - <<: *run-on-osx-old-xcode
+#      os: osx
+#      osx_image: xcode6.4
+#      env: OS=yosemite-10.10
+#      rvm: system
+
+    - &run-on-linux
+      os: linux
+      env: OS=x86_64_linux
+      before_install:
+        # Fix the permission problem on linux (664 instead of 644) during
+        # git clone (the one done by travis-ci). Homebrew needs formulas to be
+        # 'chmod 644'. This is because git does not conserve permissions and
+        # travis-ci seems to have by default a umask too permissive.
+        # Because we cannot do 'umask 002' just before travis clones the repo,
+        # I set umask afterwards (1) and I change the permission of
+        # already cloned files from 664 to 644 (2).
+        - umask 022                  # (1)
+        - chmod 0644 Formula/*.rb    # (2)
+
+        # Instal linuxbrew
+        - export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH";
+        # I added 'brew vendor-install ruby' because sometimes the install would
+        # fail on 'Homebrew must be run under Ruby 2.3!' error.
+        - yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)" || (brew vendor-install ruby && brew update --force)
+        # Fix a `brew doctor` error on "config" scripts for some reason
+        - sudo rm -f /home/travis/.phpenv/shims/php-config
+          /opt/pyenv/shims/*-config /usr/local/clang-*/bin/llvm-config
+      before_cache:
+        - brew cleanup
+
+    - <<: *run-on-linux
+      stage: deploy
+      if: branch = master AND NOT type IN (pull_request, cron, api)
+      os: linux
+      env: OS=any_linux
+      script:
+        # This hook will add [ci skip] the the commit messages for bottle DSL
+        # so that travis-ci does not re-build a duplicate bottle on pushing.
+        - echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
+        # We fail 'silently' if no bottle is found.
+        - |
+          if cp -v ~/shared/* . ; then
+            # This is a trick so that 'prefix' and 'cellar' are removed if they
+            # are equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
+            # 'brew bottle' on a linux setup.
+            sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json;
+            # Travis does not provide a high_sierra image yet, but I can use the
+            # sierra one and pretend it is a high_sierra bottle. I test them regularly in
+            # case it doesn't work.
+            ls *.sierra.bottle.json | while read json; do
+              sed 's/sierra/high_sierra/g' $json > ${json/sierra/high_sierra};
+              bottle=`ls ${json/bottle*/}*.tar.gz`;
+              cp ${bottle} ${bottle/sierra/high_sierra};
+            done;
+            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=touist --verbose;
+          else
+            echo "==> No bottle found in the bucket, skipping --ci-upload";
+          fi
+      after_script:
+        # Clean the bucket
+        #- aws s3 rm s3://homebrew-touist-travis/${TRAVIS_BUILD_NUMBER} --recursive
+
+after_script:
+  # In case the AWS_SECRET_ACCESS_KEY and AWS_SECRET_ACCESS_KEY are not
+  # available, we don't want the build to fail.
+  - aws s3 sync ~/shared s3://homebrew-touist-travis/${TRAVIS_BUILD_NUMBER} || true
