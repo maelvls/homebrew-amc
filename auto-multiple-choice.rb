@@ -766,7 +766,6 @@ class AutoMultipleChoice < Formula
 end
 
 
-
 __END__
 diff -r 698b50715961 AMC-perl/AMC/Basic.pm.in
 --- a/AMC-perl/AMC/Basic.pm.in	Tue Jan 02 18:04:21 2018 +0100
