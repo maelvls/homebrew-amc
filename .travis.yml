@@ -68,9 +68,14 @@ install:
 script:
   - set -e;
     if [ $TRAVIS_EVENT_TYPE = cron -o $TRAVIS_EVENT_TYPE = api ]; then
-      for f in Formula/*.rb; do
+      for f in *.rb; do
         brew install $f;
-        brew linkage --test $f;
+        if ! brew linkage --test $f; then
+          rev=$(grep revision $f | sed 's/^[^0-9]*\([0-9]*\)$/\1/');
+          sed -i "s/revision [0-9]*/revision $(expr $rev + 1)" $f;
+          git commit -a -m "bump revision of $f after brew linkage errored";
+          git push https://${GITHUB_TOKEN}@github.com/maelvalais/homebrew-amc.git master;
+        fi;
       done;
     else
       brew test-bot;
@@ -127,6 +132,7 @@ jobs:
     - &run-on-linux
       os: linux
       env: OS=x86_64_linux
+      if: false
       before_install:
         # Fix the permission problem on linux (664 instead of 644) during
         # git clone (the one done by travis-ci). Homebrew needs formulas to be
@@ -136,7 +142,7 @@ jobs:
         # I set umask afterwards (1) and I change the permission of
         # already cloned files from 664 to 644 (2).
         - umask 022                  # (1)
-        - chmod 0644 Formula/*.rb    # (2)
+        - chmod 0644 *.rb    # (2)
 
         # Instal linuxbrew
         - export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH";
