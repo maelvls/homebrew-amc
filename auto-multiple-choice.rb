@@ -4,8 +4,11 @@ class AutoMultipleChoice < Formula
   url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/get/15d39fd2d4aa.tar.gz"
   sha256 "6c19ac832039b22ca266310c471aeff744c0e547d148e537969e6ba7668179dc"
   version "1.3.0.2132"
-  revision 1
+  revision 2
   head "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice", :using => :hg
+
+  bottle do
+  end
 
   option "regenerate-doc", "Regenerate documentation instead of downloading precompiled doc"
 
