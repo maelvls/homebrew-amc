@@ -132,7 +132,7 @@ jobs:
     - &run-on-linux
       os: linux
       env: OS=x86_64_linux
-      if: false
+      if: branch = azdazd
       before_install:
         # Fix the permission problem on linux (664 instead of 644) during
         # git clone (the one done by travis-ci). Homebrew needs formulas to be
