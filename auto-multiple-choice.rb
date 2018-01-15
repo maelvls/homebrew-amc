@@ -762,7 +762,7 @@ class AutoMultipleChoice < Formula
          you will have to:
          - Either symlink automultiplechoice.sty to a place Mactex knows (you
            may need to add 'sudo' but try without):
-               mkdir -p $(kpsewhich -var-value=TEXMFHOME)
+               mkdir -p $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC
                ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
 
          - Or you can set TEXMFHOME in your ~/.zshrc or ~/.bashrc:
