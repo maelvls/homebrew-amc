@@ -101,8 +101,8 @@ jobs:
         # (brew doctor) fix the missing deps
         - brew missing | cut -d':' -f1 | xargs brew uninstall
         - brew cask install xquartz || true
-        # (brew install numpy) fails during 'brew link' because f2py exists
-        - rm -f '/usr/local/bin/f2py'
+        # (brew install numpy) fails during 'brew link'
+        - brew install numpy || brew link --overwrite numpy
 
     - &run-on-osx-old-xcode # only for xcode6.4 and xcode7.3
       os: osx
