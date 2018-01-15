@@ -74,7 +74,7 @@ script:
           rev=$(grep revision $f | sed 's/^[^0-9]*\([0-9]*\)$/\1/');
           sed -i "s/revision [0-9]*/revision $(expr $rev + 1)" $f;
           git commit -a -m "bump revision of $f after brew linkage errored";
-          git push https://${GITHUB_TOKEN}@github.com/maelvalais/homebrew-amc.git master;
+          git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
         fi;
       done;
     else
