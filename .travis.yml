@@ -100,6 +100,9 @@ jobs:
         - brew prune                                # (B)
         # (brew doctor) fix the missing deps
         - brew missing | cut -d':' -f1 | xargs brew uninstall
+        - brew cask install xquartz || true
+        # (brew install numpy) fails during 'brew link' because f2py exists
+        - rm -f '/usr/local/bin/f2py'
 
     - &run-on-osx-old-xcode # only for xcode6.4 and xcode7.3
       os: osx
@@ -122,6 +125,7 @@ jobs:
         - brew cask uninstall xquartz || true
         # (brew test-bot on travis) fix libyaml 0.1.6_1 already installed
         - brew uninstall libyaml || true; brew uninstall md5deep || true
+        - brew cask install xquartz || true
 
 #    - <<: *run-on-osx-old-xcode
 #      os: osx
@@ -132,7 +136,7 @@ jobs:
     - &run-on-linux
       os: linux
       env: OS=x86_64_linux
-      if: branch = azdazd
+      if: branch = if_dont_want_linux_to_run
       before_install:
         # Fix the permission problem on linux (664 instead of 644) during
         # git clone (the one done by travis-ci). Homebrew needs formulas to be
