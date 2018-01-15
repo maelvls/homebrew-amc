@@ -49,7 +49,7 @@ class AutoMultipleChoice < Formula
   patch :DATA
 
   resource "dblatex" do # for build, only if --with-regenerate-doc is given
-    url "http://downloads.sourceforge.net/project/dblatex/dblatex/dblatex-0.3.10/dblatex-0.3.10.tar.bz2"
+    url "https://downloads.sourceforge.net/project/dblatex/dblatex/dblatex-0.3.10/dblatex-0.3.10.tar.bz2"
     sha256 "6fd696b740e0044ae1caf843d225d98c01b6ed916550384544e7e31c0c6a2cfa"
   end
   resource "pdftk" do # for AMC itself
