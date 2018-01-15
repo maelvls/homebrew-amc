@@ -12,6 +12,9 @@ class AutoMultipleChoice < Formula
 
   option "regenerate-doc", "Regenerate documentation instead of downloading precompiled doc"
 
+  # I don't set 'tex' as a 'hard' dependency as it is not handled nicely by the Homebrew
+  # core repository. On the contrary, x11 is well handled and can be used as a hard dep.
+  # depends_on :tex
   depends_on :x11
   depends_on "perl"
   depends_on "gtk+3"
