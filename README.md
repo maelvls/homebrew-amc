@@ -1,5 +1,5 @@
-Brew formula for auto-multiple-choice
-=====================================
+Brew formula for auto-multiple-choice 📖
+========================================
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/2195781/34616703-4ef9a912-f239-11e7-82ec-256acf855104.png">
@@ -9,7 +9,13 @@ Install it:
 
     brew install maelvalais/amc/auto-mutiple-choice
 
-How? I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. The **only prerequisite** is to have Mactex (if you don't have it: `brew cask install mactex`). To install auto-mutiple-choice:
+- **What are the dependencies?** Homebrew will pull automatically everything (Gtk3, Opencv) except for xquartz.
+  Also, to run it, you will need to install a latex distribution (for example, Mactex can be installed by
+  `brew cask install mactex`).
+- **How come there has never been an official formula for Homebrew?** This is mainly because of the complexity of
+  auto-multiple-choice (insane number of dependencies) as well as the fact that Homebrew does not cope well with
+  latex dependencies.
+- **How did you do it?** I took the macports [recipe][macports], vendored perl packages and pdftk (also dblatex but it is only used during build). Nothing is installed outside of the Homebrew environment so you don't have to worry with messing your system. The **only prerequisite** is to have Mactex (if you don't have it: `brew cask install mactex`). To install auto-mutiple-choice:
 
 Notes:
 1. because it is using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening as tabbed
@@ -27,11 +33,11 @@ Notes:
          ln -s $(brew --prefix auto-multiple-choice)/share/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
    
 3. the PDF documentation and .tex templates (_models_) are not built by
-   default. Use `--with-doc` to them (I disabled it as it didn't work
-   because of a problem with the japanese fonts). But you can download every
-   PDF at https://download.auto-multiple-choice.net.
+   default; instead, I pull the current precompiled linux version from
+   https://download.auto-multiple-choice.net and copy its documentation.
+   You can use `--with-regenerate-doc` to build the doc/.sty instead of
+   downloading them.
 4. you can install the dev version using `brew install maelvalais/amc/auto-mutiple-choice --HEAD`
-
 5. The font *Linux Libertine O* can be used in tex or amc-txt files or for
    annotating marks. Note that if you install Libertine using brew, i.e.,
 
