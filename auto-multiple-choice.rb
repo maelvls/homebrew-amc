@@ -9,7 +9,6 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    cellar :any
     sha256 "cda41c010a4860bf0e5dd01791e60ec81429536b0fcc9d92977dd072b0b2aef8" => :high_sierra
     sha256 "cda41c010a4860bf0e5dd01791e60ec81429536b0fcc9d92977dd072b0b2aef8" => :sierra
   end
