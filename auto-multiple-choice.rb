@@ -518,6 +518,7 @@ class AutoMultipleChoice < Formula
                 "PERLPATH=#{Formula["perl"].opt_bin}/perl"
     system "make", "version_files", *make_opts
     inreplace "Makefile.versions", /PACKAGE_V_DEB=.*$/, "PACKAGE_V_DEB=#{version} (homebrew)"
+    raise "adz"
     system "make", *make_opts
     system "make", "install_models", *make_opts
     system "make", "install_doc", *make_opts
@@ -764,11 +765,16 @@ class AutoMultipleChoice < Formula
          you will have to:
          - Either symlink automultiplechoice.sty to a place Mactex knows (you
            may need to add 'sudo' but try without):
+
                mkdir -p $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC
                ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
 
          - Or you can set TEXMFHOME in your ~/.zshrc or ~/.bashrc:
+
                export TEXMFHOME=#{opt_share}/texmf-local
+
+      If you have any problem/remark regarding this formula, you can submit
+      an issue to https://github.com/maelvalais/homebrew-amc.
     EOS
     s
   end
