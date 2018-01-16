@@ -37,12 +37,13 @@ class AutoMultipleChoice < Formula
   depends_on "freetype"
   depends_on "cairo"
 
-  depends_on "libxml2" => :build # for XML::LibXML (perl) which is only used during build
   depends_on :python => :build if build.with?("regenerate-doc") # for dblatex
   depends_on "docbook" => :build if build.with?("regenerate-doc") # for dblatex
   depends_on "docbook-xsl" => :build if build.with?("regenerate-doc") # for dblatex
   depends_on "gnu-sed" => :build if build.with?("regenerate-doc") # for doc/Makefile
   depends_on "fontconfig" => :build if build.with?("regenerate-doc") # for checking fonts
+  # libxml2 comes with macOS, no need to depend on it (for XML::LibXML)
+  # depends_on "libxml2" => :build
 
   # What is missing in this brew-flavoured AMC:
   # - shared-mime-info: there might be warnings about 'shared-mime-info'
