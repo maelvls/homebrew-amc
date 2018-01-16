@@ -100,7 +100,7 @@ jobs:
         - brew prune                                # (B)
         # (brew doctor) fix the missing deps
         - brew missing | cut -d':' -f1 | xargs brew uninstall
-        - brew cask install xquartz || true
+        - brew cask reinstall xquartz || true
         # (brew install numpy) fails during 'brew link'
         - brew install numpy || brew link --overwrite numpy
 
@@ -122,10 +122,9 @@ jobs:
         # (brew doctor) fix the many missing deps on gnupg and others
         - brew missing | cut -d':' -f1 | xargs brew uninstall
         # (brew doctor) fix "your XQuartz (2.7.9) is outdated" if it is installed
-        - brew cask uninstall xquartz || true
+        - brew cask reinstall xquartz || true
         # (brew test-bot on travis) fix libyaml 0.1.6_1 already installed
         - brew uninstall libyaml || true; brew uninstall md5deep || true
-        - brew cask install xquartz || true
 
 #    - <<: *run-on-osx-old-xcode
 #      os: osx
