@@ -516,9 +516,13 @@ class AutoMultipleChoice < Formula
     # The actual build
     make_opts = "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}",
                 "PERLPATH=#{Formula["perl"].opt_bin}/perl"
-    system "make", "version_files", *make_opts
-    inreplace "Makefile.versions", /PACKAGE_V_DEB=.*$/, "PACKAGE_V_DEB=#{version} (homebrew)"
-    raise "adz"
+    # Instead of running 'make version_files', create our own Makefile.versions
+    (buildpath/"Makefile.versions").write <<~EOS
+      PACKAGE_V_DEB=#{pkg_version}-homebrew
+      PACKAGE_V_VC=
+      PACKAGE_V_PDFDATE=#{Time.now.year}#{Time.now.month}#{Time.now.day}000000
+      PACKAGE_V_ISODATE=#{Time.now.year}-#{Time.now.month}-#{Time.now.day}
+    EOS
     system "make", *make_opts
     system "make", "install_models", *make_opts
     system "make", "install_doc", *make_opts
