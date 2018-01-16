@@ -13,11 +13,13 @@ class AutoMultipleChoice < Formula
     sha256 "cda41c010a4860bf0e5dd01791e60ec81429536b0fcc9d92977dd072b0b2aef8" => :sierra
   end
 
-  option "regenerate-doc", "Regenerate documentation instead of downloading precompiled doc"
+  option "with-regenerate-doc", "Regenerate doc instead of downloading precompiled doc (requires mactex)"
 
-  # I don't set 'tex' as a 'hard' dependency as it is not handled nicely by the Homebrew
-  # core repository. On the contrary, x11 is well handled and can be used as a hard dep.
-  # depends_on :tex
+  # I cannot set 'tex' as a default dependency as it is not handled by the
+  # Homebrew core repository. On the contrary, x11 is well handled (it is
+  # installed by default on their test-bot runs) and can be used as a default
+  # dependency.
+  depends_on :tex if build.with?("regenerate-doc")
   depends_on :x11
   depends_on "perl"
   depends_on "gtk+3"
