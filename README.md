@@ -5,18 +5,24 @@ Brew formula for auto-multiple-choice 📖
   <img src="https://user-images.githubusercontent.com/2195781/34616703-4ef9a912-f239-11e7-82ec-256acf855104.png">
 </p>
 
-Install it:
 
-    brew install maelvalais/amc/auto-mutiple-choice
+|                      Install                      |          Run          |
+|:-------------------------------------------------:|:---------------------:|
+| `brew install maelvalais/amc/auto-mutiple-choice` | `auto-mutiple-choice` |
 
-Run it:
+Brew will try to install using a precompiled version of AMC (bottle) that
+is built on Travis-ci. Every night, an automated installation of the bottle
+is done as well as `brew linkage auto-mutiple-choice` in order to check
+that the bottle is still working.
 
-    auto-mutiple-choice
+[![Build Status](https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master)](https://travis-ci.org/maelvalais/homebrew-amc)
 
-You can also try the HEAD version from
-[mercurial](https://bitbucket.org/auto-multiple-choice/auto-multiple-choice):
+If you have problems with the bottle (**dyld issues** detected by
+`brew linkage auto-mutiple-choice`), you can rebuild from source:
+- using `brew install maelvalais/amc/auto-mutiple-choice --build-from-source`
+- or using `brew install maelvalais/amc/auto-mutiple-choice --HEAD` to install from source the latest version from [mercurial]
 
-    brew install maelvalais/amc/auto-mutiple-choice --HEAD
+[mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
 
 ## FAQ
 
@@ -113,6 +119,19 @@ You can also try the HEAD version from
   tried to [fix the issue][gtk-craches] but it does not seem easily
   reproducible so I gave up.
 
+- **Why is there no nice icon nor AutoMultipleChoice.app?** Unfortunately,
+  only deb-related linux distributions can (today) have a real _application_
+  feel with a clickable icon in the application menu. On macOS, it would
+  require to create an .app and sign it (which costs $99 per year). This is
+  why we can only run it from the terminal and we don't get a fancy icon
+  in the dock.
+
+## Report issues
+
+You can create an [issue] if you have any problem, question or if you
+think the whole idea of a formula that vendors everything is insane.
+
+[issues]: https://github.com/maelvalais/homebrew-amc/issues
 [gtk-craches]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/43/fix-the-assertion-failed-when-readding-an/diff#comment-53125101
 [macports]: https://github.com/macports/macports-ports/blob/d894802c28bda4045d956f327b3d5af89576bb22/x11/auto-multiple-choice/Portfile
 
