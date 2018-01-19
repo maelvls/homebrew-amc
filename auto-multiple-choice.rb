@@ -9,8 +9,11 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    sha256 "cda41c010a4860bf0e5dd01791e60ec81429536b0fcc9d92977dd072b0b2aef8" => :high_sierra
-    sha256 "cda41c010a4860bf0e5dd01791e60ec81429536b0fcc9d92977dd072b0b2aef8" => :sierra
+    cellar :any
+    rebuild 1
+    sha256 "c8a180cf9d7ae91d0e0d5bde78fdaa71388a9ec74aebb0c09e890ea82651b049" => :high_sierra
+    sha256 "c8a180cf9d7ae91d0e0d5bde78fdaa71388a9ec74aebb0c09e890ea82651b049" => :sierra
+    sha256 "43f509a9295b64e899d4da5677ba0facac9d7f21efbc77c637833fdf19d6726c" => :el_capitan
   end
 
   option "with-regenerate-doc", "Regenerate doc instead of downloading precompiled doc (requires mactex)"
