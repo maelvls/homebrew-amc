@@ -65,21 +65,29 @@ install:
   # brew cask uninstall... it will fail on the deprecation notice.
   # Unless I am in 'brew test-bot', I don't want to fail on warnings.
 
+# WARNING: I discovered that 'set -e' is breaking Travis CI. I was using for
+# stopping a multiple-lines command as soon as one of the commands fails.
+# After having 'set -e', internal travis commands may stop working, e.g.:
+#   /Users/travis/.travis/job_stages: line 57: shell_session_update: command not found
+# is an internal error that shouldn't stop the script for continuing, but
+# because of 'set -e', the whole internal Travis CI script stops.
+# Conclusion: avoid using 'set -e' and more generally avoid for-loops and
+# multi-line commands that should fail when one of the commands fails.
 script:
-  - set -e;
-    if [ $TRAVIS_EVENT_TYPE = cron -o $TRAVIS_EVENT_TYPE = api ]; then
+  - |
+    if [[ $TRAVIS_EVENT_TYPE =~ cron|api ]]; then
+      brew install *.rb || exit 123
       for f in *.rb; do
-        brew install $f;
-        if ! brew linkage --test $f; then
-          rev=$(grep revision $f | sed 's/^[^0-9]*\([0-9]*\)$/\1/');
-          sed -i "s/revision [0-9]*/revision $(expr $rev + 1)" $f;
-          git commit -a -m "bump revision of $f after brew linkage errored";
-          git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
-        fi;
-      done;
-    else
-      brew test-bot;
+        if ! brew linkage --test ${f/\.rb/}; then
+          rev=$(grep revision $f | sed 's/^[^0-9]*\([0-9]*\)$/\1/')
+          sed -i "s/revision [0-9]*/revision $(expr $rev + 1)" $f
+          git commit -a -m "${f/\.rb/}: bump from revision $rev to $(expr $rev + 1) (brew linkage)"
+          git log -n2 -p
+          git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master
+        fi
+      done
     fi
+  - if [[ $TRAVIS_EVENT_TYPE =~ push|pull_request ]]; then brew test-bot; fi
   - cp *.bottle*.* ~/shared 2>/dev/null || echo "==> No bottle created here"
 
 jobs:
@@ -87,7 +95,6 @@ jobs:
     - os: osx
       osx_image: xcode8.3
       env: OS=sierra-10.12
-      rvm: system
       before_install:
         # Sometimes, brew update fails with the error `Homebrew must be run
         # under Ruby 2.3! You are running 2.0.0' (althouth ruby-portable
@@ -108,7 +115,6 @@ jobs:
       os: osx
       osx_image: xcode7.3
       env: OS=el_capitan-10.11
-      rvm: system
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
         # Sometimes, brew update fails with the error `Homebrew must be run
         # under Ruby 2.3! You are running 2.0.0' (althouth ruby-portable
@@ -125,6 +131,8 @@ jobs:
         - brew cask reinstall xquartz || true
         # (brew test-bot on travis) fix libyaml 0.1.6_1 already installed
         - brew uninstall libyaml || true; brew uninstall md5deep || true
+        # (brew install numpy) fails during 'brew link'
+        - brew install numpy || brew link --overwrite numpy
 
 #    - <<: *run-on-osx-old-xcode
 #      os: osx
@@ -135,7 +143,7 @@ jobs:
     - &run-on-linux
       os: linux
       env: OS=x86_64_linux
-      if: branch = if_dont_want_linux_to_run
+      if: branch = I_dont_want_linux_to_run
       before_install:
         # Fix the permission problem on linux (664 instead of 644) during
         # git clone (the one done by travis-ci). Homebrew needs formulas to be
@@ -145,7 +153,7 @@ jobs:
         # I set umask afterwards (1) and I change the permission of
         # already cloned files from 664 to 644 (2).
         - umask 022                  # (1)
-        - chmod 0644 *.rb    # (2)
+        - chmod 0644 *.rb            # (2)
 
         # Instal linuxbrew
         - export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH";
