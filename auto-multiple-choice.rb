@@ -765,17 +765,10 @@ class AutoMultipleChoice < Formula
          - Or just un-tab manually by dragging the tab out.
 
       3) Where is automultiplechoice.sty?
-         In order to build latex files with \\usepackage{automultiplechoice},
-         you will have to:
-         - Either symlink automultiplechoice.sty to a place Mactex knows (you
-           may need to add 'sudo' but try without):
+         After installing, you have to run:
 
-               mkdir -p $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC
-               ln -s #{opt_share}/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
-
-         - Or you can set TEXMFHOME in your ~/.zshrc or ~/.bashrc:
-
-               export TEXMFHOME=#{opt_share}/texmf-local
+             sudo mkdir -p $(kpsewhich -var-value=TEXMFLOCAL)
+             sudo auto-multiple-choice latex-link
 
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvalais/homebrew-amc.
