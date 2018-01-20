@@ -1,11 +1,11 @@
 class AutoMultipleChoice < Formula
   desc "Auto Multiple Choice (AMC) helps you prepare printed tests for your students and mark them using PDF scans"
   homepage "https://www.auto-multiple-choice.net"
-  url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/get/15d39fd2d4aa.tar.gz"
-  sha256 "6c19ac832039b22ca266310c471aeff744c0e547d148e537969e6ba7668179dc"
-  version "1.3.0.2132"
-  revision 2
-  head "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice", :using => :hg
+  url "https://bitbucket.org/maelvalais/auto-multiple-choice/get/8102da1e91a2.tar.gz"
+  sha256 "e02c97cfbda970fc3f3141b07663df71597d2b4be1a4e7812ecdb0497403776e"
+  version "1.3.0.2166"
+  revision 0
+  head "https://bitbucket.org/maelvalais/auto-multiple-choice", :using => :hg
 
   bottle do
     root_url "https://dl.bintray.com/maelvalais/bottles-amc"
@@ -16,13 +16,20 @@ class AutoMultipleChoice < Formula
     sha256 "43f509a9295b64e899d4da5677ba0facac9d7f21efbc77c637833fdf19d6726c" => :el_capitan
   end
 
-  option "with-regenerate-doc", "Regenerate doc instead of downloading precompiled doc (requires mactex)"
+  option "with-regenerate-doc", "Regenerate doc instead of downloading precompiled doc (requires Mactex)"
 
   # I cannot set 'tex' as a default dependency as it is not handled by the
   # Homebrew core repository. On the contrary, x11 is well handled (it is
   # installed by default on their test-bot runs) and can be used as a default
   # dependency.
-  depends_on :tex if build.with?("regenerate-doc")
+  # UPDATE January 17th, 2018: the Homebrew team has deprecated 'depends :tex'
+  # completely, meaning that I cannot rely on it anymore in order to
+  # have latex in the PATH. I replaced it with 'env :std' which asks brew not
+  # to remove the original PATH of the user so that the latex binaries can be
+  # found.
+
+  env :std if build.with?("regenerate-doc")
+  # depends_on :tex if build.with?("regenerate-doc")
   depends_on :x11
   depends_on "perl"
   depends_on "gtk+3"
@@ -40,10 +47,9 @@ class AutoMultipleChoice < Formula
   depends_on "freetype"
   depends_on "cairo"
 
-  depends_on :python => :build if build.with?("regenerate-doc") # for dblatex
+  depends_on "python2" => :build if build.with?("regenerate-doc") # for dblatex
   depends_on "docbook" => :build if build.with?("regenerate-doc") # for dblatex
   depends_on "docbook-xsl" => :build if build.with?("regenerate-doc") # for dblatex
-  depends_on "gnu-sed" => :build if build.with?("regenerate-doc") # for doc/Makefile
   depends_on "fontconfig" => :build if build.with?("regenerate-doc") # for checking fonts
   # libxml2 comes with macOS, no need to depend on it (for XML::LibXML)
   # depends_on "libxml2" => :build
@@ -57,8 +63,6 @@ class AutoMultipleChoice < Formula
   #   on MacOS, we should rather use a Growl or native notifications. So I
   #   removed the depends_on "libnotify" & "dbus" and the perl Desktop::Notify.
   #   Also, I disabled the feature (notify_desktop parameter in Config.pm).
-
-  patch :DATA
 
   resource "dblatex" do # for build, only if --with-regenerate-doc is given
     url "https://downloads.sourceforge.net/project/dblatex/dblatex/dblatex-0.3.10/dblatex-0.3.10.tar.bz2"
@@ -415,10 +419,6 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/J/JO/JOSEPHW/XML-Writer-0.625.tar.gz"
     sha256 "e080522c6ce050397af482665f3965a93c5d16f5e81d93f6e2fe98084ed15fbe"
   end
-  resource "Desktop::Notify" do
-    url "https://cpan.metacpan.org/authors/id/S/SA/SACAVILIA/Desktop-Notify-0.05.tar.gz"
-    sha256 "5ec52aa13387a6819402554b74997830954aa5e908a711eb8bb19dd3334b101d"
-  end
 
   def install
     installed = {} # helps me avoid installing the same perl package twice
@@ -429,7 +429,6 @@ class AutoMultipleChoice < Formula
       libexec.install "bin", "man", "lib"
     end
 
-    ENV.prepend_path "PATH", "#{Formula["gnu-sed"].libexec}/gnubin" # used in build
     ENV.prepend_create_path "PERL5LIB", libexec/"lib/perl5"
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].opt_lib}/pkgconfig" # for Glib::Object::Introspection
@@ -442,7 +441,10 @@ class AutoMultipleChoice < Formula
     inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
       "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
-    if build.with? "regenerated-doc"
+    # Disable libnotify as it is not usable on mac
+    inreplace ["AMC-perl/AMC/Config.pm"], /notify_desktop *=> *1/, "notify_desktop => 0"
+
+    if build.with? "regenerate-doc"
       # Check presence of 'Dejavu Sans' and 'IPAexMincho' using fc-list (fontconfig)
       # Brew changes the HOME directory which breaks codesign
       home = `eval printf "~$USER"`
@@ -463,20 +465,11 @@ class AutoMultipleChoice < Formula
       ENV.prepend_create_path "TEXMFHOME", buildpath/"texmf"
       resource("dblatex").stage do
         # The 'dblatex' python script is only useful during build. Requires XML::LibXML.
-        system "python", "setup.py", "install", "--prefix=#{buildpath}", "--install-scripts=#{buildpath}/bin"
+        system "python2", "setup.py", "install", "--prefix=#{buildpath}", "--install-scripts=#{buildpath}/bin"
         # The dblatex tarball also contains latex .sty files that we need.
         mkdir_p buildpath/"texmf/tex/latex/dblatex"
         mv Dir[buildpath/"share/dblatex/latex/{style,misc}/*"], buildpath/"texmf/tex/latex/dblatex"
       end
-      # Make sure we do not miss any silent error by setting 'set -e'.
-      inreplace ["doc/Makefile"], "export TEXINPUTS=", "set -e; export TEXINPUTS="
-      # This is just in case anything goes wrong in pdflatex; by default, it
-      # hangs indefinitely.
-      inreplace ["doc/Makefile","doc/sty/Makefile"], "pdflatex", "pdflatex -halt-on-error -interaction=nonstopmode"
-      inreplace ["doc/Makefile"], "xelatex", "xelatex -halt-on-error -interaction=nonstopmode"
-      # Because of bug with sed (GNU/non-GNU?) the .tex files have a missing '\'
-      # ('usepackage{xeCJK}' instead of '\usepackage{xeCJK}').
-      inreplace "doc/Makefile", "usepackage{xeCJK}", "\\\\usepackage{xeCJK}"
 
       # Now we need to install XML::LibXML which is used by extrait-fichiers.pl
       # in doc/Makefile during the build.
@@ -488,45 +481,41 @@ class AutoMultipleChoice < Formula
         install_perl_package(r, installed)
       end
     else
-      # Get all the documentation, templates (= models) and automultiplechoice.sty
-      # from a precompiled tarball. This avoids to rely on tex during the build.
+      # Get all the documentation from a precompiled tarball. This avoids to
+      # rely on tex during the build. Note that automultiplechoice.sty is
+      # generated from automultiplechoice.sty.in which is in the repo.
       resource("auto-multiple-choice-precomp").stage do
-        rm_rf buildpath/"doc"
-        mv "doc", buildpath/"doc"
-      end
-      # As we alredy have the documentation, prevent 'make' from building the
-      # documentation (pdf, html, sty, models).
-      inreplace ["Makefile"] do |s|
-        s.gsub! /FROM_IN *=.*/, "FROM_IN = auto-multiple-choice $(GLADE_FROMIN) AMC-gui.pl AMC-latex-link.pl AMC-perl/AMC/Basic.pm $(DTX)"
-        s.gsub! /^all: (.*) doc(.*)$/, "all: \\1 \\2"
+        mv Dir["doc/*.{pdf,1}"], buildpath/"doc"
+        mv Dir["doc/sty/*.pdf"], buildpath/"doc/sty"
+        rm_rf [buildpath/"doc/modeles", buildpath/"doc/html"]
+        mv Dir["doc/html"], buildpath/"doc"
+        mv Dir["doc/modeles"], buildpath/"doc"
       end
     end
 
-    # Adapt Makefile-macports.conf for homebrew use
-    inreplace ["Makefile-macports.conf"] do |s|
-      s.gsub! /PERLPATH=.*/, "PERLPATH=#{Formula["perl"].bin}/perl"
-      s.gsub! /PERLDIR=.*/, "PERLDIR=#{libexec/"lib/perl5"}"
-      s.gsub! "DIR=$(BASEPATH)", "DIR=$(PREFIX)"
-      s.gsub! "$(BASEPATH)", "$(LIBS_PREFIX)"
-      s.gsub! /DOCBOOK_MAN_XSL *=.*/, "DOCBOOK_MAN_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/manpages/docbook.xsl"
-      s.gsub! /DOCBOOK_XHTML_XSL *=.*/, "DOCBOOK_XHTML_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/xhtml/docbook.xsl"
-      s.gsub! /DOCBOOK_DTD *=.*/, "DOCBOOK_DTD = #{Formula["docbook"].prefix}/docbook/xml/4.5/docbookx.dtd"
-    end
+    # Override three variables that cannot be passed as make variables
+    # because they are reset in Makefile.conf.
+    (buildpath/"Makefile-brew.conf").append_lines <<~EOS
+      DOCBOOK_MAN_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/manpages/docbook.xsl
+      DOCBOOK_XHTML_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/xhtml/docbook.xsl
+      DOCBOOK_DTD = #{Formula["docbook"].prefix}/docbook/xml/4.5/docbookx.dtd
+      PERLPATH=#{Formula["perl"].opt_bin}/perl
+      PERLDIR=#{libexec}/lib/perl5
+    EOS
 
-    # Disable libnotify as it is not usable on mac
-    inreplace ["AMC-perl/AMC/Config.pm"], /notify_desktop *=> *1/, "notify_desktop => 0"
-
-    # The actual build
-    make_opts = "AMCCONF=macports", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}",
-                "PERLPATH=#{Formula["perl"].opt_bin}/perl"
     # Instead of running 'make version_files', create our own Makefile.versions
     (buildpath/"Makefile.versions").write <<~EOS
-      PACKAGE_V_DEB=#{pkg_version}-homebrew
+      PACKAGE_V_DEB=#{pkg_version.to_s.gsub('_', '-')}-brew
       PACKAGE_V_VC=
       PACKAGE_V_PDFDATE=#{Time.now.year}#{Time.now.month}#{Time.now.day}000000
       PACKAGE_V_ISODATE=#{Time.now.year}-#{Time.now.month}-#{Time.now.day}
     EOS
-    system "make", *make_opts
+
+    # The actual build
+    make_opts = "AMCCONF=brew", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    system "make", "core", *make_opts
+    system "make", "doc", *make_opts if build.with?("regenerate-doc")
+    system "make", "docsty", *make_opts if build.with?("regenerate-doc")
     system "make", "install_models", *make_opts
     system "make", "install_doc", *make_opts
     system "make", "install_nodoc", *make_opts
@@ -534,7 +523,6 @@ class AutoMultipleChoice < Formula
     mv bin/"auto-multiple-choice", libexec/"bin/auto-multiple-choice"
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
         :PERL5LIB => ENV["PERL5LIB"],
-        :TEXMFHOME => share/"texmf-local",
         :PATH => libexec/"bin:$PATH",
         :AMCBASEDIR => prefix
 
@@ -695,7 +683,10 @@ class AutoMultipleChoice < Formula
   end
 
   test do
-    opoo "we should write some tests"
+    Open3.popen3("#{bin}/auto-multiple-choice detect") do |stdin, stdout, _|
+      stdin.write "\r\n\r\n"
+      assert_match "TX=0.00 TY=0.00 DIAM=0.00\n", stdout.gets("\r\n\r\n")
+    end
   end
 
   def install_perl_package(package, installed)
@@ -779,33 +770,3 @@ class AutoMultipleChoice < Formula
     s
   end
 end
-
-
-__END__
-diff -r 698b50715961 AMC-perl/AMC/Basic.pm.in
---- a/AMC-perl/AMC/Basic.pm.in	Tue Jan 02 18:04:21 2018 +0100
-+++ b/AMC-perl/AMC/Basic.pm.in	Thu Jan 04 15:32:09 2018 +0100
-@@ -91,6 +91,7 @@
-     'icons'=>"@/ICONSDIR/@",
-     'models'=>"@/MODELSDIR/@",
-     'doc/auto-multiple-choice'=>"@/DOCDIR/@",
-+    'locale' => "@/LOCALEDIR/@"
-     );
- 
- sub amc_specdir {
-@@ -570,14 +571,7 @@
- 
- sub use_gettext {
-     $localisation=Locale::gettext->domain("auto-multiple-choice");
--    # For portable installs
--    if(! -f ($localisation->dir()."/fr/LC_MESSAGES/auto-multiple-choice.mo")) {
--	$localisation->dir(amc_adapt_path(
--			       'locals'=>['locale'],
--			       'alt'=>[$localisation->dir()],
--			   ));
--    }
--
-+    $localisation->dir(amc_specdir('locale'));
-     init_translations();
- }
- 
