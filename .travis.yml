@@ -34,8 +34,6 @@ cache:
     - "$HOME/.gem/ruby"
 
 install:
-  # Fix travis log truncated (https://github.com/travis-ci/travis-ci/issues/8920)
-  - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
   # the official test-bot won't let you run inside TravisCI, so we use
   # davidchall's one. David's test-bot cannot push the commit using
   # Oauth github + https (only ssh) so I use my own.
@@ -96,43 +94,26 @@ jobs:
       osx_image: xcode8.3
       env: OS=sierra-10.12
       before_install:
-        # Sometimes, brew update fails with the error `Homebrew must be run
-        # under Ruby 2.3! You are running 2.0.0' (althouth ruby-portable
-        # is there). Workaround (A): run double brew update (see
-        # https://github.com/Homebrew/brew/issues/3299). This seems to happen
-        # as soon as the macos image on Travis is 'too old'.
-        # The issue of broken symlink (B) also happens at the same time.
-        - brew update | grep "==>" || brew update   # (A)
-        # (brew doctor) fix some random broken symlinks
-        - brew prune                                # (B)
-        # (brew doctor) fix the missing deps
-        - brew missing | cut -d':' -f1 | xargs brew uninstall
-        - brew cask reinstall xquartz || true
-        # (brew install numpy) fails during 'brew link'
-        - brew install numpy || brew link --overwrite numpy
+        # Three reasons not to use the /usr/local and Homebrew installations
+        # that come in the Travis CI images:
+        # 1) because Travis CI has installed many non-homebrew things into
+        #    /usr/local that randomly cause 'brew doctor' to fail;
+        # 2) after time, the osx image contains an outdated Homebrew that
+        #    has weird 'unlinked kegs' and such;
+        # 3) also because it takes a long time to 'brew update' from an old
+        #    Homebrew anyway, so why not start fresh.
+        - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
+        - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        - brew cask reinstall xquartz
 
     - &run-on-osx-old-xcode # only for xcode6.4 and xcode7.3
       os: osx
       osx_image: xcode7.3
       env: OS=el_capitan-10.11
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
-        # Sometimes, brew update fails with the error `Homebrew must be run
-        # under Ruby 2.3! You are running 2.0.0' (althouth ruby-portable
-        # is there). Workaround (A): run double brew update (see
-        # https://github.com/Homebrew/brew/issues/3299). This seems to happen
-        # as soon as the macos image on Travis is 'too old'.
-        # The issue of broken symlink (B) also happens at the same time.
-        - brew update | grep "==>" || brew update   # (A)
-        # (brew doctor) fix some random broken symlinks
-        - brew prune                                # (B)
-        # (brew doctor) fix the many missing deps on gnupg and others
-        - brew missing | cut -d':' -f1 | xargs brew uninstall
-        # (brew doctor) fix "your XQuartz (2.7.9) is outdated" if it is installed
-        - brew cask reinstall xquartz || true
-        # (brew test-bot on travis) fix libyaml 0.1.6_1 already installed
-        - brew uninstall libyaml || true; brew uninstall md5deep || true
-        # (brew install numpy) fails during 'brew link'
-        - brew install numpy || brew link --overwrite numpy
+        - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
+        - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        - brew cask reinstall xquartz
 
 #    - <<: *run-on-osx-old-xcode
 #      os: osx
