@@ -94,6 +94,10 @@ jobs:
       osx_image: xcode8.3
       env: OS=sierra-10.12
       before_install:
+        # First we uninstall any outdated versions of xquartz; otherwise,
+        # Homebrew will complain of of older version (2.9.7) being outdated
+        # even though we install a new version.
+        - brew cask outdated xquartz || brew cask uninstall xquartz
         # Three reasons not to use the /usr/local and Homebrew installations
         # that come in the Travis CI images:
         # 1) because Travis CI has installed many non-homebrew things into
@@ -111,6 +115,7 @@ jobs:
       osx_image: xcode7.3
       env: OS=el_capitan-10.11
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
+        - brew cask outdated xquartz || brew cask uninstall xquartz
         - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
         - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         - brew cask reinstall xquartz
