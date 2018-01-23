@@ -8,7 +8,7 @@ Brew formula for auto-multiple-choice 📖
 
 |                      Install                      |          Run          |
 |:-------------------------------------------------:|:---------------------:|
-| `brew install maelvalais/amc/auto-mutiple-choice` | `auto-mutiple-choice` |
+| `brew install maelvalais/amc/auto-multiple-choice`| `auto-mutiple-choice` |
 
 Brew will try to install using a precompiled version of AMC (bottle) that
 is built on Travis-ci. Every night, an automated installation of the bottle
