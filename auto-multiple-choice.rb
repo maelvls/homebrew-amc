@@ -761,7 +761,6 @@ class AutoMultipleChoice < Formula
       3) Where is automultiplechoice.sty?
          After installing, you have to run:
 
-             sudo mkdir -p $(kpsewhich -var-value=TEXMFLOCAL)
              sudo auto-multiple-choice latex-link
 
       If you have any problem/remark regarding this formula, you can submit
