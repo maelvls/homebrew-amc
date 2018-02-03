@@ -30,6 +30,21 @@ to remove ~100 loc from the formula).
 
 [mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
 
+⚠️  If you get the following error when Homebrew updates: ⚠️
+```
+Recorded preimage for 'auto-multiple-choice.rb'
+error: Failed to merge in the changes.
+Patch failed at 0001 amc: use the fork bitbucket.org/maelvalais/auto-multiple-choice
+The copy of the patch that failed is found in: .git/rebase-apply/patch
+```
+Sorry for that, I am **really** dumb on this one. I force-pushed homebrew-amc
+in order to revert the 2166 version. This is because I had created a fork
+with a different version numbering; later, the commits in my fork were merged into
+the main AMC repo and the version was 2161. `brew audit` would tell me not to
+have a version number lower than the previous ones... **Solution:**
+
+    git -C $(brew --repo maelvalais/amc)
+
 ## FAQ
 
 - **What are the dependencies?** For the installation, only Xquartz is
