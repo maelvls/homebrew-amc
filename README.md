@@ -1,5 +1,5 @@
-Brew formula for auto-multiple-choice 📖
-========================================
+🍺 Brew formula for auto-multiple-choice 📖
+==========================================
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/2195781/34616703-4ef9a912-f239-11e7-82ec-256acf855104.png">
@@ -18,9 +18,15 @@ that the bottle is still working.
 [![Build Status](https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master)](https://travis-ci.org/maelvalais/homebrew-amc)
 
 If you have problems with the bottle (**dyld issues** detected by
-`brew linkage auto-mutiple-choice`), you can rebuild from source:
-- using `brew install maelvalais/amc/auto-mutiple-choice --build-from-source`
-- or using `brew install maelvalais/amc/auto-mutiple-choice --HEAD` to install from source the latest version from [mercurial]
+`brew linkage auto-mutiple-choice`), you can rebuild from source using
+
+    brew install maelvalais/amc/auto-mutiple-choice --build-from-source
+
+Note that at first, I had enabled the possibility for compiling using the
+`--HEAD` flag (so that it compiles using the latest sources from [mercurial]).
+But because it required latex during the build and that the compilation of
+the documentation and .sty was extremely cumbersome, I disabled it (allowing me
+to remove ~100 loc from the formula).
 
 [mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
 
@@ -55,8 +61,7 @@ If you have problems with the bottle (**dyld issues** detected by
   perl packages and pdftk (also dblatex but it is only used during build).
   Nothing is installed outside of the Homebrew environment so you don't
   have to worry with messing your system. The **only prerequisite** is to
-  have Mactex (if you don't have it: `brew cask install mactex`). To
-  install auto-mutiple-choice:
+  have Mactex (if you don't have it: `brew cask install mactex`).
 
 - **Why are the windows _tabbed_ like in Safari tabs?**  because it is
   using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening
@@ -66,17 +71,11 @@ If you have problems with the bottle (**dyld issues** detected by
   (_System preferences_ -> _Dock_ -> _Prefer tabs when opening
   documents_).
 - **`automultiplechoice.sty` is not found!** This file cannot be installed
-  to your Mactex distribution during installation as it requires sudo. Two
-  options:
-  - either you add the following to your `~.zshrc` (or `~/.bashrc` or
-    whatever):
+  to your Mactex distribution during installation as it requires sudo. You
+  must run this after installing:
 
-        export TEXMFHOME=/usr/local/opt/auto-multiple-choice/share/texmf-local
+        sudo auto-multiple-choice latex-link
 
-  - or you symlink `automultiplechoice.sty` in your TEXMFHOME:
-
-        mkdir -p $(kpsewhich -var-value=TEXMFHOME)/tex/latex/AMC
-        ln -s $(brew --prefix auto-multiple-choice)/share/texmf-local/tex/latex/AMC/automultiplechoice.sty $(kpsewhich-var-value=TEXMFHOME)/tex/latex/AMC/automultiplechoice.sty
 - **The font *Linux Libertine* is not found!** Install Libertine using brew:
 
       brew cask install caskroom/fonts/font-linux-libertine
@@ -95,20 +94,9 @@ If you have problems with the bottle (**dyld issues** detected by
   (eventually) merge the formula to the core repo. In the core repo, `x11`
   is accepted as a default dependency (xquartz is installed on their
   testing/bottling infrastructure). In the contrary, `tex` is not accepted
-  as a default dependency as Mactex is not installed during bottling.
-- **Why not building doc & automultiplechoice.sty instead of downloading?**
-  This is because compiling the documentation & sty is a pain, mainly
-  because it needs Mactex (which is not an accepted 'default' dep for the
-  Homebrew core formulas) and it also needs extra fonts (DejaVu and IPAex).
-  As I noticed that the PDF documentation does not evolve a lot and that
-  `automultiplechoice.sty` stays the same, I decided to copy the
-  documentation from previous precompiled versions of AMC (targeted for
-  linux). This is why you may notice that the doc kind of lags behind.
-- **Why is the documentation outdated?** This is because I decided not to
-  rebuild the whole documentation and instead download a precompiled
-  tarball (for linux) and copying the 'doc' directory from there. In order
-  to recompile the documentation/sty, you can still use
-  `--with-regenerate-doc`.
+  as a default dependency as Mactex is not installed during bottling. So we
+  use the 'dist' tarballs from the Bitbucket's Downloads area which contain
+  already compiled PDFs and documentation.
 
 - **The application craches after closing a warning popup** The error is:
 
