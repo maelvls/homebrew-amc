@@ -43,13 +43,17 @@ with a different version numbering; later, the commits in my fork were merged in
 the main AMC repo and the version was 2161. `brew audit` would tell me not to
 have a version number lower than the previous ones... **Solution:**
 
-    git -C $(brew --repo maelvalais/amc)
+    git -C $(brew --repo maelvalais/amc) reset --hard origin/master
 
 ## FAQ
 
 - **What are the dependencies?** For the installation, only Xquartz is
-  required. For running it, you will need to have Mactex (e.g.,
-  `brew cask install mactex`).
+  required. For running it, you need a latex distribution installed.
+  If you already have Mactex or Basic Tex installed (for example
+  the one you installed using `MacTeX.pkg`), you are ready to go!!
+  **You don't need to install a specific Homebrew version of Mactex**.
+  But if you don't have latex installed at all, you can install it using 
+  `brew cask install mactex`.
 - **How come there has never been an official formula for Homebrew?** This
   is mainly because of the complexity of auto-multiple-choice. It has an
   insane number of dependencies like Gtk+3, Opencv, Cairo, Pango,
