@@ -16,6 +16,8 @@ is done as well as `brew linkage auto-mutiple-choice` in order to check
 that the bottle is still working.
 
 [![Build Status](https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master)](https://travis-ci.org/maelvalais/homebrew-amc)
+[ ![Where the bottle is stored](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion)
+
 
 If you have problems with the bottle (**dyld issues** detected by
 `brew linkage auto-mutiple-choice`), you can rebuild from source using
