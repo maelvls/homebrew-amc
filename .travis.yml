@@ -74,7 +74,7 @@ install:
 script:
   - |
     if [[ $TRAVIS_EVENT_TYPE =~ cron|api ]]; then
-      brew install *.rb || exit 123
+      brew install *.rb && brew test *.rb || exit 123
       for f in *.rb; do
         if ! brew linkage --test ${f/\.rb/}; then
           rev=$(grep revision $f | sed 's/^[^0-9]*\([0-9]*\)$/\1/')
@@ -176,7 +176,11 @@ jobs:
               bottle=`ls ${json/bottle*/}*.tar.gz`;
               cp ${bottle} ${bottle/sierra/high_sierra};
             done;
-            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            # Note that --git-name also determines where the push will be done!
+            # In my case, I disabled the push using '--no-push' so it wont push
+            # to maelvalais/homebrew-amc.
+            brew test-bot --ci-upload --no-push --overwrite --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            git fetch && git rebase && git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
