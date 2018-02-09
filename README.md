@@ -83,7 +83,19 @@ have a version number lower than the previous ones... **Solution:**
   Nothing is installed outside of the Homebrew environment so you don't
   have to worry with messing your system. The **only prerequisite** is to
   have Mactex (if you don't have it: `brew cask install mactex`).
+- **What are the next steps before publishing the formula to
+  homebrew-core?** Two main problems before the maintainers of Homebrew can
+  accept this formula into the core formulas: I rely on a pre-built
+  `pdftk.pkg`. It is not allowed in Homebrew core. A source-code-based
+  [PDFtk formula](https://github.com/spl/homebrew-pdftk) has existed for a
+  while but the maintainer gave up as because of gcj-5 (from gcc@5
+  --with-java) 'hanging' during the build (Macports [fixed
+  gcc5](https://trac.macports.org/ticket/49227) just in order to build
+  PDFtk). This is because PDFtk relies on GCJ which is dead by now. We
+  could replace `pdftk` if we knew a way to scrap filled forms from PDFs.
 
+
+## Troubleshooting
 - **Why are the windows _tabbed_ like in Safari tabs?**  because it is
   using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening
   as tabbed windows. This is a work-in-progress on the GTK3 side; the
