@@ -15,6 +15,8 @@ env:
   global:
     - HOMEBREW_BINTRAY_USER=maelvalais
     - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/maelvalais
+    - AWS_REGION=eu-west-1 # needed because the aws-sdk-s3 gem errors without it
+    - BUCKET=homebrew-amc
     # Beyond these global variables, you also need to set some secret variables
     # in your travis-ci settings:
     # - AWS_ACCESS_KEY_ID
@@ -38,7 +40,8 @@ install:
   # davidchall's one. David's test-bot cannot push the commit using
   # Oauth github + https (only ssh) so I use my own.
   - brew tap maelvalais/test-bot
-
+  # Install the ruby AWS gem so that I can upload bottles to S3
+  - sudo gem install aws-sdk-s3
   # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
   # Step: 1) create the intermediate folders <user>/<repo> so that
   # we can 2) remove <repo> and 3) replace it with a sym link
@@ -51,10 +54,6 @@ install:
   - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
   - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
   - git fetch --unshallow || true               # 4)
-
-  - brew install awscli
-  - aws s3 sync s3://homebrew-amc/${TRAVIS_BUILD_NUMBER} ~/shared || true
-
   # 'brew doctor' must be run under HOMEBREW_DEVELOPER=1. Otherwise,
   # it returns 1 with the message "this osx version is outdated" on old osx ver.
   - HOMEBREW_DEVELOPER=1 brew doctor
@@ -86,14 +85,14 @@ script:
       done
     fi
   - if [[ $TRAVIS_EVENT_TYPE =~ push|pull_request ]]; then brew test-bot; fi
-  - cp *.bottle*.* ~/shared 2>/dev/null || echo "==> No bottle created here"
+  - ls *.bottle*.* || echo "==> No bottle created here"
 
 jobs:
   include:
     - os: osx
       osx_image: xcode8.3
       env: OS=sierra-10.12
-      before_install:
+      before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
         # First we uninstall any outdated versions of xquartz; otherwise,
         # Homebrew will complain of of older version (2.9.7) being outdated
         # even though we install a new version.
@@ -138,8 +137,8 @@ jobs:
         # Because we cannot do 'umask 002' just before travis clones the repo,
         # I set umask afterwards (1) and I change the permission of
         # already cloned files from 664 to 644 (2).
-        - umask 022                  # (1)
-        - chmod 0644 *.rb            # (2)
+        - umask 022          # (1)
+        - chmod 0644 *.rb    # (2)
 
         # Instal linuxbrew
         - export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH";
@@ -158,12 +157,17 @@ jobs:
       os: linux
       env: OS=any_linux
       script:
+        # First step: download the *.json and *.tar.gz from the S3 bucket
+        - |
+          ruby <<EOF || true
+          require 'aws-sdk-s3'; s3 = Aws::S3::Resource.new
+          s3.bucket("$BUCKET").objects(prefix:"$TRAVIS_BUILD_NUMBER/").each { |o| o.download_file(o.key.to_s.gsub(/^\d*\/(.*)/, '\1')) }
         # This hook will add [ci skip] the the commit messages for bottle DSL
         # so that travis-ci does not re-build a duplicate bottle on pushing.
         - echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
         # We fail 'silently' if no bottle is found.
         - |
-          if cp -v ~/shared/* . ; then
+          if ls *.{json,tar.gz}; then
             # This is a trick so that 'prefix' and 'cellar' are removed if they
             # are equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
             # 'brew bottle' on a linux setup.
@@ -177,18 +181,20 @@ jobs:
               cp ${bottle} ${bottle/sierra/high_sierra};
             done;
             # Note that --git-name also determines where the push will be done!
-            # In my case, I disabled the push using '--no-push' so it wont push
-            # to maelvalais/homebrew-amc.
-            brew test-bot --ci-upload --no-push --overwrite --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
-            git fetch && git rebase && git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
+            git fetch && git checkout master;
+            brew test-bot --ci-upload --no-push --override-bintray --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            # git fetch && git rebase && git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
       after_script:
-        # Clean the bucket
-        #- aws s3 rm s3://homebrew-amc/${TRAVIS_BUILD_NUMBER} --recursive
+        # nothing
 
 after_script:
   # In case the AWS_SECRET_ACCESS_KEY and AWS_SECRET_ACCESS_KEY are not
   # available, we don't want the build to fail.
-  - aws s3 sync ~/shared s3://homebrew-amc/${TRAVIS_BUILD_NUMBER} || true
+  # Here, the 'testing' jobs have finished and must upload their *.{json,tar.gz}
+  - |
+    ruby <<EOF || true
+    require 'aws-sdk-s3'; s3 = Aws::S3::Resource.new
+    Dir["*.{json,tar.gz}"].each { |f| s3.bucket("$BUCKET").put_object(key:"$TRAVIS_BUILD_NUMBER/#{f}").upload_file(f) }
