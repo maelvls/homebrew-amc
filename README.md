@@ -19,7 +19,7 @@ that the bottle is still working.
 [ ![Where the bottle is stored](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion)
 
 
-If you have problems with the bottle (**dyld issues** detected by
+If you have problems with the bottle (**dydl issues** detected by
 `brew linkage auto-mutiple-choice`), you can rebuild from source using
 
     brew install maelvalais/amc/auto-mutiple-choice --build-from-source
@@ -58,19 +58,17 @@ have a version number lower than the previous ones... **Solution:**
   `brew cask install mactex`.
 - **How come there has never been an official formula for Homebrew?** This
   is mainly because of the complexity of auto-multiple-choice. It has an
-  insane number of dependencies like Gtk+3, Opencv, Cairo, Pango,
-  Imagemagick... but more importantly it has around 70 perl dependencies.
-  Perl dependencies are not handled by Homebrew (Macports does handle them),
-  so I have to 'vendored' them (= install them only for auto-multiple-choice,
-  not system-wide). The last huge problem was the fact that Mactex is required
-  for `make` but Mactex cannot be handled by Homebrew (it cannot be
-  installed automatically from the formula). My workaround is to download
-  the part that relies on Mactex (i.e., the doc and the .sty file).
+  insane number of Perl dependencies (~70 packages). Perl dependencies are not
+  handled by Homebrew (Macports does handle them), so I have to 'vendor'
+  them (= install them only for auto-multiple-choice, not system-wide).
+  The bad side is that it makes it a _long_ formula (678 loc) that you
+  can compare to the [`ansible.rb`][ansible.rb] formula (557 lines, but for vendoring python
+  packages).
 - **When building from source, why are there so many Perl download/make/make install?**
   This is because Homebrew is not able to handle Perl dependencies, so I
   have to vendor each of the dependencies (around 70 of them), which means
   there are MANY downloads during the build phase if it is built from source.
-- **When running, there is a dylib error** This is probably because it
+- **When running, there is a dylib/dydl error** This is probably because it
   installed from a bottle and that the bottle was outdated. I run a daily
   cron script in order to check that the dylib links links are not broken.
   Two solutions: **1)** try reinstalling with `brew reinstall
@@ -94,6 +92,7 @@ have a version number lower than the previous ones... **Solution:**
   PDFtk). This is because PDFtk relies on GCJ which is dead by now. We
   could replace `pdftk` if we knew a way to scrap filled forms from PDFs.
 
+[ansible.rb]: https://github.com/Homebrew/homebrew-core/blob/master/Formula/ansible.rb
 
 ## Troubleshooting
 - **Why are the windows _tabbed_ like in Safari tabs?**  because it is
@@ -186,6 +185,7 @@ Then I run
 and I copy everything in `resources` to the formula.
 
 Here is `list_to_resources.pl`:
+
 ```perl
 #!/usr/bin/env perl
 # Lines must be of form (spaces and the comma are ignored):
