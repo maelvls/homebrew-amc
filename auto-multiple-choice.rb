@@ -419,6 +419,12 @@ class AutoMultipleChoice < Formula
     inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
       "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
+    # When using 'sudo auto-multiple-choice latex-link', make sure that the
+    # symlink used in 'latex-link' is not version-hardcoded so that
+    # 'brew upgrade' won't require a 'latex-link' afterwards.
+    # Why? Because @/TEXDIR/@ is using #{prefix} which changes on each version.
+    inreplace "AMC-latex-link.pl.in", "@/TEXDIR/@", opt_share/"texmf-local/tex/latex/AMC"
+
     # Override three variables that cannot be passed as make variables
     # because they are reset in Makefile.conf.
     (buildpath/"Makefile-brew.conf").append_lines <<~EOS
