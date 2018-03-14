@@ -48,7 +48,12 @@ have a version number lower than the previous ones... **Solution:**
     git -C $(brew --repo maelvalais/amc) reset --hard origin/master
 
 ## FAQ
-
+- **How can I uninstall in a clean way?** If you want to go back to Macport's
+  auto-multiple-choice or you want to simply get rid or brew's installation,
+  you can uninstall using `brew uninstall auto-multiple-choice` (see
+  (here)[https://github.com/Homebrew/install] for uninstalling homebrew totally).
+  If anything went wrong (bugs, errors), I would be pleased to see an issue opened
+  on Github (or contact me by email at mael.valais@gmail.com).
 - **What are the dependencies?** For the installation, only Xquartz is
   required. For running it, you need a latex distribution installed.
   If you already have Mactex or Basic Tex installed (for example
