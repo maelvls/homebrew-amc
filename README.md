@@ -18,19 +18,16 @@ that the bottle is still working.
 [![Build Status](https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master)](https://travis-ci.org/maelvalais/homebrew-amc)
 [ ![Where the bottle is stored](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion)
 
+# News
 
-If you have problems with the bottle (**dydl issues** detected by
-`brew linkage auto-mutiple-choice`), you can rebuild from source using
+## March 14th, 2018: build from source until March 17th
 
-    brew install maelvalais/amc/auto-mutiple-choice --build-from-source
+Homebrew has a bug that prevents me from creating bottles for a few days. I'll
+re-enable the bottles as soon as brew [releases version 1.5.11](https://github.com/Homebrew/brew/releases).
+Until then, we must build from source, meaning that many perl packages will be
+downloaded and built during installation. Sorry for that!
 
-Note that at first, I had enabled the possibility for compiling using the
-`--HEAD` flag (so that it compiles using the latest sources from [mercurial]).
-But because it required latex during the build and that the compilation of
-the documentation and .sty was extremely cumbersome, I disabled it (allowing me
-to remove ~100 loc from the formula).
-
-[mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
+## Febrary 3rd, 2018: brew update thows 'rebase' errors
 
 ⚠️  If you get the following error when Homebrew updates: ⚠️
 ```
@@ -47,13 +44,15 @@ have a version number lower than the previous ones... **Solution:**
 
     git -C $(brew --repo maelvalais/amc) reset --hard origin/master
 
-## FAQ
+
+# FAQ
+
 - **How can I uninstall in a clean way?** If you want to go back to Macport's
   auto-multiple-choice or you want to simply get rid or brew's installation,
-  you can uninstall using `brew uninstall auto-multiple-choice` (see
-  (here)[https://github.com/Homebrew/install] for uninstalling homebrew totally).
-  If anything went wrong (bugs, errors), I would be pleased to see an issue opened
-  on Github (or contact me by email at mael.valais@gmail.com).
+  you can uninstall using `brew uninstall auto-multiple-choice` (see [uninstall-brew]
+  for uninstalling homebrew totally). If anything went wrong (bugs, errors), I would
+  be pleased to see an issue opened on Github (or contact me by email at
+  mael.valais@gmail.com, but I would prefer that an issue is opened 😊).
 - **What are the dependencies?** For the installation, only Xquartz is
   required. For running it, you need a latex distribution installed.
   If you already have Mactex or Basic Tex installed (for example
@@ -86,6 +85,12 @@ have a version number lower than the previous ones... **Solution:**
   Nothing is installed outside of the Homebrew environment so you don't
   have to worry with messing your system. The **only prerequisite** is to
   have Mactex (if you don't have it: `brew cask install mactex`).
+- **Can I use the latest version (--devel, --HEAD) from mercurial?**
+  At first, I had enabled the possibility for compiling using the
+  `--HEAD` flag (so that it compiles using the latest sources from [mercurial]).
+  But because it required latex during the build and that the compilation of
+  the documentation and .sty was extremely cumbersome, I disabled it (allowing me
+  to remove ~100 loc from the formula).
 - **What are the next steps before publishing the formula to
   homebrew-core?** Two main problems before the maintainers of Homebrew can
   accept this formula into the core formulas: I rely on a pre-built
@@ -97,6 +102,8 @@ have a version number lower than the previous ones... **Solution:**
   PDFtk). This is because PDFtk relies on GCJ which is dead by now. We
   could replace `pdftk` if we knew a way to scrap filled forms from PDFs.
 
+[mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
+[uninstall-brew]: https://github.com/Homebrew/install
 [ansible.rb]: https://github.com/Homebrew/homebrew-core/blob/master/Formula/ansible.rb
 
 ## Troubleshooting
