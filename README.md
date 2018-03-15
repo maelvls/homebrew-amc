@@ -20,6 +20,22 @@ that the bottle is still working.
 
 # News
 
+## March 15th, 2018: OpenCV breaks scan detection
+
+Homebrew updated OpenCV from 3.4.0 to 3.4.1. In 3.4.0, the C headers of OpenCV used
+in AMC were fine (athough they have been [deprecated](https://github.com/opencv/opencv/issues/6221)
+for a long time now) but in 3.4.1 the function `cvLoadImage()` breaks. Because I cannot
+force Homebrew not to use OpenCV 3.4.1 for now, my only workaround is to help you switch back
+to the 3.4.0:
+
+    brew unlink opencv
+    brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/ff77d71c8ded338c3e3d28fcdb1ffb5728035cfc/Formula/opencv.rb
+    brew switch opencv 3.4.0_1
+    
+I'll see if we can move away from the C bindings in `AMC-detect.cc` (which is the culprit,
+see [the issue](https://github.com/maelvalais/homebrew-amc/issues/4)) but that will take some
+days and even more time for pushing that upstream. 
+
 ## March 14th, 2018: build from source until March 17th
 
 Homebrew has a bug that prevents me from creating bottles for a few days. I'll
