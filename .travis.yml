@@ -173,7 +173,7 @@ jobs:
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json;
             # Note that --git-name also determines where the push will be done!
             git fetch && git checkout master;
-            brew test-bot --ci-upload --no-push --override-bintray --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            brew test-bot --ci-upload --override-bintray --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
             # git fetch && git rebase && git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
