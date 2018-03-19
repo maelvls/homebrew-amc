@@ -1,10 +1,10 @@
 class AutoMultipleChoice < Formula
   desc "Auto Multiple Choice (AMC) helps you prepare printed tests for your students and mark them using PDF scans"
   homepage "https://www.auto-multiple-choice.net"
-  url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/downloads/auto-multiple-choice_1.3.0-2161-33b2895d5ed5_dist.tar.gz"
-  sha256 "e065972b0157a60a58f77f7753424b05b87656541e013e9461fb37c22f842d63"
-  version "1.3.0.2161"
-  revision 1
+  url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/downloads/auto-multiple-choice_1.3.0-2199-bf07b77e8a6d_dist.tar.gz"
+  sha256 "582b785e8466a375ec5ddac7b97e11f53b937d493587ff11f52408d6acf77d56"
+  version "1.3.0.2199"
+  revision 0
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
