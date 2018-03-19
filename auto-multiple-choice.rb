@@ -12,6 +12,7 @@ class AutoMultipleChoice < Formula
   bottle do
   end
 
+
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
   # installed by default on their test-bot runs) and can be used as a default
