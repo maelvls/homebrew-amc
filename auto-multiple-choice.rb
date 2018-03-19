@@ -10,6 +10,11 @@ class AutoMultipleChoice < Formula
   # which already contain the doc and doc/sty. See (1) for details.
 
   bottle do
+    root_url "https://dl.bintray.com/maelvalais/bottles-amc"
+    cellar :any
+    sha256 "07dbeb35e85f8ee29de1eb69228816fcd0ad7a35f45e68d33740e7179d437552" => :high_sierra
+    sha256 "604d956235824fe609ef06562b2095c52c13b731c84d91bf91b8338b4057fc72" => :sierra
+    sha256 "218bb6dba75474c2c21ac2b066dc7a96c0ff8c531f98dbe3445e44f8da7ee682" => :el_capitan
   end
 
 
