@@ -1,20 +1,15 @@
 class AutoMultipleChoice < Formula
   desc "Auto Multiple Choice (AMC) helps you prepare printed tests for your students and mark them using PDF scans"
   homepage "https://www.auto-multiple-choice.net"
-  url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/downloads/auto-multiple-choice_1.3.0-2186-7d6613da21d6_dist.tar.gz"
-  sha256 "0e660e8de4ceeff193d0b1f445aa66f2ed228ce5bd5e485fe4e8287223f3bfe9"
-  version "1.3.0.2186"
+  url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/downloads/auto-multiple-choice_1.3.0-2199-bf07b77e8a6d_dist.tar.gz"
+  sha256 "582b785e8466a375ec5ddac7b97e11f53b937d493587ff11f52408d6acf77d56"
+  version "1.3.0.2199"
   revision 0
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
   bottle do
-    root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    cellar :any
-    sha256 "880f653e86c99537e6d084ecd073fbff70394a0bc7a283682f0a77ee5deac8d6" => :high_sierra
-    sha256 "46080546977d88c77e3ae072e6a01b007bb66a4272339b8430a075e305151934" => :sierra
-    sha256 "e7c54b566fe69787e73ba1ba12ce30aea8d616f5fcd9b9de93000ef5a5549622" => :el_capitan
   end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
