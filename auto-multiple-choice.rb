@@ -24,20 +24,20 @@ class AutoMultipleChoice < Formula
 
   depends_on :x11
   depends_on "perl"
-  depends_on "gtk+3"
-  depends_on "pango"
+  depends_on "gtk+3" # libs
+  depends_on "pango" # libs
   depends_on "adwaita-icon-theme" # icons used in AMC
-  depends_on "librsvg" # I don't know what this is; copied from macports'
-  depends_on "netpbm"
-  depends_on "poppler"
-  depends_on "opencv"
-  depends_on "imagemagick@6" # for Image::Magick (perl)
+  depends_on "netpbm" # libs and binaries
+  depends_on "poppler" # libs and binaries
+  depends_on "opencv" # libs
+  depends_on "imagemagick@6" # libs (for Image::Magick) and binaries
   depends_on "glib" # for Glib (perl)
   depends_on "libffi" # for Glib::Object::Introspection (perl)
-  depends_on "gobject-introspection"
+  depends_on "gobject-introspection" # for Glib::Object::Introspection (perl)
   depends_on "gettext" # runtime (Locale::gettext needs libintl) and build (msgfmt)
   depends_on "freetype"
   depends_on "cairo"
+  depends_on "librsvg" => :build # in Makefile
 
   # What is missing in this brew-flavoured AMC:
   # - shared-mime-info: there might be warnings about 'shared-mime-info'
@@ -404,7 +404,7 @@ class AutoMultipleChoice < Formula
 
     ENV.prepend_create_path "PERL5LIB", libexec/"lib/perl5"
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
-    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].opt_lib}/pkgconfig" # for Glib::Object::Introspection
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
 
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
     ENV["PERL_MB_OPT"] = "--install_base '#{libexec}'" # for cpan (Build.PL)
@@ -426,7 +426,7 @@ class AutoMultipleChoice < Formula
       DOCBOOK_MAN_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/manpages/docbook.xsl
       DOCBOOK_XHTML_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/xhtml/docbook.xsl
       DOCBOOK_DTD = #{Formula["docbook"].prefix}/docbook/xml/4.5/docbookx.dtd
-      PERLPATH=#{Formula["perl"].opt_bin}/perl
+      PERLPATH=#{Formula["perl"].bin}/perl
       PERLDIR=#{libexec}/lib/perl5
     EOS
 
@@ -439,9 +439,9 @@ class AutoMultipleChoice < Formula
     mv bin/"auto-multiple-choice", libexec/"bin/auto-multiple-choice"
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
         :PERL5LIB => ENV["PERL5LIB"],
-        :PATH => libexec/"bin:$PATH",
+        # netpbm, poppler and imagemagick@6 must be in the PATH
+        :PATH => "#{libexec}/bin:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
-
     [
       # Here are all the perl dependencies that we will vendor (= install locally
       # only for this recipe):
