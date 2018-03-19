@@ -23,8 +23,8 @@ that the bottle is still working.
 ## March 19th, 2018: Scan detection works again!
 
 We fixed the above bug (see [PR53]). Everything should be back to normal in 1.3.0.2199.
-Note that bottles won't be available for a couple of days, but it only means that
-the installation will be slightly longer in the meantime!
+~~Note that bottles won't be available for a couple of days, but it only means that
+the installation will be slightly longer in the meantime!~~ done!
 
 [PR53]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/53/amc-detect-fix-errors-with-opencv-341-by
 
