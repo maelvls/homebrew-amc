@@ -5,10 +5,10 @@
   <img src="https://user-images.githubusercontent.com/2195781/34616703-4ef9a912-f239-11e7-82ec-256acf855104.png">
 </p>
 
-
-|                      Install                      |           Run          |
+|                      Install                      |  Run (in your shell)   |
 |:-------------------------------------------------:|:----------------------:|
 | `brew install maelvalais/amc/auto-multiple-choice`| `auto-multiple-choice` |
+
 
 Brew will try to install using a precompiled version of AMC (bottle) that
 is built on Travis-ci. Every night, an automated installation of the bottle
@@ -20,21 +20,22 @@ that the bottle is still working.
 
 # News
 
-## March 15th, 2018: OpenCV breaks scan detection
+## March 19th, 2018: Scan detection works again!
+
+We fixed the above bug (see [PR53]). Everything should be back to normal in 1.3.0.2199.
+Note that bottles won't be available for a couple of days, but it only means that
+the installation will be slightly longer in the meantime!
+
+[PR53]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/53/amc-detect-fix-errors-with-opencv-341-by
+
+## March 15th, 2018: Fixed: ~~OpenCV breaks scan detection~~
 
 Homebrew updated OpenCV from 3.4.0 to 3.4.1. In 3.4.0, the C headers of OpenCV used
 in AMC were fine (athough they have been [deprecated](https://github.com/opencv/opencv/issues/6221)
-for a long time now) but in 3.4.1 the function `cvLoadImage()` breaks. Because I cannot
-force Homebrew not to use OpenCV 3.4.1 for now, my only workaround is to help you switch back
-to the 3.4.0:
-
-    brew unlink opencv
-    brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/ff77d71c8ded338c3e3d28fcdb1ffb5728035cfc/Formula/opencv.rb
-    brew switch opencv 3.4.0_1
-    
-I'll see if we can move away from the C bindings in `AMC-detect.cc` (which is the culprit,
-see [the issue](https://github.com/maelvalais/homebrew-amc/issues/4)) but that will take some
-days and even more time for pushing that upstream. 
+for a long time now) but in 3.4.1 the function `cvLoadImage()` breaks.  I'll see if we can move
+away from the C bindings in `AMC-detect.cc` (which is the culprit, see
+[the issue](https://github.com/maelvalais/homebrew-amc/issues/4)) but that will take some
+days and even more time for pushing that upstream.
 
 ## March 14th, 2018: build from source until March 17th
 
