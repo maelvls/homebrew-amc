@@ -10,7 +10,7 @@
 # - pull-request: same as 'push on master' but without bintray and commit.
 
 language: ruby
-if: tag IS blank AND NOT (type IN (push) AND branch = master)
+if: tag IS blank AND NOT type IN (push)
 env:
   global:
     - HOMEBREW_BINTRAY_USER=maelvalais
