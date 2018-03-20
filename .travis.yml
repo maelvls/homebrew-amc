@@ -10,7 +10,7 @@
 # - pull-request: same as 'push on master' but without bintray and commit.
 
 language: ruby
-if: tag IS blank # build is disabled on tags (no rationale actually)
+if: tag IS blank AND NOT (type IN (push) AND branch = master)
 env:
   global:
     - HOMEBREW_BINTRAY_USER=maelvalais
@@ -24,16 +24,18 @@ env:
     # - GITHUB_TOKEN                   (for pushing bottle DSL commits)
     # - HOMEBREW_BINTRAY_KEY           (for the Bintray repo)
 
-# Note: I removed $HOME/Library/Caches/Homebrew from the caches
-# because it was enormous (~2GB for the 4 jobs). This is because
-# this folder is already present on osx images and it is big.
-# Note2: I also removed $HOME/.cache/Homebrew (cache of Linuxbrew)
-# because it was also storing some logs, making the cache rebuilt
-# every time.
+# (1) remember tu use 'brew cleanup -s' at the end of the travis script;
+# otherwise, the $HOME/Library/Caches/Homebrew folder will be enormous
+# (~2GB for the 4 jobs). This is because this folder is already present on
+# osx images and it is big.
+# (2) I also removed $HOME/.cache/Homebrew (cache of Linuxbrew) because it
+# was also storing some logs, making the cache rebuilt every time.
 cache:
   directories:
     - "$HOME/.cache/pip"
     - "$HOME/.gem/ruby"
+    #- "$HOME/Library/Caches/Homebrew" # (1)
+    #- "$HOME/.cache/Homebrew"        # (2)
 
 install:
   # the official test-bot won't let you run inside TravisCI, so we use
@@ -149,10 +151,11 @@ jobs:
           /opt/pyenv/shims/*-config /usr/local/clang-*/bin/llvm-config
       before_cache:
         - brew cleanup
-
+    # Uploading to bintray (as unpublished bottle) and pushing a tag to the
+    # repo are only enabled on pull_requests.
     - <<: *run-on-linux
       stage: deploy
-      if: branch = master AND NOT type IN (pull_request, cron, api)
+      if: branch = master AND type IN (pull_request)
       os: linux
       env: OS=any_linux
       script:
@@ -161,25 +164,26 @@ jobs:
           ruby <<EOF || true
           require 'aws-sdk-s3'; s3 = Aws::S3::Resource.new
           s3.bucket("$BUCKET").objects(prefix:"$TRAVIS_BUILD_NUMBER/").each { |o| o.download_file(o.key.to_s.gsub(/^\d*\/(.*)/, '\1')) }
+
         # This hook will add [ci skip] the the commit messages for bottle DSL
         # so that travis-ci does not re-build a duplicate bottle on pushing.
         - echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
-        # We fail 'silently' if no bottle is found.
+
+        # (1) We fail 'silently' if no bottle is found.
+        # (2) A trick so that 'prefix' and 'cellar' are removed if they are
+        # equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
+        # 'brew bottle' on a linux setup.
+        # (3) In 'brew --ci--upload', --git-name is the name of the fork
+        # where the pr-1234 (or testing-98 when not in a PR) tag is pushed.
+        # In my case, I use the 'main' instead of a fork.
         - |
-          if ls *.{json,tar.gz}; then
-            # This is a trick so that 'prefix' and 'cellar' are removed if they
-            # are equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
-            # 'brew bottle' on a linux setup.
-            sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json;
-            # Note that --git-name also determines where the push will be done!
-            git fetch && git checkout master;
+          if ls *.{json,tar.gz}; then                                  # (1)
+            sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
             brew test-bot --ci-upload --override-bintray --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
-            # git fetch && git rebase && git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
-      after_script:
-        # nothing
+      after_script: true # nothing
 
 after_script:
   # In case the AWS_SECRET_ACCESS_KEY and AWS_SECRET_ACCESS_KEY are not
