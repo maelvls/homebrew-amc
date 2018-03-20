@@ -4,17 +4,13 @@ class AutoMultipleChoice < Formula
   url "https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/downloads/auto-multiple-choice_1.3.0-2199-bf07b77e8a6d_dist.tar.gz"
   sha256 "582b785e8466a375ec5ddac7b97e11f53b937d493587ff11f52408d6acf77d56"
   version "1.3.0.2199"
-  revision 0
+  revision 1
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
   bottle do
-    root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    cellar :any
-    sha256 "07dbeb35e85f8ee29de1eb69228816fcd0ad7a35f45e68d33740e7179d437552" => :high_sierra
-    sha256 "604d956235824fe609ef06562b2095c52c13b731c84d91bf91b8338b4057fc72" => :sierra
-    sha256 "218bb6dba75474c2c21ac2b066dc7a96c0ff8c531f98dbe3445e44f8da7ee682" => :el_capitan
+
   end
 
 
