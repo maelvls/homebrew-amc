@@ -170,7 +170,7 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            brew test-bot --ci-upload --override-bintray --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
