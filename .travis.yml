@@ -75,18 +75,9 @@ install:
 script:
   - |
     if [[ $TRAVIS_EVENT_TYPE =~ cron|api ]]; then
-      brew install *.rb && brew test *.rb || exit 123
-      for f in *.rb; do
-        if ! brew linkage --test ${f/\.rb/}; then
-          rev=$(grep revision $f | sed 's/^[^0-9]*\([0-9]*\)$/\1/')
-          sed -i "s/revision [0-9]*/revision $(expr $rev + 1)" $f
-          git commit -a -m "${f/\.rb/}: bump from revision $rev to $(expr $rev + 1) (brew linkage)"
-          git log -n2 -p
-          git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git master
-        fi
-      done
+      brew install *.rb && brew test *.rb && brew linkage --test *.rb || exit 123
     fi
-  - if [[ $TRAVIS_EVENT_TYPE =~ push|pull_request ]]; then brew test-bot; fi
+  - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then brew test-bot; fi
   - ls *.bottle*.* || echo "==> No bottle created here"
 
 jobs:
