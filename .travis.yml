@@ -5,12 +5,13 @@
 # - cron/api (api is when you select 'trigger build' in travis): in this mode,
 #   all the formulas are tested to make sure that there is no shared lib
 #   breakage
-# - push to master: in this mode, the updated formulas are built and bottled
-#   and the bottles are pushed to bintray, commited and pushed.
-# - pull-request: same as 'push on master' but without bintray and commit.
+# - push to master: does nothing
+# - pull-request: in this mode, the updated formulas are built and bottled
+#   and the bottles are pushed to bintray as 'unpublished'. The DSL commit
+#   is pushed as a tag, e.g., 'pr-1234', which us unrelated to master.
 
 language: ruby
-if: tag IS blank AND NOT (type IN (push) AND branch = master)
+if: tag IS blank AND NOT type IN (push)
 env:
   global:
     - HOMEBREW_BINTRAY_USER=maelvalais
@@ -170,7 +171,7 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            brew test-bot --ci-upload --override-bintray --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
