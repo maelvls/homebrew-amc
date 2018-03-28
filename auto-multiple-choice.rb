@@ -9,6 +9,11 @@ class AutoMultipleChoice < Formula
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
+  devel do
+    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/5659f896287d83e7ae241bdb8a140e06/auto-multiple-choice-1.4.0-beta1.tar.gz"
+    sha256 "3c4c3a535fbab654b3b98bd3550024482016033bb2481a0f57a3e775cf0d8dfd"
+  end
+
   bottle do
     root_url "https://dl.bintray.com/maelvalais/bottles-amc"
     cellar :any
@@ -34,7 +39,7 @@ class AutoMultipleChoice < Formula
   depends_on "pango" # libs
   depends_on "adwaita-icon-theme" # icons used in AMC
   depends_on "netpbm" # libs and binaries
-  depends_on "poppler" # libs and binaries
+  depends_on "poppler" # libs and binaries (e.g., pdfimages)
   depends_on "opencv" # libs
   depends_on "imagemagick@6" # libs (for Image::Magick) and binaries
   depends_on "glib" # for Glib (perl)
@@ -43,6 +48,7 @@ class AutoMultipleChoice < Formula
   depends_on "gettext" # runtime (Locale::gettext needs libintl) and build (msgfmt)
   depends_on "freetype"
   depends_on "cairo"
+  depends_on "qpdf" # runtime
   depends_on "librsvg" => :build # in Makefile
 
   # What is missing in this brew-flavoured AMC:
@@ -55,6 +61,7 @@ class AutoMultipleChoice < Formula
   #   removed the depends_on "libnotify" & "dbus" and the perl Desktop::Notify.
   #   Also, I disabled the feature (notify_desktop parameter in Config.pm).
 
+  # TODO: remove it on the 1.4.0 release
   resource "pdftk" do # for AMC itself
     url "https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg"
     sha256 "c33cf95151e477953cd57c1ea9c99ebdc29d75f4c9af0d5f947b385995750b0c"
@@ -401,11 +408,13 @@ class AutoMultipleChoice < Formula
   def install
     installed = {} # helps me avoid installing the same perl package twice
 
-    # Install pdftk-server. I took the recipe from a github PR:
-    # https://github.com/Homebrew/homebrew-binary/pull/344
-    resource("pdftk").stage do
-      system "pax", "-rz", "-f", "pdftk.pkg/Payload"
-      libexec.install "bin", "man", "lib"
+    if build.stable? # TODO: remove this on the 1.4.0 release
+      # Install pdftk-server. I took the recipe from a github PR:
+      # https://github.com/Homebrew/homebrew-binary/pull/344
+      resource("pdftk").stage do
+        system "pax", "-rz", "-f", "pdftk.pkg/Payload"
+        libexec.install "bin", "man", "lib"
+      end
     end
 
     ENV.prepend_create_path "PERL5LIB", libexec/"lib/perl5"
@@ -442,11 +451,12 @@ class AutoMultipleChoice < Formula
     system "make", "install_doc", *make_opts
     system "make", "install_nodoc", *make_opts
 
+    mkdir_p libexec/"bin"
     mv bin/"auto-multiple-choice", libexec/"bin/auto-multiple-choice"
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
         :PERL5LIB => ENV["PERL5LIB"],
         # netpbm, poppler and imagemagick@6 must be in the PATH
-        :PATH => "#{libexec}/bin:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
+        :PATH => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
     [
       # Here are all the perl dependencies that we will vendor (= install locally
