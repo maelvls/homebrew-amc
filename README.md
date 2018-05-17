@@ -20,6 +20,16 @@ that the bottle is still working.
 
 # News
 
+## May 17th, 2018: try the coming 1.4.0-beta version!
+
+You can enable the development version using:
+
+    brew install maelvalais/amc/auto-multiple-choice --devel
+
+It will install the latest beta available. Note that due to Homebrew limitations,
+bottles cannot be built for devel versions, resulting in a longer installation
+time (it will need to download and install all the Perl dependencies).
+
 ## March 19th, 2018: Scan detection works again!
 
 We fixed the above bug (see [PR53]). Everything should be back to normal in 1.3.0.2199.
