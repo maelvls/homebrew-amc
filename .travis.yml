@@ -106,7 +106,7 @@ jobs:
         #    Homebrew anyway, so why not start fresh.
         - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
         - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-        - brew cask reinstall xquartz
+        - travis_retry brew cask reinstall xquartz
 
     - <<: *run-osx
       os: osx
