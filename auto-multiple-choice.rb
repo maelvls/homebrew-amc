@@ -10,8 +10,8 @@ class AutoMultipleChoice < Formula
   # which already contain the doc and doc/sty. See (1) for details.
 
   devel do
-    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/5659f896287d83e7ae241bdb8a140e06/auto-multiple-choice-1.4.0-beta1.tar.gz"
-    sha256 "3c4c3a535fbab654b3b98bd3550024482016033bb2481a0f57a3e775cf0d8dfd"
+    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/752bcd6a19915b66683330840e7e627b/auto-multiple-choice_1.4.0-beta2_dist.tar.gz"
+    sha256 "68623b1165c2bee6d861d406fb5cd4fa5a1940a94f4017f36699faf08df11e25"
   end
 
   bottle do
