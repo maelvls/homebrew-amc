@@ -10,8 +10,8 @@ class AutoMultipleChoice < Formula
   # which already contain the doc and doc/sty. See (1) for details.
 
   devel do
-    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/5659f896287d83e7ae241bdb8a140e06/auto-multiple-choice-1.4.0-beta1.tar.gz"
-    sha256 "3c4c3a535fbab654b3b98bd3550024482016033bb2481a0f57a3e775cf0d8dfd"
+    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/752bcd6a19915b66683330840e7e627b/auto-multiple-choice_1.4.0-beta2_dist.tar.gz"
+    sha256 "68623b1165c2bee6d861d406fb5cd4fa5a1940a94f4017f36699faf08df11e25"
   end
 
   bottle do
@@ -50,6 +50,8 @@ class AutoMultipleChoice < Formula
   depends_on "cairo"
   depends_on "qpdf" # runtime
   depends_on "librsvg" => :build # in Makefile
+  depends_on "make" => :build # macOS system make (3.81) seems to be
+  # too old or broken and prevents from creating vars-subs.pl properly.
 
   # What is missing in this brew-flavoured AMC:
   # - shared-mime-info: there might be warnings about 'shared-mime-info'
@@ -419,6 +421,7 @@ class AutoMultipleChoice < Formula
 
     ENV.prepend_create_path "PERL5LIB", libexec/"lib/perl5"
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
+    ENV.prepend_path "PATH", Formula["make"].libexec/"gnubin" # system's make (3.81) too old
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
 
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
