@@ -107,6 +107,9 @@ jobs:
         - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
         - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         - travis_retry brew cask reinstall xquartz
+        # This is a bug
+        - ssh -V
+        - brew install openssl
 
     - <<: *run-osx
       os: osx
