@@ -90,7 +90,7 @@ jobs:
       # We must use 'rvm: system' because the system ruby doesn't rely on
       # Homebrew, which allows us to reinstall Homebrew without having a
       # damaged ruby. We need ruby because we use the 'aws-sdk-s3' gem.
-      rvm: system
+      # rvm: system
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
         # First we uninstall any outdated versions of xquartz; otherwise,
         # Homebrew will complain of of older version (2.9.7) being outdated
@@ -107,9 +107,6 @@ jobs:
         - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
         - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         - travis_retry brew cask reinstall xquartz
-        # This is a bug
-        - ssh -V
-        - brew install openssl
 
     - <<: *run-osx
       os: osx
