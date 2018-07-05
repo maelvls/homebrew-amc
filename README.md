@@ -20,6 +20,10 @@ that the bottle is still working.
 
 # News
 
+## July 5th, 2018: 1.4.0-rc1
+
+I updated the `--devel` version with the latest release candidate.
+
 ## May 17th, 2018: try the coming 1.4.0-beta version!
 
 You can enable the development version using:
