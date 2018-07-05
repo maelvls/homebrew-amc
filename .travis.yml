@@ -18,6 +18,8 @@ env:
     - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/maelvalais
     - AWS_REGION=eu-west-1 # needed because the aws-sdk-s3 gem errors without it
     - BUCKET=homebrew-amc
+    - HOMEBREW_LOGS=/tmp # Prevent ~/.cache/Homebrew/Logs from being rebuilt
+    - HOMEBREW_NO_AUTO_UPDATE=yes # Prevents redundant auto-updates from brew
     # Beyond these global variables, you also need to set some secret variables
     # in your travis-ci settings:
     # - AWS_ACCESS_KEY_ID
@@ -25,18 +27,19 @@ env:
     # - GITHUB_TOKEN                   (for pushing bottle DSL commits)
     # - HOMEBREW_BINTRAY_KEY           (for the Bintray repo)
 
-# (1) remember tu use 'brew cleanup -s' at the end of the travis script;
+# (1) remember to use 'brew cleanup -s' at the end of the travis script;
 # otherwise, the $HOME/Library/Caches/Homebrew folder will be enormous
 # (~2GB for the 4 jobs). This is because this folder is already present on
 # osx images and it is big.
-# (2) I also removed $HOME/.cache/Homebrew (cache of Linuxbrew) because it
-# was also storing some logs, making the cache rebuilt every time.
+# (2) For a time, I had removed $HOME/.cache/Homebrew (cache of Linuxbrew)
+# because it was also storing some logs in $HOME/.cache/Homebrew/Logs, making
+# the cache rebuilt every time.
 cache:
   directories:
     - "$HOME/.cache/pip"
     - "$HOME/.gem/ruby"
-    #- "$HOME/Library/Caches/Homebrew" # (1)
-    #- "$HOME/.cache/Homebrew"        # (2)
+    - "$HOME/Library/Caches/Homebrew" # (1)
+    - "$HOME/.cache/Homebrew"         # (2)
 
 install:
   # the official test-bot won't let you run inside TravisCI, so we use
@@ -44,7 +47,7 @@ install:
   # Oauth github + https (only ssh) so I use my own.
   - brew tap maelvalais/test-bot
   # Install the ruby AWS gem so that I can upload bottles to S3
-  - sudo gem install aws-sdk-s3
+  - rvm default do gem install aws-sdk-s3
   # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
   # Step: 1) create the intermediate folders <user>/<repo> so that
   # we can 2) remove <repo> and 3) replace it with a sym link
@@ -78,14 +81,14 @@ script:
     if [[ $TRAVIS_EVENT_TYPE =~ cron|api ]]; then
       brew install *.rb && brew test *.rb && brew linkage --test *.rb || exit 123
     fi
-  - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then brew test-bot; fi
+  - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then ruby --version; brew test-bot; fi
   - ls *.bottle*.* || echo "==> No bottle created here"
 
 jobs:
   include:
     - &run-osx
       os: osx
-      osx_image: xcode9.3beta
+      osx_image: xcode9.4
       env: OS=sierra-10.13
       # We must use 'rvm: system' because the system ruby doesn't rely on
       # Homebrew, which allows us to reinstall Homebrew without having a
@@ -94,7 +97,8 @@ jobs:
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
         # First we uninstall any outdated versions of xquartz; otherwise,
         # Homebrew will complain of of older version (2.9.7) being outdated
-        # even though we install a new version.
+        # even though we install a new version. Remember that
+        # /usr/local/Caskroom will also be deleted below.
         - brew cask outdated xquartz || brew cask uninstall xquartz
         # Three reasons not to use the /usr/local and Homebrew installations
         # that come in the Travis CI images:
@@ -106,16 +110,26 @@ jobs:
         #    Homebrew anyway, so why not start fresh.
         - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
         - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-        - travis_retry brew cask reinstall xquartz
+
+        # Either xquartz was already installed at its latest version or it has
+        # been uninstalled. First, we put the cask back in place if it has not
+        # been uninstalled.
+        - |
+          if [ -d ~/usr_local/Caskroom/xquartz ];
+          then sudo mv ~/usr_local/Caskroom /usr/local/Caskroom;
+          else travis_retry brew cask install xquartz; fi
+        # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
+        # system ruby uses an old openssl version ("tlsv1 alert protocol").
+        - travis_retry brew install libyaml gmp openssl@1.1 openssl
 
     - <<: *run-osx
       os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9.2
       env: OS=high_sierra-10.12
 
     - <<: *run-osx
       os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8
       env: OS=el_capitan-10.11
 
     - &run-on-linux
@@ -141,8 +155,7 @@ jobs:
         # Fix a `brew doctor` error on "config" scripts for some reason
         - sudo rm -f /home/travis/.phpenv/shims/php-config
           /opt/pyenv/shims/*-config /usr/local/clang-*/bin/llvm-config
-      before_cache:
-        - brew cleanup
+
     # Uploading to bintray (as unpublished bottle) and pushing a tag to the
     # repo are only enabled on pull_requests.
     - <<: *run-on-linux
@@ -153,7 +166,7 @@ jobs:
       script:
         # First step: download the *.json and *.tar.gz from the S3 bucket
         - |
-          ruby <<EOF || true
+          rvm default do ruby <<EOF || true
           require 'aws-sdk-s3'; s3 = Aws::S3::Resource.new
           s3.bucket("$BUCKET").objects(prefix:"$TRAVIS_BUILD_NUMBER/").each { |o| o.download_file(o.key.to_s.gsub(/^\d*\/(.*)/, '\1')) }
 
@@ -182,6 +195,16 @@ after_script:
   # available, we don't want the build to fail.
   # Here, the 'testing' jobs have finished and must upload their *.{json,tar.gz}
   - |
-    ruby <<EOF || true
+    rvm default do ruby <<EOF || true
     require 'aws-sdk-s3'; s3 = Aws::S3::Resource.new
     Dir["*.{json,tar.gz}"].each { |f| s3.bucket("$BUCKET").put_object(key:"$TRAVIS_BUILD_NUMBER/#{f}").upload_file(f) }
+
+before_cache:
+  # Scrub cache so that travis only caches stuff for installed formulae.
+  - brew cleanup -s
+  - brew cask cleanup
+  # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
+  - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
+  # List the formulae so that I understand why the cache is huge sometimes
+  - brew list
+  - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
