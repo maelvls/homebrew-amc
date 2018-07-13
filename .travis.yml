@@ -14,18 +14,26 @@ language: ruby
 if: tag IS blank AND NOT type IN (push)
 env:
   global:
-    - HOMEBREW_BINTRAY_USER=maelvalais
-    - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/maelvalais
-    - AWS_REGION=eu-west-1 # needed because the aws-sdk-s3 gem errors without it
-    - BUCKET=homebrew-amc
     - HOMEBREW_LOGS=/tmp # Prevent ~/.cache/Homebrew/Logs from being rebuilt
     - HOMEBREW_NO_AUTO_UPDATE=yes # Prevents redundant auto-updates from brew
-    # Beyond these global variables, you also need to set some secret variables
-    # in your travis-ci settings:
-    # - AWS_ACCESS_KEY_ID
-    # - AWS_SECRET_ACCESS_KEY          (for the AWS S3 bucket)
-    # - GITHUB_TOKEN                   (for pushing bottle DSL commits)
-    # - HOMEBREW_BINTRAY_KEY           (for the Bintray repo)
+
+    ###### Bintray configuration ######
+    - TAP_BOTTLE_ORG=maelvalais            # Used in this script only
+    - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/$TAP_BOTTLE_ORG
+    - HOMEBREW_BINTRAY_USER=maelvalais
+    # HOMEBREW_BINTRAY_KEY                 # Secret variable set in Travis CI
+
+    ###### AWS S3 configuration ######
+    - AWS_REGION=eu-west-1                 # aws-sdk-s3 gem errors without it
+    - BUCKET=homebrew-amc
+    # AWS_ACCESS_KEY_ID                    # Secret variable set in Travis CI
+    # AWS_SECRET_ACCESS_KEY                # Secret variable set in Travis CI
+
+    ###### Github configuration ######
+    # This config allows test-bot to push tags (eg. pr-1234) and DSL commits.
+    # They will be pushed to github.com/$GITHUB_USER/homebrew-%TAP%.
+    - GITHUB_USER=maelvalais
+    # GITHUB_TOKEN                   # (Secret) For pushing bottle DSL commits
 
 # (1) remember to use 'brew cleanup -s' at the end of the travis script;
 # otherwise, the $HOME/Library/Caches/Homebrew folder will be enormous
@@ -81,7 +89,7 @@ script:
     if [[ $TRAVIS_EVENT_TYPE =~ cron|api ]]; then
       brew install *.rb && brew test *.rb && brew linkage --test *.rb || exit 123
     fi
-  - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then ruby --version; brew test-bot; fi
+  - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then brew test-bot; fi
   - ls *.bottle*.* || echo "==> No bottle created here"
 
 jobs:
@@ -184,7 +192,7 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            brew test-bot --ci-upload --git-name=maelvalais --git-email=mael.valais@gmail.com --bintray-org=maelvalais --verbose;
+            brew test-bot --ci-upload --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
