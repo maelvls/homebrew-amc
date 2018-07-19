@@ -613,6 +613,12 @@ class AutoMultipleChoice < Formula
       stdin.write "\r\n\r\n"
       assert_match "TX=0.00 TY=0.00 DIAM=0.00\n", stdout.gets("\r\n\r\n")
     end
+
+    # We cannot test the GUI but we still want to check if there is no error
+    # such as "Cairo.c: loadable library and perl binaries are mismatched".
+    Open3.popen3("#{bin}/auto-multiple-choice --do-nothing") do |_, _, _, wait_thr|
+      assert_equal 0, wait_thr.value
+    end
   end
 
   # WARNING: when installing Cairo from CPAN, make test won't pass because of
