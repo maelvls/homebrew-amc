@@ -19,7 +19,6 @@ env:
 
     ###### Bintray configuration ######
     - TAP_BOTTLE_ORG=maelvalais            # Used in this script only
-    - TAP_BOTTLE_DOMAIN=https://dl.bintray.com/$TAP_BOTTLE_ORG
     - HOMEBREW_BINTRAY_USER=maelvalais
     # HOMEBREW_BINTRAY_KEY                 # Secret variable set in Travis CI
 
@@ -192,7 +191,7 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            brew test-bot --ci-upload --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --verbose;
+            brew test-bot --ci-upload --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --root-url=https://dl.bintray.com/$TAP_BOTTLE_ORG/bottles-amc --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
           fi
