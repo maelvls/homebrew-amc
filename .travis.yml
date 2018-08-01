@@ -96,7 +96,7 @@ jobs:
     - &run-osx
       os: osx
       osx_image: xcode9.4
-      env: OS=sierra-10.13
+      env: OS=high_sierra-10.13
       # We must use 'rvm: system' because the system ruby doesn't rely on
       # Homebrew, which allows us to reinstall Homebrew without having a
       # damaged ruby. We need ruby because we use the 'aws-sdk-s3' gem.
@@ -132,7 +132,7 @@ jobs:
     - <<: *run-osx
       os: osx
       osx_image: xcode9.2
-      env: OS=high_sierra-10.12
+      env: OS=sierra-10.12
 
     - <<: *run-osx
       os: osx
