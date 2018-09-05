@@ -421,6 +421,7 @@ class AutoMultipleChoice < Formula
       # Install pdftk-server. I took the recipe from a github PR:
       # https://github.com/Homebrew/homebrew-binary/pull/344
       resource("pdftk").stage do
+        system "xar", "-x", ".", "-f", *Dir.glob('*.pkg') # necessary since brew 1.7.2
         system "pax", "-rz", "-f", "pdftk.pkg/Payload"
         libexec.install "bin", "man", "lib"
       end
