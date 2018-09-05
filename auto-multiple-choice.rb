@@ -16,9 +16,10 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    sha256 "86d5c002488734a17c41b0fb4a8be597ac034ac0ff169ce55e7c6524820cc694" => :high_sierra
-    sha256 "a682f9dfb73849e9f9f638e396926f32c63fdab44d05ce2d549122e61e646877" => :sierra
-    sha256 "ee5ec026cccbc22f14f233ed479a0aaa2d8f9f3c5092c475ed2ab6e6b4fa5791" => :el_capitan
+    rebuild 1
+    sha256 "8afcd9ae63c572c773d254a191781f4882c34230d90ad60b528b56e92782199e" => :high_sierra
+    sha256 "2f78d6e66eddde3e7e3b629091dd0a872413278d031b1cd801a4d8b355009a7c" => :sierra
+    sha256 "5779a70a6a9946d4a63fc827c042cdd5ade167dd1ed3d0fd2d6d455b2e7f68d6" => :el_capitan
   end
 
 
