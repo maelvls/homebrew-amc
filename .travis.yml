@@ -125,7 +125,7 @@ jobs:
         - |
           if [ -d ~/usr_local/Caskroom/xquartz ];
           then sudo mv ~/usr_local/Caskroom /usr/local/Caskroom;
-          else travis_retry brew cask install xquartz; fi
+          else travis_retry brew cask install xquartz --no-quarantine; fi
         # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
         # system ruby uses an old openssl version ("tlsv1 alert protocol").
         - travis_retry brew install libyaml gmp openssl@1.1 openssl
