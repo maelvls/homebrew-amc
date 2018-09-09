@@ -17,6 +17,8 @@ class AutoMultipleChoice < Formula
     sha256 "5779a70a6a9946d4a63fc827c042cdd5ade167dd1ed3d0fd2d6d455b2e7f68d6" => :el_capitan
   end
 
+  conflicts_with "auto-multiple-choice@1.4", :because => "both install `bin/auto-multiple-choice`"
+
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
   # installed by default on their test-bot runs) and can be used as a default
@@ -451,7 +453,7 @@ class AutoMultipleChoice < Formula
     EOS
 
     # The actual build
-    make_opts = "AMCCONF=brew", "PREFIX=#{prefix}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    make_opts = "AMCCONF=brew", "PREFIX=#{prefix.sub("@","\\@")}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
     system "make", *make_opts
     system "make", "install_doc", *make_opts
     system "make", "install_nodoc", *make_opts
