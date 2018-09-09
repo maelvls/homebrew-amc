@@ -410,9 +410,7 @@ class AutoMultipleChoice < Formula
   end
   def install
     installed = {} # helps me avoid installing the same perl package twice
-    if !build.stable?
-      odie "In order to install the latest dev version, use 'brew install auto-multiple-choice@1.4 instead of '--devel'"
-    end
+
     if build.stable? # TODO: remove this on the 1.4.0 release
       # Install pdftk-server. I took the recipe from a github PR:
       # https://github.com/Homebrew/homebrew-binary/pull/344
@@ -705,6 +703,12 @@ class AutoMultipleChoice < Formula
          After installing, you have to run:
 
              sudo auto-multiple-choice latex-link
+
+      4) If you want the latest 1.4.0 (dev version for now), the --devel
+         won't work anymore. Instead, do:
+
+             brew uninstall auto-multiple-choice
+             brew install auto-multiple-choice@1.4
 
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvalais/homebrew-amc.
