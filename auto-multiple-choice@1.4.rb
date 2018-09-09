@@ -11,6 +11,7 @@ class AutoMultipleChoice14 < Formula
   bottle do
   end
 
+  conflicts_with "auto-multiple-choice", :because => "both install `bin/auto-multiple-choice`"
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
