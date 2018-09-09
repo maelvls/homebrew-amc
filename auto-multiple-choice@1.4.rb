@@ -432,7 +432,7 @@ class AutoMultipleChoice14 < Formula
     EOS
 
     # The actual build
-    make_opts = "AMCCONF=brew", "PREFIX=#{prefix.sub("@","\\@")}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    make_opts = "AMCCONF=brew", "PREFIX=#{prefix.sub("@","\\\\@")}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
     system "make", *make_opts
     system "make", "install_doc", *make_opts
     system "make", "install_nodoc", *make_opts
