@@ -79,6 +79,9 @@ install:
   # it should be '1' only during test-bot. If it is '1' during
   # brew cask uninstall... it will fail on the deprecation notice.
   # Unless I am in 'brew test-bot', I don't want to fail on warnings.
+  # perl regex: needed so that I can use 1.4.0-beta1 or 1.4.0-rc1 as stable versions
+  - perl -pi -e 's/(.*)problem(.*version.*should not contain.*)$/$1opoo$2/' $(brew --repo)/Library/Homebrew/dev-cmd/audit.rb
+  - git -C $(brew --repo) commit -a -m "disable error on beta or alpha version"
 
 # WARNING: I discovered that 'set -e' is breaking Travis CI. I was using for
 # stopping a multiple-lines command as soon as one of the commands fails.
