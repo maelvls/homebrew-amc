@@ -56,6 +56,8 @@ install:
   # davidchall's one. David's test-bot cannot push the commit using
   # Oauth github + https (only ssh) so I use my own.
   - brew tap maelvalais/test-bot
+  # Often, Travis CI image's git is too old for brew
+  - brew install git
   # Install the ruby AWS gem so that I can upload bottles to S3
   - rvm default do gem install aws-sdk-s3
   # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
