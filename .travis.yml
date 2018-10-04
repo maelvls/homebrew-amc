@@ -16,6 +16,8 @@ env:
   global:
     - HOMEBREW_LOGS=/tmp # Prevent ~/.cache/Homebrew/Logs from being rebuilt
     - HOMEBREW_NO_AUTO_UPDATE=yes # Prevents redundant auto-updates from brew
+    - HOMEBREW_TRAVIS_CI=$TRAVIS
+    - HOMEBREW_TRAVIS_SUDO=$TRAVIS_SUDO
 
     ###### Bintray configuration ######
     - TAP_BOTTLE_ORG=maelvalais            # Used in this script only
