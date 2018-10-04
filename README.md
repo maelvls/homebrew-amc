@@ -20,6 +20,10 @@ that the bottle is still working.
 
 # News
 
+## Oct. 4th, 2018: 1.4.0-rc2
+
+I updated the `--devel` version with the latest release candidate.
+
 ## July 5th, 2018: 1.4.0-rc1
 
 I updated the `--devel` version with the latest release candidate.
