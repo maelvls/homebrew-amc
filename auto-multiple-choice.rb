@@ -10,8 +10,8 @@ class AutoMultipleChoice < Formula
   # which already contain the doc and doc/sty. See (1) for details.
 
   devel do
-    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/e0b1a6a7541d2187aa230997c865f8b0/auto-multiple-choice_1.4.0-rc1_dist.tar.gz"
-    sha256 "f36eeb92995741685946f4f569a1ea61a087b91ac87e752174535a2db68977b2"
+    url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/61e8950910b21661e5a15d6c2ac9df2b/auto-multiple-choice_1.4.0-rc2_dist.tar.gz"
+    sha256 "87a275e7e85430d1323bc615963fab0f5647dc047964c3128469cae161d4302c"
   end
 
   bottle do
@@ -21,7 +21,6 @@ class AutoMultipleChoice < Formula
     sha256 "2f78d6e66eddde3e7e3b629091dd0a872413278d031b1cd801a4d8b355009a7c" => :sierra
     sha256 "5779a70a6a9946d4a63fc827c042cdd5ade167dd1ed3d0fd2d6d455b2e7f68d6" => :el_capitan
   end
-
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
@@ -414,7 +413,6 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/S/SB/SBECK/Locale-Codes-3.58.tar.gz"
     sha256 "345c0b0170288d74a147fbe218b7c78147aa2baf4e839fe8680a2b0a2d8e505b"
   end
-
   def install
     installed = {} # helps me avoid installing the same perl package twice
 
@@ -422,7 +420,7 @@ class AutoMultipleChoice < Formula
       # Install pdftk-server. I took the recipe from a github PR:
       # https://github.com/Homebrew/homebrew-binary/pull/344
       resource("pdftk").stage do
-        system "xar", "-x", ".", "-f", *Dir.glob('*.pkg') # necessary since brew 1.7.2
+        system "xar", "-x", ".", "-f", *Dir.glob("*.pkg") # necessary since brew 1.7.2
         system "pax", "-rz", "-f", "pdftk.pkg/Payload"
         libexec.install "bin", "man", "lib"
       end
@@ -439,7 +437,7 @@ class AutoMultipleChoice < Formula
 
     # The Libertine font provided by 'brew cask' is 'Linux Libertine' (no O)
     inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
-      "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
+               "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
     # When using 'sudo auto-multiple-choice latex-link', make sure that the
     # symlink used in 'latex-link' is not version-hardcoded so that
@@ -470,6 +468,7 @@ class AutoMultipleChoice < Formula
         # netpbm, poppler and imagemagick@6 must be in the PATH
         :PATH => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
+    # rubocop:disable AlignArray
     [
       # Here are all the perl dependencies that we will vendor (= install locally
       # only for this recipe):
@@ -501,7 +500,6 @@ class AutoMultipleChoice < Formula
       # 2) From this array, I create the 'resource ... do ... end' using:
       #    ./list_to_resources.pl < ruby_list > resources
       #    The code of "list_to_resources.pl" is showed at the end of this file.
-
 
       # Note that duplicates are allowed; only the first package from the
       # bottom will be installed.
@@ -613,10 +611,11 @@ class AutoMultipleChoice < Formula
               "HTTP::Negotiate",
               "Net::HTTP",
       "XML::Writer",
-      "Locale::Language"
-    ].reverse.each do |r|
+      "Locale::Language",
+    ].reverse_each do |r|
       install_perl_package(r, installed)
     end
+    # rubocop:enable AlignArray
   end
 
   test do
@@ -643,7 +642,7 @@ class AutoMultipleChoice < Formula
     if installed[package].nil?
       installed[package] = true
       resource(package).stage do
-        if package == "XML::SAX" || package == "XML::SAX::Expat"
+        if ["XML::SAX", "XML::SAX::Expat"].include? package
           # XML::SAX and XML::SAX::Expat have a race condition during
           # 'make install'.  Workaround proposed: unset the MAKEFLAGS variable
           # before installing.
@@ -662,7 +661,11 @@ class AutoMultipleChoice < Formula
           system "make"
           system "make", "install"
         elsif package == "Image::Magick"
-          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none", "INC=-I#{Formula["imagemagick@6"].include}/ImageMagick-6", "LIBS=-L#{Formula["imagemagick@6"].lib}"
+          system "perl", "Makefile.PL",
+            "INSTALL_BASE=#{libexec}",
+            "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none",
+            "INC=-I#{Formula["imagemagick@6"].include}/ImageMagick-6",
+            "LIBS=-L#{Formula["imagemagick@6"].lib}"
           inreplace "Makefile", /CCCDLFLAGS *=/, "CCCDLFLAGS = -I#{Formula["imagemagick@6"].include}/ImageMagick-6"
           inreplace "Makefile", /LDDLFLAGS *=/, "LDDLFLAGS = -L#{Formula["gettext"].lib}"
           system "make"
