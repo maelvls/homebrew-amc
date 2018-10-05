@@ -136,6 +136,11 @@ jobs:
         # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
         # system ruby uses an old openssl version ("tlsv1 alert protocol").
         - travis_retry brew install libyaml gmp openssl@1.1 openssl
+    # TO BE ENABLED AS SOON AS TRAVIS HAS A MOJAVE IMAGE:
+    #- <<: *run-osx
+    #  os: osx
+    #  osx_image: xcode9.4
+    #  env: OS=high_sierra-10.13
 
     - <<: *run-osx
       os: osx
@@ -188,12 +193,20 @@ jobs:
         # (2) A trick so that 'prefix' and 'cellar' are removed if they are
         # equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
         # 'brew bottle' on a linux setup.
-        # (3) In 'brew --ci--upload', --git-name is the name of the fork
+        # (3) Travis does not provide a high_sierra image yet, but I can use the
+        # sierra one and pretend it is a high_sierra bottle. I test them regularly in
+        # case it doesn't work.
+        # (4) In 'brew --ci--upload', --git-name is the name of the fork
         # where the pr-1234 (or testing-98 when not in a PR) tag is pushed.
         # In my case, I use the 'main' instead of a fork.
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
+            ls *.high_sierra.bottle.json | while read json; do         # (3)
+              sed 's/high_sierra/mojave/g' $json > ${json/high_sierra/mojave};
+              bottle=`ls ${json/bottle*/}*.tar.gz`;
+              cp ${bottle} ${bottle/high_sierra/mojave};
+            done;
             brew test-bot --ci-upload --root-url=$TAP_BOTTLE_ROOT_URL --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
