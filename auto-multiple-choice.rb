@@ -22,7 +22,6 @@ class AutoMultipleChoice < Formula
     sha256 "5779a70a6a9946d4a63fc827c042cdd5ade167dd1ed3d0fd2d6d455b2e7f68d6" => :el_capitan
   end
 
-
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
   # installed by default on their test-bot runs) and can be used as a default
@@ -422,7 +421,7 @@ class AutoMultipleChoice < Formula
       # Install pdftk-server. I took the recipe from a github PR:
       # https://github.com/Homebrew/homebrew-binary/pull/344
       resource("pdftk").stage do
-        system "xar", "-x", ".", "-f", *Dir.glob('*.pkg') # necessary since brew 1.7.2
+        system "xar", "-x", ".", "-f", *Dir.glob("*.pkg") # necessary since brew 1.7.2
         system "pax", "-rz", "-f", "pdftk.pkg/Payload"
         libexec.install "bin", "man", "lib"
       end
@@ -439,7 +438,7 @@ class AutoMultipleChoice < Formula
 
     # The Libertine font provided by 'brew cask' is 'Linux Libertine' (no O)
     inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
-      "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
+               "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
     # When using 'sudo auto-multiple-choice latex-link', make sure that the
     # symlink used in 'latex-link' is not version-hardcoded so that
@@ -470,6 +469,7 @@ class AutoMultipleChoice < Formula
         # netpbm, poppler and imagemagick@6 must be in the PATH
         :PATH => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
+    # rubocop:disable AlignArray
     [
       # Here are all the perl dependencies that we will vendor (= install locally
       # only for this recipe):
@@ -501,7 +501,6 @@ class AutoMultipleChoice < Formula
       # 2) From this array, I create the 'resource ... do ... end' using:
       #    ./list_to_resources.pl < ruby_list > resources
       #    The code of "list_to_resources.pl" is showed at the end of this file.
-
 
       # Note that duplicates are allowed; only the first package from the
       # bottom will be installed.
@@ -613,10 +612,11 @@ class AutoMultipleChoice < Formula
               "HTTP::Negotiate",
               "Net::HTTP",
       "XML::Writer",
-      "Locale::Language"
-    ].reverse.each do |r|
+      "Locale::Language",
+    ].reverse_each do |r|
       install_perl_package(r, installed)
     end
+    # rubocop:enable AlignArray
   end
 
   test do
@@ -643,7 +643,7 @@ class AutoMultipleChoice < Formula
     if installed[package].nil?
       installed[package] = true
       resource(package).stage do
-        if package == "XML::SAX" || package == "XML::SAX::Expat"
+        if ["XML::SAX", "XML::SAX::Expat"].include? package
           # XML::SAX and XML::SAX::Expat have a race condition during
           # 'make install'.  Workaround proposed: unset the MAKEFLAGS variable
           # before installing.
@@ -662,7 +662,11 @@ class AutoMultipleChoice < Formula
           system "make"
           system "make", "install"
         elsif package == "Image::Magick"
-          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none", "INC=-I#{Formula["imagemagick@6"].include}/ImageMagick-6", "LIBS=-L#{Formula["imagemagick@6"].lib}"
+          system "perl", "Makefile.PL",
+            "INSTALL_BASE=#{libexec}",
+            "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none",
+            "INC=-I#{Formula["imagemagick@6"].include}/ImageMagick-6",
+            "LIBS=-L#{Formula["imagemagick@6"].lib}"
           inreplace "Makefile", /CCCDLFLAGS *=/, "CCCDLFLAGS = -I#{Formula["imagemagick@6"].include}/ImageMagick-6"
           inreplace "Makefile", /LDDLFLAGS *=/, "LDDLFLAGS = -L#{Formula["gettext"].lib}"
           system "make"
