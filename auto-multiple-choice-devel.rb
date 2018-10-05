@@ -9,6 +9,10 @@ class AutoMultipleChoiceDevel < Formula
   # which already contain the doc and doc/sty. See (1) for details.
 
   bottle do
+    root_url "https://dl.bintray.com/maelvalais/bottles-amc"
+    sha256 "780437910ddefc6076c50a2f7f51dd4c462d82c1019c1d3da239b4cf1d60cd03" => :mojave
+    sha256 "780437910ddefc6076c50a2f7f51dd4c462d82c1019c1d3da239b4cf1d60cd03" => :high_sierra
+    sha256 "ae93478ff71f2033b6ede21cc3b2b6d76a1d62f90bc0084fa9b51ff54f694f4d" => :sierra
   end
 
   conflicts_with "auto-multiple-choice", :because => "both install `bin/auto-multiple-choice`"
