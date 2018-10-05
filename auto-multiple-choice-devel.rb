@@ -1,4 +1,4 @@
-class AutoMultipleChoice14 < Formula
+class AutoMultipleChoiceDevel < Formula
   desc "Auto Multiple Choice (AMC) helps you prepare printed tests for your students and mark them using PDF scans"
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/61e8950910b21661e5a15d6c2ac9df2b/auto-multiple-choice_1.4.0-rc2_dist.tar.gz"
