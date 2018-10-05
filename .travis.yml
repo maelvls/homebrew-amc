@@ -142,11 +142,6 @@ jobs:
       osx_image: xcode9.2
       env: OS=sierra-10.12
 
-    - <<: *run-osx
-      os: osx
-      osx_image: xcode8
-      env: OS=el_capitan-10.11
-
     - &run-on-linux
       os: linux
       env: OS=x86_64_linux
