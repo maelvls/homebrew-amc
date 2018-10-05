@@ -11,10 +11,10 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    rebuild 1
-    sha256 "8afcd9ae63c572c773d254a191781f4882c34230d90ad60b528b56e92782199e" => :high_sierra
-    sha256 "2f78d6e66eddde3e7e3b629091dd0a872413278d031b1cd801a4d8b355009a7c" => :sierra
-    sha256 "5779a70a6a9946d4a63fc827c042cdd5ade167dd1ed3d0fd2d6d455b2e7f68d6" => :el_capitan
+    rebuild 2
+    sha256 "419fbede4ffa6d6e173ecc13f4bb05dc9e92421d7b0ce7a5ce9c8ed93128117a" => :mojave
+    sha256 "419fbede4ffa6d6e173ecc13f4bb05dc9e92421d7b0ce7a5ce9c8ed93128117a" => :high_sierra
+    sha256 "902115947877aa1e8a506647f077e958ab5eb28527637471e1908cd51725f9ba" => :sierra
   end
 
   conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
