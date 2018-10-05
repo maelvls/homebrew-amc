@@ -413,7 +413,7 @@ class AutoMultipleChoiceDevel < Formula
 
     # The Libertine font provided by 'brew cask' is 'Linux Libertine' (no O)
     inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
-      "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
+               "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
     # When using 'sudo auto-multiple-choice latex-link', make sure that the
     # symlink used in 'latex-link' is not version-hardcoded so that
@@ -432,7 +432,7 @@ class AutoMultipleChoiceDevel < Formula
     EOS
 
     # The actual build
-    make_opts = "AMCCONF=brew", "PREFIX=#{prefix.sub("@","\\\\@")}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
+    make_opts = "AMCCONF=brew", "PREFIX=#{prefix.sub("@", "\\\\@")}", "LIBS_PREFIX=#{HOMEBREW_PREFIX}"
     system "make", *make_opts
     system "make", "install_doc", *make_opts
     system "make", "install_nodoc", *make_opts
@@ -444,6 +444,7 @@ class AutoMultipleChoiceDevel < Formula
         # netpbm, poppler and imagemagick@6 must be in the PATH
         :PATH => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
+    # rubocop:disable AlignArray
     [
       # Here are all the perl dependencies that we will vendor (= install locally
       # only for this recipe):
@@ -475,7 +476,6 @@ class AutoMultipleChoiceDevel < Formula
       # 2) From this array, I create the 'resource ... do ... end' using:
       #    ./list_to_resources.pl < ruby_list > resources
       #    The code of "list_to_resources.pl" is showed at the end of this file.
-
 
       # Note that duplicates are allowed; only the first package from the
       # bottom will be installed.
@@ -587,10 +587,11 @@ class AutoMultipleChoiceDevel < Formula
               "HTTP::Negotiate",
               "Net::HTTP",
       "XML::Writer",
-      "Locale::Language"
-    ].reverse.each do |r|
+      "Locale::Language",
+    ].reverse_each do |r|
       install_perl_package(r, installed)
     end
+    # rubocop:enable AlignArray
   end
 
   test do
@@ -617,7 +618,7 @@ class AutoMultipleChoiceDevel < Formula
     if installed[package].nil?
       installed[package] = true
       resource(package).stage do
-        if package == "XML::SAX" || package == "XML::SAX::Expat"
+        if ["XML::SAX", "XML::SAX::Expat"].include? package
           # XML::SAX and XML::SAX::Expat have a race condition during
           # 'make install'.  Workaround proposed: unset the MAKEFLAGS variable
           # before installing.
@@ -636,7 +637,11 @@ class AutoMultipleChoiceDevel < Formula
           system "make"
           system "make", "install"
         elsif package == "Image::Magick"
-          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none", "INC=-I#{Formula["imagemagick@6"].include}/ImageMagick-6", "LIBS=-L#{Formula["imagemagick@6"].lib}"
+          system "perl", "Makefile.PL",
+            "INSTALL_BASE=#{libexec}",
+            "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none",
+            "INC=-I#{Formula["imagemagick@6"].include}/ImageMagick-6",
+            "LIBS=-L#{Formula["imagemagick@6"].lib}"
           inreplace "Makefile", /CCCDLFLAGS *=/, "CCCDLFLAGS = -I#{Formula["imagemagick@6"].include}/ImageMagick-6"
           inreplace "Makefile", /LDDLFLAGS *=/, "LDDLFLAGS = -L#{Formula["gettext"].lib}"
           system "make"
