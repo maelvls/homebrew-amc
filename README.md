@@ -16,13 +16,24 @@ is done as well as `brew linkage auto-mutiple-choice` in order to check
 that the bottle is still working.
 
 [![Build Status](https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master)](https://travis-ci.org/maelvalais/homebrew-amc)
-[ ![Where the bottle is stored](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion)
+[![Stable bottle version](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion)
+[ ![Devel bottle version](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion)
 
 # News
 
-## Oct. 4th, 2018: 1.4.0-rc2
+## Oct. 4th, 2018: new auto-multiple-choice-devel formula
 
-I updated the `--devel` version with the latest release candidate.
+I was kind of frustrated at the fact that using `--devel` was taking a LOT of
+time, and updating it was thus a pain. I decided to create a real formula
+called `auto-multiple-choice-devel` that replaces the use of `--devel`. What's
+nice is that you will get precompiled: way less waiting when installing!!!
+
+To sum up:
+
+1. **`--devel` won't work anymore**,
+2. instead, use **`brew install auto-multiple-choice-devel`**.
+3. `auto-multiple-choice` and `auto-multiple-choice-devel` cannot be linked at
+   simultanously (obviously).
 
 ## July 5th, 2018: 1.4.0-rc1
 
