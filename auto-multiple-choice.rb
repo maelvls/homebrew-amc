@@ -413,7 +413,6 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/S/SB/SBECK/Locale-Codes-3.58.tar.gz"
     sha256 "345c0b0170288d74a147fbe218b7c78147aa2baf4e839fe8680a2b0a2d8e505b"
   end
-
   def install
     installed = {} # helps me avoid installing the same perl package twice
 
