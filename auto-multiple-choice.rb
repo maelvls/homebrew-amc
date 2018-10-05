@@ -17,7 +17,7 @@ class AutoMultipleChoice < Formula
     sha256 "5779a70a6a9946d4a63fc827c042cdd5ade167dd1ed3d0fd2d6d455b2e7f68d6" => :el_capitan
   end
 
-  conflicts_with "auto-multiple-choice1.4", :because => "both install `bin/auto-multiple-choice`"
+  conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
