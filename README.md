@@ -21,7 +21,7 @@ that the bottle is still working.
 
 # News
 
-## Oct. 4th, 2018: new auto-multiple-choice-devel formula
+## Oct. 4th, 2018: 1.4.0-rc2 and auto-multiple-choice-devel formula
 
 I was kind of frustrated at the fact that using `--devel` was taking a LOT of
 time, and updating it was thus a pain. I decided to create a real formula
@@ -92,7 +92,11 @@ have a version number lower than the previous ones... **Solution:**
 
 
 # FAQ
-
+- **Why is the _reduce_ button not working?** This issue is discussed
+  [here][issue-reduce-button]. In short, it is related to the Glade UI toolkit
+  which doesn't seem to be great with the Quartz (macOS) backend of Gtk3. The
+  same issue appears when using Glade itself. Can't fix it from the AMC project
+  itself 😔  
 - **How can I uninstall in a clean way?** If you want to go back to Macport's
   auto-multiple-choice or you want to simply get rid or brew's installation,
   you can uninstall using `brew uninstall auto-multiple-choice` (see [uninstall-brew]
@@ -151,6 +155,7 @@ have a version number lower than the previous ones... **Solution:**
 [mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
 [uninstall-brew]: https://github.com/Homebrew/install
 [ansible.rb]: https://github.com/Homebrew/homebrew-core/blob/master/Formula/ansible.rb
+[issue-reduce-button]: https://github.com/maelvalais/homebrew-amc/issues/18
 
 ## Troubleshooting
 - **Why are the windows _tabbed_ like in Safari tabs?**  because it is
