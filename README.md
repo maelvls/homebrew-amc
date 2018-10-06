@@ -2,7 +2,8 @@
 ==========================================
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/2195781/34616703-4ef9a912-f239-11e7-82ec-256acf855104.png">
+  <img width="420" alt="capture d ecran 2018-10-06 a 11 31 01" src="https://user-images.githubusercontent.com/2195781/46569894-26cddd00-c95c-11e8-9efd-6aa7fa3a6eb8.png">
+  <img width="390" alt="capture d ecran 2018-10-06 a 11 23 47" src="https://user-images.githubusercontent.com/2195781/46569889-0867e180-c95c-11e8-98ad-969735cbb76f.png">
 </p>
 
 |                      Install                      |  Run (in your shell)   |
