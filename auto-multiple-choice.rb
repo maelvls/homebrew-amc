@@ -706,11 +706,12 @@ class AutoMultipleChoice < Formula
 
              sudo auto-multiple-choice latex-link
 
-      4) If you want the latest 1.4.0 (dev version for now), the --devel
-         won't work anymore. Instead, do:
+      4) This is the stable version; this version kinda lags behind. If you
+         want the latest development versions, there is a specific formula
+         for that (--devel won't work):
 
              brew uninstall auto-multiple-choice
-             brew install auto-multiple-choice@1.4
+             brew install auto-multiple-choice-devel
 
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvalais/homebrew-amc.

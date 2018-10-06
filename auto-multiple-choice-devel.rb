@@ -689,6 +689,12 @@ class AutoMultipleChoiceDevel < Formula
 
              sudo auto-multiple-choice latex-link
 
+      4) This is the developement version. If you want to go back to the
+         stable version, easy:
+
+             brew uninstall auto-multiple-choice-devel
+             brew install auto-multiple-choice
+
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvalais/homebrew-amc.
     EOS
