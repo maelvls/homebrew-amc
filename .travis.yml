@@ -16,8 +16,6 @@ env:
   global:
     - HOMEBREW_LOGS=/tmp # Prevent ~/.cache/Homebrew/Logs from being rebuilt
     - HOMEBREW_NO_AUTO_UPDATE=yes # Prevents redundant auto-updates from brew
-    - HOMEBREW_TRAVIS_CI=$TRAVIS
-    - HOMEBREW_TRAVIS_SUDO=$TRAVIS_SUDO
 
     ###### Bintray configuration ######
     - TAP_BOTTLE_ORG=maelvalais            # Used in this script only
@@ -72,12 +70,6 @@ install:
   - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
   - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
   - git fetch --unshallow || true               # 4)
-  # 'brew doctor' must be run under HOMEBREW_DEVELOPER=1. Otherwise,
-  # it returns 1 with the message "this osx version is outdated" on old osx ver.
-  - HOMEBREW_DEVELOPER=1 brew doctor
-  # Note on HOMEBREW_DEVELOPER: I don't want to put in env.global because
-  # it should be '1' only during test-bot. If it is '1' during
-  # brew cask uninstall... it will fail on the deprecation notice.
   # Unless I am in 'brew test-bot', I don't want to fail on warnings.
   # perl regex: needed so that I can use 1.4.0-beta1 or 1.4.0-rc1 as stable versions
   - perl -pi -e 's/(.*)problem(.*version.*should not contain.*)$/$1opoo$2/' $(brew --repo)/Library/Homebrew/dev-cmd/audit.rb
@@ -94,7 +86,12 @@ install:
 script:
   - |
     if [[ $TRAVIS_EVENT_TYPE =~ cron|api ]]; then
-      brew install *.rb && brew test *.rb && brew linkage --test *.rb || exit 123
+      brew install auto-multiple-choice;
+      brew test auto-multiple-choice && brew linkage --test auto-multiple-choice || exit 123;
+      brew unlink auto-multiple-choice;
+      brew install auto-multiple-choice-devel;
+      brew test auto-multiple-choice-devel && brew linkage --test auto-multiple-choice-devel;
+      brew unlink auto-multiple-choice-devel
     fi
   - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then brew test-bot --root-url=$TAP_BOTTLE_ROOT_URL; fi
   - ls *.bottle*.* || echo "==> No bottle created here"
