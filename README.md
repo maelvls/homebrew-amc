@@ -6,20 +6,27 @@
   <img width="390" alt="capture d ecran 2018-10-06 a 11 23 47" src="https://user-images.githubusercontent.com/2195781/46569889-0867e180-c95c-11e8-98ad-969735cbb76f.png">
 </p>
 
-|                      Install                      |  Run (in your shell)   |
-|:-------------------------------------------------:|:----------------------:|
-| `brew install maelvalais/amc/auto-multiple-choice`| `auto-multiple-choice` |
+|                      Install                            |  Version                                             |
+|---------------------------------------------------------|:----------------------------------------------------:|
+| `brew install maelvalais/amc/auto-multiple-choice`      | [![Stable bottle][stable-bottle-img]][stable-bottle] |
+| `brew install maelvalais/amc/auto-multiple-choice-devel`| [![Devel bottle][devel-bottle-img]][devel-bottle]    |
 
+- **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
+- **For switching between the `devel` and `stable`**: see [below](#faq)
 
 Brew will try to install using a precompiled version of AMC (bottle) that
 is built on Travis-ci. Every night, an automated installation of the bottle
 is done as well as `brew linkage auto-mutiple-choice` in order to check
 that the bottle is still working.
 
-[![Build Status](https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master)](https://travis-ci.org/maelvalais/homebrew-amc)
-[![Stable bottle version](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion)
-[ ![Devel bottle version](https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle) ](https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion)
+[![Build Status][build-status-img]][build-status]
 
+[build-status-img]: https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master
+[build-status]: https://travis-ci.org/maelvalais/homebrew-amc
+[stable-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle
+[stable-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion
+[devel-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle
+[devel-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion
 # News
 
 ## Oct. 4th, 2018: 1.4.0-rc2 and auto-multiple-choice-devel formula
@@ -93,6 +100,19 @@ have a version number lower than the previous ones... **Solution:**
 
 
 # FAQ
+- **How to switch between the `devel` and stable version?** As both formulas
+  are mutually exclusive, one must be **uninstalled** or **unlinked** before the other
+  can be used. For example, from stable to devel:
+  
+      brew unlink auto-multiple-choice
+      brew install auto-multiple-choice-devel
+  
+  Remember that for both formulas, the command is the same: `auto-multiple-choice`.
+  **IMPORTANT:** You will need to run `latex-link` when switching versions:
+    
+      sudo auto-multiple-choice latex-link remove
+      sudo auto-multiple-choice latex-link
+
 - **Why is the _reduce_ button not working?** This issue is discussed
   [here][issue-reduce-button]. In short, it is related to the Glade UI toolkit
   which doesn't seem to be great with the Quartz (macOS) backend of Gtk3. The
