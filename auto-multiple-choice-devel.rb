@@ -1,18 +1,15 @@
 class AutoMultipleChoiceDevel < Formula
   desc "Auto Multiple Choice (AMC) helps you prepare printed tests for your students and mark them using PDF scans"
   homepage "https://www.auto-multiple-choice.net"
-  url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/61e8950910b21661e5a15d6c2ac9df2b/auto-multiple-choice_1.4.0-rc2_dist.tar.gz"
-  sha256 "87a275e7e85430d1323bc615963fab0f5647dc047964c3128469cae161d4302c"
+  url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
+  version "1.4.0"
+  sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
   revision 0
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
   bottle do
-    root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    sha256 "780437910ddefc6076c50a2f7f51dd4c462d82c1019c1d3da239b4cf1d60cd03" => :mojave
-    sha256 "780437910ddefc6076c50a2f7f51dd4c462d82c1019c1d3da239b4cf1d60cd03" => :high_sierra
-    sha256 "ae93478ff71f2033b6ede21cc3b2b6d76a1d62f90bc0084fa9b51ff54f694f4d" => :sierra
   end
 
   conflicts_with "auto-multiple-choice", :because => "both install `bin/auto-multiple-choice`"
@@ -670,13 +667,13 @@ class AutoMultipleChoiceDevel < Formula
       If you don't have Mactex installed, you will need it:
           brew cask install mactex
 
-      1) Issue of 'Linux Libertine O' not found:
+      1) If you have an issue of 'Linux Libertine O' not found:
          If you want to use this font, you should install it:
              brew cask install caskroom/fonts/font-linux-libertine
          But the name is 'Linux Libertine' (no 'O'). In your AMC-TXT files:
              Font: Linux Libertine
 
-      2) Issue of new windows in tabs:
+      2) If you have an issue of new windows in tabs:
          with Gtk3, new windows may open in tabs instead of
          in a new window. This is unwanted because Gtk3 has a bug making it
          hard to click on some buttons. Two workarounds:
