@@ -1,5 +1,5 @@
 class AutoMultipleChoice < Formula
-  desc "Auto Multiple Choice (AMC) helps you prepare printed tests for your students and mark them using PDF scans"
+  desc "printable tests for students with OCR marking"
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   version "1.4.0"
@@ -12,8 +12,6 @@ class AutoMultipleChoice < Formula
   bottle do
   end
 
-  conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
-
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
   # installed by default on their test-bot runs) and can be used as a default
@@ -24,25 +22,27 @@ class AutoMultipleChoice < Formula
   # to remove the original PATH of the user so that the latex binaries can be
   # found.
 
-  depends_on :x11
-  depends_on "perl"
-  depends_on "gtk+3" # libs
-  depends_on "pango" # libs
-  depends_on "adwaita-icon-theme" # icons used in AMC
-  depends_on "netpbm" # libs and binaries
-  depends_on "poppler" # libs and binaries (e.g., pdfimages)
-  depends_on "opencv" # libs
-  depends_on "imagemagick@6" # libs (for Image::Magick) and binaries
-  depends_on "glib" # for Glib (perl)
-  depends_on "libffi" # for Glib::Object::Introspection (perl)
-  depends_on "gobject-introspection" # for Glib::Object::Introspection (perl)
-  depends_on "gettext" # runtime (Locale::gettext needs libintl) and build (msgfmt)
-  depends_on "freetype"
+  depends_on "librsvg" => :build
+  depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
+  depends_on "adwaita-icon-theme"
   depends_on "cairo"
-  depends_on "qpdf" # runtime
-  depends_on "librsvg" => :build # in Makefile
-  depends_on "make" => :build # macOS system make (3.81) seems to be
-  # too old or broken and prevents from creating vars-subs.pl properly.
+  depends_on "freetype"
+  depends_on "gettext"
+  depends_on "glib"
+  depends_on "gobject-introspection"
+  depends_on "gtk+3"
+  depends_on "imagemagick@6"
+  depends_on "libffi"
+  depends_on "netpbm"
+  depends_on "opencv"
+  depends_on "pango"
+  depends_on "perl"
+  depends_on "poppler"
+  depends_on "qpdf"
+
+  depends_on :x11
+
+  conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
 
   # What is missing in this brew-flavoured AMC:
   # - shared-mime-info: there might be warnings about 'shared-mime-info'
@@ -441,9 +441,9 @@ class AutoMultipleChoice < Formula
     mkdir_p libexec/"bin"
     mv bin/"auto-multiple-choice", libexec/"bin/auto-multiple-choice"
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
-        :PERL5LIB => ENV["PERL5LIB"],
+        :PERL5LIB   => ENV["PERL5LIB"],
         # netpbm, poppler and imagemagick@6 must be in the PATH
-        :PATH => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
+        :PATH       => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
     # rubocop:disable AlignArray
     [
@@ -595,19 +595,6 @@ class AutoMultipleChoice < Formula
     # rubocop:enable AlignArray
   end
 
-  test do
-    Open3.popen3("#{bin}/auto-multiple-choice detect") do |stdin, stdout, _|
-      stdin.write "\r\n\r\n"
-      assert_match "TX=0.00 TY=0.00 DIAM=0.00\n", stdout.gets("\r\n\r\n")
-    end
-
-    # We cannot test the GUI but we still want to check if there is no error
-    # such as "Cairo.c: loadable library and perl binaries are mismatched".
-    Open3.popen3("#{bin}/auto-multiple-choice --do-nothing") do |_, _, _, wait_thr|
-      assert_equal 0, wait_thr.value
-    end
-  end
-
   # WARNING: when installing Cairo from CPAN, make test won't pass because of
   # a (likely) bug in the count of tests skipped (Test::More); there is a
   # 'Bad plan' error.
@@ -697,5 +684,18 @@ class AutoMultipleChoice < Formula
       an issue to https://github.com/maelvalais/homebrew-amc.
     EOS
     s
+  end
+
+  test do
+    Open3.popen3("#{bin}/auto-multiple-choice detect") do |stdin, stdout, _|
+      stdin.write "\r\n\r\n"
+      assert_match "TX=0.00 TY=0.00 DIAM=0.00\n", stdout.gets("\r\n\r\n")
+    end
+
+    # We cannot test the GUI but we still want to check if there is no error
+    # such as "Cairo.c: loadable library and perl binaries are mismatched".
+    Open3.popen3("#{bin}/auto-multiple-choice --do-nothing") do |_, _, _, wait_thr|
+      assert_equal 0, wait_thr.value
+    end
   end
 end
