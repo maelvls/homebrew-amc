@@ -1,5 +1,4 @@
-🍺 Brew formula for auto-multiple-choice 📖
-==========================================
+# 🍺 Brew formula for auto-multiple-choice 📖
 
 <p align="center">
   <img width="420" alt="capture d ecran 2018-10-06 a 11 31 01" src="https://user-images.githubusercontent.com/2195781/46569894-26cddd00-c95c-11e8-9efd-6aa7fa3a6eb8.png">
@@ -14,10 +13,11 @@
 - **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
 - **For switching between the `devel` and `stable`**: see [below](#faq)
 
-Brew will try to install using a precompiled version of AMC (bottle) that
-is built on Travis-ci. Every night, an automated installation of the bottle
-is done as well as `brew linkage auto-mutiple-choice` in order to check
-that the bottle is still working.
+This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew. This tap
+also features precompiled binaries (called _bottle_) built on Travis CI. As
+for testing, a cron job runs tests the installation of the bottle on Travis
+CI every night (as well as `brew linkage auto-mutiple-choice`) in order to
+check that the bottle is still working.
 
 [![Build Status][build-status-img]][build-status]
 
@@ -27,9 +27,16 @@ that the bottle is still working.
 [stable-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion
 [devel-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle
 [devel-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion
-# News
 
-## Oct. 4th, 2018: 1.4.0-rc2 and auto-multiple-choice-devel formula
+## News
+
+### Dec. 30th, 2018: 1.4.0 released 🍾
+
+Note that the `auto-multiple-choice-devel` will have the same version number
+as `auto-multiple-choice` probably for the next few months; I'll update
+`devel` as soon as new tags are created.
+
+### Oct. 4th, 2018: 1.4.0-rc2 and auto-multiple-choice-devel formula
 
 I was kind of frustrated at the fact that using `--devel` was taking a LOT of
 time, and updating it was thus a pain. I decided to create a real formula
@@ -43,11 +50,11 @@ To sum up:
 3. `auto-multiple-choice` and `auto-multiple-choice-devel` cannot be linked at
    simultanously (obviously).
 
-## July 5th, 2018: 1.4.0-rc1
+### July 5th, 2018: 1.4.0-rc1
 
 I updated the `--devel` version with the latest release candidate.
 
-## May 17th, 2018: try the coming 1.4.0-beta version!
+### May 17th, 2018: try the coming 1.4.0-beta version!
 
 You can enable the development version using:
 
@@ -57,7 +64,7 @@ It will install the latest beta available. Note that due to Homebrew limitations
 bottles cannot be built for devel versions, resulting in a longer installation
 time (it will need to download and install all the Perl dependencies).
 
-## March 19th, 2018: Scan detection works again!
+### March 19th, 2018: Scan detection works again!
 
 We fixed the above bug (see [PR53]). Everything should be back to normal in 1.3.0.2199.
 ~~Note that bottles won't be available for a couple of days, but it only means that
@@ -65,7 +72,7 @@ the installation will be slightly longer in the meantime!~~ done!
 
 [PR53]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/53/amc-detect-fix-errors-with-opencv-341-by
 
-## March 15th, 2018: Fixed: ~~OpenCV breaks scan detection~~
+### March 15th, 2018: Fixed: ~~OpenCV breaks scan detection~~
 
 Homebrew updated OpenCV from 3.4.0 to 3.4.1. In 3.4.0, the C headers of OpenCV used
 in AMC were fine (athough they have been [deprecated](https://github.com/opencv/opencv/issues/6221)
@@ -74,22 +81,24 @@ away from the C bindings in `AMC-detect.cc` (which is the culprit, see
 [the issue](https://github.com/maelvalais/homebrew-amc/issues/4)) but that will take some
 days and even more time for pushing that upstream.
 
-## March 14th, 2018: build from source until March 17th
+### March 14th, 2018: build from source until March 17th
 
 Homebrew has a bug that prevents me from creating bottles for a few days. I'll
 re-enable the bottles as soon as brew [releases version 1.5.11](https://github.com/Homebrew/brew/releases).
 Until then, we must build from source, meaning that many perl packages will be
 downloaded and built during installation. Sorry for that!
 
-## Febrary 3rd, 2018: brew update thows 'rebase' errors
+### Febrary 3rd, 2018: brew update thows 'rebase' errors
 
 ⚠️  If you get the following error when Homebrew updates: ⚠️
-```
+
+```plain
 Recorded preimage for 'auto-multiple-choice.rb'
 error: Failed to merge in the changes.
 Patch failed at 0001 amc: use the fork bitbucket.org/maelvalais/auto-multiple-choice
 The copy of the patch that failed is found in: .git/rebase-apply/patch
 ```
+
 Sorry for that, I am **really** dumb on this one. I force-pushed homebrew-amc
 in order to revert the 2166 version. This is because I had created a fork
 with a different version numbering; later, the commits in my fork were merged into
@@ -98,18 +107,18 @@ have a version number lower than the previous ones... **Solution:**
 
     git -C $(brew --repo maelvalais/amc) reset --hard origin/master
 
+## FAQ
 
-# FAQ
 - **How to switch between the `devel` and stable version?** As both formulas
   are mutually exclusive, one must be **uninstalled** or **unlinked** before the other
   can be used. For example, from stable to devel:
-  
+
       brew unlink auto-multiple-choice
       brew install auto-multiple-choice-devel
-  
+
   Remember that for both formulas, the command is the same: `auto-multiple-choice`.
   **IMPORTANT:** You will need to run `latex-link` when switching versions:
-    
+
       sudo auto-multiple-choice latex-link remove
       sudo auto-multiple-choice latex-link
 
@@ -117,7 +126,7 @@ have a version number lower than the previous ones... **Solution:**
   [here][issue-reduce-button]. In short, it is related to the Glade UI toolkit
   which doesn't seem to be great with the Quartz (macOS) backend of Gtk3. The
   same issue appears when using Glade itself. Can't fix it from the AMC project
-  itself 😔  
+  itself 😔
 - **How can I uninstall in a clean way?** If you want to go back to Macport's
   auto-multiple-choice or you want to simply get rid or brew's installation,
   you can uninstall using `brew uninstall auto-multiple-choice` (see [uninstall-brew]
@@ -129,7 +138,7 @@ have a version number lower than the previous ones... **Solution:**
   If you already have Mactex or Basic Tex installed (for example
   the one you installed using `MacTeX.pkg`), you are ready to go!!
   **You don't need to install a specific Homebrew version of Mactex**.
-  But if you don't have latex installed at all, you can install it using 
+  But if you don't have latex installed at all, you can install it using
   `brew cask install mactex`.
 - **How come there has never been an official formula for Homebrew?** This
   is mainly because of the complexity of auto-multiple-choice. It has an
@@ -179,6 +188,7 @@ have a version number lower than the previous ones... **Solution:**
 [issue-reduce-button]: https://github.com/maelvalais/homebrew-amc/issues/18
 
 ## Troubleshooting
+
 - **Why are the windows _tabbed_ like in Safari tabs?**  because it is
   using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening
   as tabbed windows. This is a work-in-progress on the GTK3 side; the
@@ -250,8 +260,9 @@ think the whole idea of a formula that vendors everything is insane.
 
 ## Maintainance details: vendoring the ~70 Perl dependencies
 
-I went to http://deps.cpantesters.org and I copy-pasted the tree of dependencies
+I went to <http://deps.cpantesters.org> and I copy-pasted the tree of dependencies
 (except for 'Core modules') into a Ruby array. For example:
+
 ```ruby
       "XML::Simple",
         "XML::SAX",
