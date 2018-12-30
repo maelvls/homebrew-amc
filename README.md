@@ -27,6 +27,8 @@ check that the bottle is still working.
 [stable-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion
 [devel-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle
 [devel-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion
+[gitlab]: https://gitlab.com/jojo_boulix/auto-multiple-choice
+[homepage]: https://www.auto-multiple-choice.net/index.en
 
 ## News
 
