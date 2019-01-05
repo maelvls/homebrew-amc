@@ -32,13 +32,15 @@ check that the bottle is still working.
 
 ## News
 
-### Jan. 5th, 2018: opencv4 breaks things
+### Jan. 5th, 2018: opencv4 ~~breaks things~~ fixed ✅
 
 `AMC-detect` and `AMC-buildpdf` rely on opencv3. When Homebrew moved to opencv4,
 it broke the dynamic library linkages as well as makfiles (now `-std=c++11` is needed
 and the header path is a bit different).
 
-I'll fix that asap.
+~~I'll fix that asap.~~ Fixed on Jan. 6th, 2018 with version `1.4.0_1`!
+If you still have the `1.4.0` version, just `brew upgrade auto-multiple-choice`. You can do
+`brew info auto-multiple-choice` to check the installed version.
 
 ### Dec. 30th, 2018: 1.4.0 released 🍾
 
