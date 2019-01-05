@@ -427,6 +427,12 @@ class AutoMultipleChoiceDevel < Formula
     # Why? Because @/TEXDIR/@ is using #{prefix} which changes on each version.
     inreplace "AMC-latex-link.pl.in", "@/TEXDIR/@", opt_share/"texmf-local/tex/latex/AMC"
 
+    # These are needed because Homebrew moved to opencv4 on Dec. 28, 2018 and
+    # it broke things. Now c++11 is needed and I use pkg-config for conveniency.
+    inreplace "Makefile", "opencv\)", "opencv4)"
+    inreplace "Makefile", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS)", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS) -std=c++11"
+    inreplace "Makefile-brew.conf", /^GCC_.*/, ""
+
     # Override three variables that cannot be passed as make variables
     # because they are reset in Makefile.conf.
     (buildpath/"Makefile-brew.conf").append_lines <<~EOS
