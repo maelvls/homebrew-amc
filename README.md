@@ -13,9 +13,9 @@
 - **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
 - **For switching between the `devel` and `stable`**: see [below](#faq)
 
-This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew. This tap
-also features precompiled binaries (called _bottle_) built on Travis CI. As
-for testing, a cron job runs tests the installation of the bottle on Travis
+This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew, an alternative to Macports
+([portfile] for AMC). This tap also features precompiled binaries (called _bottle_) built
+on Travis CI. As for testing, a cron job runs tests the installation of the bottle on Travis
 CI every night (as well as `brew linkage auto-mutiple-choice`) in order to
 check that the bottle is still working.
 
@@ -30,15 +30,17 @@ check that the bottle is still working.
 [gitlab]: https://gitlab.com/jojo_boulix/auto-multiple-choice
 [homepage]: https://www.auto-multiple-choice.net/index.en
 
+[portfile]: https://github.com/macports/macports-ports/blob/master/x11/auto-multiple-choice/Portfile
+
 ## News
 
-### Jan. 5th, 2018: opencv4 ~~breaks things~~ fixed ✅
+### Jan. 5th, 2019: opencv4 ~~breaks things~~ fixed ✅
 
 `AMC-detect` and `AMC-buildpdf` rely on opencv3. When Homebrew moved to opencv4,
 it broke the dynamic library linkages as well as makfiles (now `-std=c++11` is needed
 and the header path is a bit different).
 
-~~I'll fix that asap.~~ Fixed on Jan. 6th, 2018 with version `1.4.0_1`!
+~~I'll fix that asap.~~ Fixed on Jan. 6th, 2019 with version `1.4.0_1`!
 If you still have the `1.4.0` version, just `brew upgrade auto-multiple-choice`. You can do
 `brew info auto-multiple-choice` to check the installed version.
 
