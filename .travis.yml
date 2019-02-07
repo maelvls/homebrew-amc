@@ -10,7 +10,6 @@
 #   and the bottles are pushed to bintray as 'unpublished'. The DSL commit
 #   is pushed as a tag, e.g., 'pr-1234', which us unrelated to master.
 
-language: ruby
 if: tag IS blank AND NOT type IN (push)
 env:
   global:
