@@ -57,7 +57,7 @@ install:
   # Often, Travis CI image's git is too old for brew
   - brew install git
   # Install the ruby AWS gem so that I can upload bottles to S3
-  - rvm default do gem install aws-sdk-s3
+  - sudo gem install aws-sdk-s3
   # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
   # Step: 1) create the intermediate folders <user>/<repo> so that
   # we can 2) remove <repo> and 3) replace it with a sym link
@@ -105,7 +105,6 @@ jobs:
       # We must use 'rvm: system' because the system ruby doesn't rely on
       # Homebrew, which allows us to reinstall Homebrew without having a
       # damaged ruby. We need ruby because we use the 'aws-sdk-s3' gem.
-      rvm: system
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
         # First we uninstall any outdated versions of xquartz; otherwise,
         # Homebrew will complain of of older version (2.9.7) being outdated
