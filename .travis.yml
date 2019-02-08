@@ -15,6 +15,7 @@ env:
   global:
     - HOMEBREW_LOGS=/tmp # Prevent ~/.cache/Homebrew/Logs from being rebuilt
     - HOMEBREW_NO_AUTO_UPDATE=yes # Prevents redundant auto-updates from brew
+    - HOMEBREW_AZURE_PIPELINES=1
 
     ###### Bintray configuration ######
     - TAP_BOTTLE_ORG=maelvalais            # Used in this script only
