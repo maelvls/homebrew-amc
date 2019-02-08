@@ -18,13 +18,13 @@ env:
     - HOMEBREW_AZURE_PIPELINES=1
 
     ###### Bintray configuration ######
-    - TAP_BOTTLE_ORG=maelvalais            # Used in this script only
+    - TAP_BOTTLE_ORG=maelvalais # Used in this script only
     - TAP_BOTTLE_ROOT_URL=https://dl.bintray.com/$TAP_BOTTLE_ORG/bottles-amc
     - HOMEBREW_BINTRAY_USER=maelvalais
     # HOMEBREW_BINTRAY_KEY                 # Secret variable set in Travis CI
 
     ###### AWS S3 configuration ######
-    - AWS_REGION=eu-west-1                 # aws-sdk-s3 gem errors without it
+    - AWS_REGION=eu-west-1 # aws-sdk-s3 gem errors without it
     - BUCKET=homebrew-amc
     # AWS_ACCESS_KEY_ID                    # Secret variable set in Travis CI
     # AWS_SECRET_ACCESS_KEY                # Secret variable set in Travis CI
@@ -47,7 +47,7 @@ cache:
     - "$HOME/.cache/pip"
     - "$HOME/.gem/ruby"
     - "$HOME/Library/Caches/Homebrew" # (1)
-    - "$HOME/.cache/Homebrew"         # (2)
+    - "$HOME/.cache/Homebrew" # (2)
 
 install:
   # the official test-bot won't let you run inside TravisCI, so we use
@@ -66,10 +66,10 @@ install:
   # branch, and thus we cannot test our tap at the current pushed commit.
   # We also need to unshallow in 4) because sometimes travis does not
   # clone thouroughly but we need a deep clone.
-  - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
-  - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
+  - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG) # 1)
+  - rm -rf $(brew --repo $TRAVIS_REPO_SLUG) # 2)
   - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
-  - git fetch --unshallow || true               # 4)
+  - git fetch --unshallow || true # 4)
   # Unless I am in 'brew test-bot', I don't want to fail on warnings.
   # perl regex: needed so that I can use 1.4.0-beta1 or 1.4.0-rc1 as stable versions
   - perl -pi -e 's/(.*)problem(.*version.*should not contain.*)$/$1opoo$2/' $(brew --repo)/Library/Homebrew/dev-cmd/audit.rb
@@ -129,9 +129,11 @@ jobs:
           if [ -d ~/usr_local/Caskroom/xquartz ];
           then sudo mv ~/usr_local/Caskroom /usr/local/Caskroom;
           else travis_retry brew cask install xquartz --no-quarantine; fi
-        # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
-        # system ruby uses an old openssl version ("tlsv1 alert protocol").
-        - travis_retry brew install libyaml gmp openssl@1.1 openssl
+        # We still need the 'rvm default' ruby (which links to Homebrew stuff) on
+        # macOS 10.12 and 10.11 because the system ruby has an old openssl
+        # ("tlsv1 alert protocol"). Reinstall needed stuff removed by test-bot.
+        - travis_retry brew install libyaml gmp openssl@1.1
+
     # TO BE ENABLED AS SOON AS TRAVIS HAS A MOJAVE IMAGE:
     #- <<: *run-osx
     #  os: osx
@@ -155,8 +157,8 @@ jobs:
         # Because we cannot do 'umask 002' just before travis clones the repo,
         # I set umask afterwards (1) and I change the permission of
         # already cloned files from 664 to 644 (2).
-        - umask 022          # (1)
-        - chmod 0644 *.rb    # (2)
+        - umask 022 # (1)
+        - chmod 0644 *.rb # (2)
 
         # Instal linuxbrew
         - export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH";
@@ -210,6 +212,10 @@ jobs:
       after_script: true # nothing
 
 after_script:
+  # We still need the 'rvm default' ruby (which links to Homebrew stuff) on
+  # macOS 10.12 and 10.11 because the system ruby has an old openssl
+  # ("tlsv1 alert protocol"). Reinstall needed stuff removed by test-bot.
+  - travis_retry brew install libyaml gmp openssl@1.1
   # In case the AWS_SECRET_ACCESS_KEY and AWS_SECRET_ACCESS_KEY are not
   # available, we don't want the build to fail.
   # Here, the 'testing' jobs have finished and must upload their *.{json,tar.gz}
@@ -221,7 +227,6 @@ after_script:
 before_cache:
   # Scrub cache so that travis only caches stuff for installed formulae.
   - brew cleanup -s
-  - brew cask cleanup
   # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
   - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
   # List the formulae so that I understand why the cache is huge sometimes
