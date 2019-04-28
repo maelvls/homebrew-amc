@@ -4,7 +4,7 @@ class AutoMultipleChoice < Formula
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   version "1.4.0"
   sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
-  revision 1
+  revision 2
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
@@ -700,7 +700,7 @@ class AutoMultipleChoice < Formula
   test do
     Open3.popen3("#{bin}/auto-multiple-choice detect") do |stdin, stdout, _|
       stdin.write "\r\n\r\n"
-      assert_match "TX=0.00 TY=0.00 DIAM=0.00\n", stdout.gets("\r\n\r\n")
+      assert_match stdout.gets("\r\n\r\n"), "TX=0.00 TY=0.00 DIAM=0.00\n"
     end
 
     # We cannot test the GUI but we still want to check if there is no error
