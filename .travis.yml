@@ -100,7 +100,7 @@ jobs:
   include:
     - &run-osx
       os: osx
-      osx_image: xcode9.4
+      osx_image: xcode10.1
       env: OS=high_sierra-10.13
       # We must use 'rvm: system' because the system ruby doesn't rely on
       # Homebrew, which allows us to reinstall Homebrew without having a
@@ -144,6 +144,11 @@ jobs:
       os: osx
       osx_image: xcode9.2
       env: OS=sierra-10.12
+
+    - <<: *run-osx
+      os: osx
+      osx_image: xcode10.2
+      env: OS=mojave-10.14
 
     - &run-on-linux
       os: linux
@@ -200,11 +205,11 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            ls *.high_sierra.bottle.json | while read json; do         # (3)
-              sed 's/high_sierra/mojave/g' $json > ${json/high_sierra/mojave};
-              bottle=`ls ${json/bottle*/}*.tar.gz`;
-              cp ${bottle} ${bottle/high_sierra/mojave};
-            done;
+            # ls *.high_sierra.bottle.json | while read json; do         # (3)
+            #   sed 's/high_sierra/mojave/g' $json > ${json/high_sierra/mojave};
+            #   bottle=`ls ${json/bottle*/}*.tar.gz`;
+            #   cp ${bottle} ${bottle/high_sierra/mojave};
+            # done;
             brew test-bot --ci-upload --root-url=$TAP_BOTTLE_ROOT_URL --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
