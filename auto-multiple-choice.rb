@@ -692,7 +692,7 @@ class AutoMultipleChoice < Formula
              brew install auto-multiple-choice-devel
 
       If you have any problem/remark regarding this formula, you can submit
-      an issue to https://github.com/maelvalais/homebrew-amc.
+      an issue to https://github.com/maelvls/homebrew-amc.
     EOS
     s
   end

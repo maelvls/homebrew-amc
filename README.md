@@ -5,10 +5,10 @@
   <img width="390" alt="capture d ecran 2018-10-06 a 11 23 47" src="https://user-images.githubusercontent.com/2195781/46569889-0867e180-c95c-11e8-98ad-969735cbb76f.png">
 </p>
 
-|                      Install                            |  Version                                             |
-|---------------------------------------------------------|:----------------------------------------------------:|
-| `brew install maelvalais/amc/auto-multiple-choice`      | [![Stable bottle][stable-bottle-img]][stable-bottle] |
-| `brew install maelvalais/amc/auto-multiple-choice-devel`| [![Devel bottle][devel-bottle-img]][devel-bottle]    |
+| Install                                               |                       Version                        |
+| ----------------------------------------------------- | :--------------------------------------------------: |
+| `brew install maelvls/amc/auto-multiple-choice`       | [![Stable bottle][stable-bottle-img]][stable-bottle] |
+| `brew install maelvls/amc/auto-multiple-choice-devel` |  [![Devel bottle][devel-bottle-img]][devel-bottle]   |
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
 - **For switching between the `devel` and `stable`**: see [below](#faq)
@@ -21,15 +21,14 @@ check that the bottle is still working.
 
 [![Build Status][build-status-img]][build-status]
 
-[build-status-img]: https://travis-ci.org/maelvalais/homebrew-amc.svg?branch=master
-[build-status]: https://travis-ci.org/maelvalais/homebrew-amc
+[build-status-img]: https://travis-ci.org/maelvls/homebrew-amc.svg?branch=master
+[build-status]: https://travis-ci.org/maelvls/homebrew-amc
 [stable-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle
 [stable-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion
 [devel-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle
 [devel-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion
 [gitlab]: https://gitlab.com/jojo_boulix/auto-multiple-choice
 [homepage]: https://www.auto-multiple-choice.net/index.en
-
 [portfile]: https://github.com/macports/macports-ports/blob/master/x11/auto-multiple-choice/Portfile
 
 ## News
@@ -72,7 +71,7 @@ I updated the `--devel` version with the latest release candidate.
 
 You can enable the development version using:
 
-    brew install maelvalais/amc/auto-multiple-choice --devel
+    brew install maelvls/amc/auto-multiple-choice --devel
 
 It will install the latest beta available. Note that due to Homebrew limitations,
 bottles cannot be built for devel versions, resulting in a longer installation
@@ -84,15 +83,15 @@ We fixed the above bug (see [PR53]). Everything should be back to normal in 1.3.
 ~~Note that bottles won't be available for a couple of days, but it only means that
 the installation will be slightly longer in the meantime!~~ done!
 
-[PR53]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/53/amc-detect-fix-errors-with-opencv-341-by
+[pr53]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/53/amc-detect-fix-errors-with-opencv-341-by
 
 ### March 15th, 2018: Fixed: ~~OpenCV breaks scan detection~~
 
 Homebrew updated OpenCV from 3.4.0 to 3.4.1. In 3.4.0, the C headers of OpenCV used
 in AMC were fine (athough they have been [deprecated](https://github.com/opencv/opencv/issues/6221)
-for a long time now) but in 3.4.1 the function `cvLoadImage()` breaks.  I'll see if we can move
+for a long time now) but in 3.4.1 the function `cvLoadImage()` breaks. I'll see if we can move
 away from the C bindings in `AMC-detect.cc` (which is the culprit, see
-[the issue](https://github.com/maelvalais/homebrew-amc/issues/4)) but that will take some
+[the issue](https://github.com/maelvls/homebrew-amc/issues/4)) but that will take some
 days and even more time for pushing that upstream.
 
 ### March 14th, 2018: build from source until March 17th
@@ -104,7 +103,7 @@ downloaded and built during installation. Sorry for that!
 
 ### Febrary 3rd, 2018: brew update thows 'rebase' errors
 
-⚠️  If you get the following error when Homebrew updates: ⚠️
+⚠️ If you get the following error when Homebrew updates: ⚠️
 
 ```plain
 Recorded preimage for 'auto-multiple-choice.rb'
@@ -119,7 +118,7 @@ with a different version numbering; later, the commits in my fork were merged in
 the main AMC repo and the version was 2161. `brew audit` would tell me not to
 have a version number lower than the previous ones... **Solution:**
 
-    git -C $(brew --repo maelvalais/amc) reset --hard origin/master
+    git -C $(brew --repo maelvls/amc) reset --hard origin/master
 
 ## FAQ
 
@@ -143,14 +142,14 @@ have a version number lower than the previous ones... **Solution:**
   itself 😔
 - **How can I uninstall in a clean way?** If you want to go back to Macport's
   auto-multiple-choice or you want to simply get rid or brew's installation,
-  you can uninstall using `brew uninstall auto-multiple-choice` (see [uninstall-brew]
+   you can uninstall using `brew uninstall auto-multiple-choice` (see [uninstall-brew]
   for uninstalling homebrew totally). If anything went wrong (bugs, errors), I would
   be pleased to see an issue opened on Github (or contact me by email at
-  mael.valais@gmail.com, but I would prefer that an issue is opened 😊).
+   mael.valais@gmail.com, but I would prefer that an issue is opened 😊).
 - **What are the dependencies?** For the installation, only Xquartz is
   required. For running it, you need a latex distribution installed.
   If you already have Mactex or Basic Tex installed (for example
-  the one you installed using `MacTeX.pkg`), you are ready to go!!
+   the one you installed using `MacTeX.pkg`), you are ready to go!!
   **You don't need to install a specific Homebrew version of Mactex**.
   But if you don't have latex installed at all, you can install it using
   `brew cask install mactex`.
@@ -169,9 +168,7 @@ have a version number lower than the previous ones... **Solution:**
 - **When running, there is a dylib/dydl error** This is probably because it
   installed from a bottle and that the bottle was outdated. I run a daily
   cron script in order to check that the dylib links links are not broken.
-  Two solutions: **1)** try reinstalling with `brew reinstall
-  auto-multiple-choice`, **2)** build from source with `brew install
-  auto-multiple-choice --build-from-source`. If you are still stuck, please
+  Two solutions: **1)** try reinstalling with `brew reinstall auto-multiple-choice`, **2)** build from source with `brew install auto-multiple-choice --build-from-source`. If you are still stuck, please
   run `brew linkage auto-multiple-choice` and submit an issue on Github
   in order to help me fix it.
 - **How did you do it?** I took the macports [recipe][macports], vendored
@@ -199,11 +196,11 @@ have a version number lower than the previous ones... **Solution:**
 [mercurial]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice
 [uninstall-brew]: https://github.com/Homebrew/install
 [ansible.rb]: https://github.com/Homebrew/homebrew-core/blob/master/Formula/ansible.rb
-[issue-reduce-button]: https://github.com/maelvalais/homebrew-amc/issues/18
+[issue-reduce-button]: https://github.com/maelvls/homebrew-amc/issues/18
 
 ## Troubleshooting
 
-- **Why are the windows _tabbed_ like in Safari tabs?**  because it is
+- **Why are the windows _tabbed_ like in Safari tabs?** because it is
   using Gtk3, pop-up windows (like _Open project_) are (weirdly) opening
   as tabbed windows. This is a work-in-progress on the GTK3 side; the
   workaround is to un-tab the window by dragging out the tab, or disable
@@ -216,7 +213,7 @@ have a version number lower than the previous ones... **Solution:**
 
         sudo auto-multiple-choice latex-link
 
-- **The font *Linux Libertine* is not found!** Install Libertine using brew:
+- **The font _Linux Libertine_ is not found!** Install Libertine using brew:
 
       brew cask install caskroom/fonts/font-linux-libertine
 
@@ -250,7 +247,7 @@ have a version number lower than the previous ones... **Solution:**
 - **Why is there no nice icon nor AutoMultipleChoice.app?** Unfortunately,
   only deb-related linux distributions can (today) have a real _application_
   feel with a clickable icon in the application menu. On macOS, it would
-  require to create an .app and sign it (which costs $99 per year). This is
+  require to create an .app and sign it (which costs \$99 per year). This is
   why we can only run it from the terminal and we don't get a fancy icon
   in the dock.
 
@@ -259,7 +256,7 @@ have a version number lower than the previous ones... **Solution:**
 You can create an [issue] if you have any problem, question or if you
 think the whole idea of a formula that vendors everything is insane.
 
-[issues]: https://github.com/maelvalais/homebrew-amc/issues
+[issues]: https://github.com/maelvls/homebrew-amc/issues
 [gtk-craches]: https://bitbucket.org/auto-multiple-choice/auto-multiple-choice/pull-requests/43/fix-the-assertion-failed-when-readding-an/diff#comment-53125101
 [macports]: https://github.com/macports/macports-ports/blob/d894802c28bda4045d956f327b3d5af89576bb22/x11/auto-multiple-choice/Portfile
 

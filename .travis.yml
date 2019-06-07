@@ -18,7 +18,7 @@ env:
     - HOMEBREW_AZURE_PIPELINES=1
 
     ###### Bintray configuration ######
-    - TAP_BOTTLE_ORG=maelvalais # Used in this script only
+    - TAP_BOTTLE_ORG=maelvls # Used in this script only
     - TAP_BOTTLE_ROOT_URL=https://dl.bintray.com/$TAP_BOTTLE_ORG/bottles-amc
     - HOMEBREW_BINTRAY_USER=maelvalais
     # HOMEBREW_BINTRAY_KEY                 # Secret variable set in Travis CI
@@ -32,7 +32,7 @@ env:
     ###### Github configuration ######
     # This config allows test-bot to push tags (eg. pr-1234) and DSL commits.
     # They will be pushed to github.com/$GITHUB_USER/homebrew-%TAP%.
-    - GITHUB_USER=maelvalais
+    - GITHUB_USER=maelvls
     # GITHUB_TOKEN                   # (Secret) For pushing bottle DSL commits
 
 # (1) remember to use 'brew cleanup -s' at the end of the travis script;
@@ -53,7 +53,7 @@ install:
   # the official test-bot won't let you run inside TravisCI, so we use
   # davidchall's one. David's test-bot cannot push the commit using
   # Oauth github + https (only ssh) so I use my own.
-  - brew tap maelvalais/test-bot
+  - brew tap maelvls/test-bot
   # Often, Travis CI image's git is too old for brew
   - brew install git
   # Install the ruby AWS gem so that I can upload bottles to S3
