@@ -147,7 +147,7 @@ jobs:
 
     - <<: *run-osx
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11
       env: OS=mojave-10.14
 
     - &run-on-linux
@@ -155,6 +155,8 @@ jobs:
       env: OS=x86_64_linux
       if: branch = I_dont_want_linux_to_run
       before_install:
+        # https://stackoverflow.com/questions/54356778/travis-task-with-brew-test-bot-failing-over-outdated-command-line-tools
+        - softwareupdate --install -a
         # Fix the permission problem on linux (664 instead of 644) during
         # git clone (the one done by travis-ci). Homebrew needs formulas to be
         # 'chmod 644'. This is because git does not conserve permissions and
