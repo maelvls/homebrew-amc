@@ -106,6 +106,8 @@ jobs:
       # Homebrew, which allows us to reinstall Homebrew without having a
       # damaged ruby. We need ruby because we use the 'aws-sdk-s3' gem.
       before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
+        # https://stackoverflow.com/questions/54356778/travis-task-with-brew-test-bot-failing-over-outdated-command-line-tools
+        - softwareupdate --install -a
         # First we uninstall any outdated versions of xquartz; otherwise,
         # Homebrew will complain of of older version (2.9.7) being outdated
         # even though we install a new version. Remember that
@@ -155,8 +157,6 @@ jobs:
       env: OS=x86_64_linux
       if: branch = I_dont_want_linux_to_run
       before_install:
-        # https://stackoverflow.com/questions/54356778/travis-task-with-brew-test-bot-failing-over-outdated-command-line-tools
-        - softwareupdate --install -a
         # Fix the permission problem on linux (664 instead of 644) during
         # git clone (the one done by travis-ci). Homebrew needs formulas to be
         # 'chmod 644'. This is because git does not conserve permissions and
