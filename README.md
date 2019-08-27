@@ -8,7 +8,8 @@
 | Install                                               |                       Version                        |
 | ----------------------------------------------------- | :--------------------------------------------------: |
 | `brew install maelvls/amc/auto-multiple-choice`       | [![Stable bottle][stable-bottle-img]][stable-bottle] |
-| `brew install maelvls/amc/auto-multiple-choice-devel` |  [![Devel bottle][devel-bottle-img]][devel-bottle]   |
+
+<!-- | `brew install maelvls/amc/auto-multiple-choice-devel` |  [![Devel bottle][devel-bottle-img]][devel-bottle]   | -->
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
 - **For switching between the `devel` and `stable`**: see [below](#faq)
@@ -32,6 +33,24 @@ check that the bottle is still working.
 [portfile]: https://github.com/macports/macports-ports/blob/master/x11/auto-multiple-choice/Portfile
 
 ## News
+
+### Aug. 27th, 2019: changed my username to `maelvls`, remove the useless devel version
+
+If you get the error:
+```
+Error: Formulae found in multiple taps:
+* maelvalais/amc/auto-multiple-choice-devel
+* maelvls/amc/auto-multiple-choice-devel
+```
+To fix it:
+```
+brew untap maelvalais/amc
+brew tap maelvls/amc
+```
+
+Regarding `auto-multiple-choice-devel`, it was used in pre-1.4.0 but right now it has
+the same version as `auto-multiple-choice` and is useless. I removed the installation
+information from the readme. 
 
 ### Jan. 5th, 2019: opencv4 ~~breaks things~~ fixed ✅
 
