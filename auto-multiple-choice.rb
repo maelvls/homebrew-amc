@@ -39,7 +39,7 @@ class AutoMultipleChoice < Formula
   depends_on "imagemagick@6"
   depends_on "libffi"
   depends_on "netpbm"
-  depends_on "opencv"
+  depends_on "opencv@3"
   depends_on "pango"
   depends_on "perl"
   depends_on "poppler"
