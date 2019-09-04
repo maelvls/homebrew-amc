@@ -2,19 +2,14 @@ class AutoMultipleChoice < Formula
   desc "printable tests for students with OCR marking"
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
-  version "1.4.0"
+  version "1.4.0_opencv3"
   sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
-  revision 3
+  revision 0
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
   bottle do
-    root_url "https://dl.bintray.com/maelvalais/bottles-amc"
-    cellar :any
-    sha256 "9ea69e45521f6fd1811a9339c9335929c207b1b9f413682513fb3df9e5d91a0f" => :mojave
-    sha256 "2831e7ded7350e62017124be95e786114afc9dc6e4ab68ee90854b2f3abdb678" => :high_sierra
-    sha256 "44a00579087d48c2874580023505c0a4728033059c8cddad14d6018c48dc8ad3" => :sierra
   end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
