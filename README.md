@@ -38,7 +38,7 @@ check that the bottle is still working.
 
 Pango 1.14.4 introduces a bug that breaks annotations (see [issue](https://github.com/maelvls/homebrew-amc/issues/33)). The text is stacked at the beginning of each PDF:
 
-![](https://user-images.githubusercontent.com/54452098/63615417-4a6d3680-c5b3-11e9-97cc-c153f0ed10d8.png
+![](https://user-images.githubusercontent.com/54452098/63615417-4a6d3680-c5b3-11e9-97cc-c153f0ed10d8.png)
 
 With Pango 1.42.4, annotations should work. Here is the workaround:
 ```
