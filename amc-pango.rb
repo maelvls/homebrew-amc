@@ -33,6 +33,8 @@ class AmcPango < Formula
   depends_on "glib"
   depends_on "harfbuzz"
 
+  keg_only "Vendored version of Homebrew's pango"
+
   def install
     system "./autogen.sh" if build.head?
     system "./configure", "--disable-dependency-tracking",
