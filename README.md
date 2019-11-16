@@ -5,9 +5,9 @@
   <img width="390" alt="capture d ecran 2018-10-06 a 11 23 47" src="https://user-images.githubusercontent.com/2195781/46569889-0867e180-c95c-11e8-98ad-969735cbb76f.png">
 </p>
 
-| Install                                               |                       Version                        |
-| ----------------------------------------------------- | :--------------------------------------------------: |
-| `brew install maelvls/amc/auto-multiple-choice`       | [![Stable bottle][stable-bottle-img]][stable-bottle] |
+| Install                                         |                       Version                        |
+| ----------------------------------------------- | :--------------------------------------------------: |
+| `brew install maelvls/amc/auto-multiple-choice` | [![Stable bottle][stable-bottle-img]][stable-bottle] |
 
 <!-- | `brew install maelvls/amc/auto-multiple-choice-devel` |  [![Devel bottle][devel-bottle-img]][devel-bottle]   | -->
 
@@ -34,13 +34,30 @@ check that the bottle is still working.
 
 ## News
 
+## Nov. 2019: Fixed Pango by fixing the version to 1.42.4
+
+The bug of the '[stacked caracters when
+annotating](https://github.com/maelvls/homebrew-amc/issues/33)' has been fixed
+(see
+[ticket](https://project.auto-multiple-choice.net/boards/4/topics/8855?r=8904#message-8904)).
+
+<!--
+
+```sh
+brew extract pango --version 1.42.4 maelvls/amc
+brew extract cairo maelvls/amc
+```
+-->
+
 ### Sep. 19th, 2019: Annotations bug and Pango version
 
 Pango 1.14.4 introduces a bug that breaks annotations (see [issue](https://github.com/maelvls/homebrew-amc/issues/33)). The text is stacked at the beginning of each PDF:
 
 ![](https://user-images.githubusercontent.com/54452098/63615417-4a6d3680-c5b3-11e9-97cc-c153f0ed10d8.png)
 
-With Pango 1.42.4, annotations should work. Here is the workaround:
+With Pango 1.42.4, annotations should work. ~~Here is the workaround:~~ this
+workaround isn't needed anymore!
+
 ```
 brew unlink pango
 brew install --build-from-source https://raw.githubusercontent.com/Homebrew/homebrew-core/a8ac7ea5/Formula/pango.rb
@@ -50,12 +67,15 @@ brew switch pango 1.42.4_2
 ### Aug. 27th, 2019: changed my username to `maelvls`, remove the useless devel version
 
 If you get the error:
+
 ```
 Error: Formulae found in multiple taps:
 * maelvalais/amc/auto-multiple-choice-devel
 * maelvls/amc/auto-multiple-choice-devel
 ```
+
 To fix it:
+
 ```
 brew untap maelvalais/amc
 brew tap maelvls/amc
@@ -63,7 +83,7 @@ brew tap maelvls/amc
 
 Regarding `auto-multiple-choice-devel`, it was used in pre-1.4.0 but right now it has
 the same version as `auto-multiple-choice` and is useless. I removed the installation
-information from the readme. 
+information from the readme.
 
 ### Jan. 5th, 2019: opencv4 ~~breaks things~~ fixed ✅
 
