@@ -2,7 +2,7 @@
 # https://github.com/maelvls/homebrew-amc/issues/33
 # https://project.auto-multiple-choice.net/boards/4/topics/8855?r=8904#message-8904
 class AmcPango < Formula
-  desc "Framework for layout and rendering of i18n text"
+  desc "(vendored) Framework for layout and rendering of i18n text"
   homepage "https://www.pango.org/"
   url "https://download.gnome.org/sources/pango/1.42/pango-1.42.4.tar.xz"
   sha256 "1d2b74cd63e8bd41961f2f8d952355aa0f9be6002b52c8aa7699d9f5da597c9d"
