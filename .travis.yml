@@ -89,9 +89,8 @@ script:
       brew install auto-multiple-choice;
       brew linkage --test auto-multiple-choice && brew test auto-multiple-choice || exit 123;
       brew unlink auto-multiple-choice;
-      brew install auto-multiple-choice-devel;
-      brew linkage --test auto-multiple-choice-devel && brew test auto-multiple-choice-devel || exit 123;
-      brew unlink auto-multiple-choice-devel
+      # brew install auto-multiple-choice-devel;
+      # brew linkage --test auto-multiple-choice-devel && brew test auto-multiple-choice-devel || exit 123;
     fi
   - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then brew test-bot --root-url=$TAP_BOTTLE_ROOT_URL; fi
   - ls *.bottle*.* || echo "==> No bottle created here"
