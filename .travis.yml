@@ -134,20 +134,9 @@ jobs:
         # ("tlsv1 alert protocol"). Reinstall needed stuff removed by test-bot.
         - travis_retry brew install libyaml gmp openssl@1.1
 
-    # TO BE ENABLED AS SOON AS TRAVIS HAS A MOJAVE IMAGE:
-    #- <<: *run-osx
-    #  os: osx
-    #  osx_image: xcode9.4
-    #  env: OS=high_sierra-10.13
-
     - <<: *run-osx
       os: osx
-      osx_image: xcode9.2
-      env: OS=sierra-10.12
-
-    - <<: *run-osx
-      os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11.2
       env: OS=mojave-10.14
 
     - &run-on-linux
