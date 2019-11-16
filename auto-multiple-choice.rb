@@ -47,7 +47,7 @@ class AutoMultipleChoice < Formula
 
   depends_on :x11
 
-  conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
+  # conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
 
   # What is missing in this brew-flavoured AMC:
   # - shared-mime-info: there might be warnings about 'shared-mime-info'
