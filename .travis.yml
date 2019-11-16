@@ -91,6 +91,7 @@ script:
       brew unlink auto-multiple-choice;
       # brew install auto-multiple-choice-devel;
       # brew linkage --test auto-multiple-choice-devel && brew test auto-multiple-choice-devel || exit 123;
+      # brew unlink auto-multiple-choice-devel
     fi
   - if [[ $TRAVIS_EVENT_TYPE =~ pull_request ]]; then brew test-bot --root-url=$TAP_BOTTLE_ROOT_URL; fi
   - ls *.bottle*.* || echo "==> No bottle created here"
@@ -184,8 +185,8 @@ jobs:
         # (2) A trick so that 'prefix' and 'cellar' are removed if they are
         # equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
         # 'brew bottle' on a linux setup.
-        # (3) Travis does not provide a high_sierra image yet, but I can use the
-        # sierra one and pretend it is a high_sierra bottle. I test them regularly in
+        # (3) Travis does not provide a 'catalina' image yet, but I can use the
+        # sierra one and pretend it is a 'mojave' bottle. I test them regularly in
         # case it doesn't work.
         # (4) In 'brew --ci--upload', --git-name is the name of the fork
         # where the pr-1234 (or testing-98 when not in a PR) tag is pushed.
@@ -193,11 +194,11 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            # ls *.high_sierra.bottle.json | while read json; do         # (3)
-            #   sed 's/high_sierra/mojave/g' $json > ${json/high_sierra/mojave};
-            #   bottle=`ls ${json/bottle*/}*.tar.gz`;
-            #   cp ${bottle} ${bottle/high_sierra/mojave};
-            # done;
+            ls *.mojave.bottle.json | while read json; do         # (3)
+              sed 's/mojave/catalina/g' $json > ${json/mojave/catalina};
+              bottle=`ls ${json/bottle*/}*.tar.gz`;
+              cp ${bottle} ${bottle/mojave/catalina};
+            done;
             brew test-bot --ci-upload --root-url=$TAP_BOTTLE_ROOT_URL --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --verbose;
           else
             echo "==> No bottle found in the bucket, skipping --ci-upload";
