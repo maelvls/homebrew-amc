@@ -6,9 +6,10 @@ class PangoAT1424 < Formula
   revision 0
 
   bottle do
-    sha256 "00b769ae7c76db06f9828398023c60597b11f33410b9f5b7c3f321b34fb7e0a9" => :mojave
-    sha256 "6d9f9ce407e6847a262eeea81f3bd93237f0ed4648d885a97c1409d95d26d892" => :high_sierra
-    sha256 "d400c90576eebb989be229742fc0fbdeb91c27e14bd98af94c05a84d2bcd7ca9" => :sierra
+    root_url "https://dl.bintray.com/maelvls/bottles-amc"
+    sha256 "8c5379b8feb896cfb88389f82da89b9e239eca14e9aa6c905cf0f3632abad18a" => :catalina
+    sha256 "8c5379b8feb896cfb88389f82da89b9e239eca14e9aa6c905cf0f3632abad18a" => :mojave
+    sha256 "6ec92ef255f1be4573fcb1acbf44b086b9f360ec0d97bc943ae2de8c2c529056" => :high_sierra
   end
 
   head do
