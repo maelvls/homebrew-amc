@@ -412,6 +412,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
     ENV.prepend_path "PATH", Formula["make"].libexec/"gnubin" # system's make (3.81) too old
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # force Pango 1.42.4
 
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
     ENV["PERL_MB_OPT"] = "--install_base '#{libexec}'" # for cpan (Build.PL)
