@@ -10,8 +10,10 @@ class AmcPango < Formula
 
   bottle do
     root_url "https://dl.bintray.com/maelvls/bottles-amc"
-    sha256 "97f59d87f502228c2f86371527fc635c9007725304e8a95b3bda3256eb804005" => :mojave
-    sha256 "92a71ac0dc3ed8de23c35a60bda54a82038b80be4422f28177f7a2a86c81ec89" => :high_sierra
+    rebuild 1
+    sha256 "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c" => :catalina
+    sha256 "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c" => :mojave
+    sha256 "147c6f9eedd3c49afdbe18551d68102f61ec20c9701b4ee28ccb434764a9d221" => :high_sierra
   end
 
   head do
