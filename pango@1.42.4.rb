@@ -1,19 +1,14 @@
-# Vendor Pango because of a 'bug' unidentified.
-# https://github.com/maelvls/homebrew-amc/issues/33
-# https://project.auto-multiple-choice.net/boards/4/topics/8855?r=8904#message-8904
-class AmcPango < Formula
-  desc "(vendored) Framework for layout and rendering of i18n text"
+class PangoAT1424 < Formula
+  desc "Framework for layout and rendering of i18n text"
   homepage "https://www.pango.org/"
   url "https://download.gnome.org/sources/pango/1.42/pango-1.42.4.tar.xz"
   sha256 "1d2b74cd63e8bd41961f2f8d952355aa0f9be6002b52c8aa7699d9f5da597c9d"
   revision 0
 
   bottle do
-    root_url "https://dl.bintray.com/maelvls/bottles-amc"
-    rebuild 1
-    sha256 "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c" => :catalina
-    sha256 "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c" => :mojave
-    sha256 "147c6f9eedd3c49afdbe18551d68102f61ec20c9701b4ee28ccb434764a9d221" => :high_sierra
+    sha256 "00b769ae7c76db06f9828398023c60597b11f33410b9f5b7c3f321b34fb7e0a9" => :mojave
+    sha256 "6d9f9ce407e6847a262eeea81f3bd93237f0ed4648d885a97c1409d95d26d892" => :high_sierra
+    sha256 "d400c90576eebb989be229742fc0fbdeb91c27e14bd98af94c05a84d2bcd7ca9" => :sierra
   end
 
   head do
@@ -32,8 +27,6 @@ class AmcPango < Formula
   depends_on "fribidi"
   depends_on "glib"
   depends_on "harfbuzz"
-
-  keg_only "Vendored version of Homebrew's pango"
 
   def install
     system "./autogen.sh" if build.head?
