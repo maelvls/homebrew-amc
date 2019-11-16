@@ -4,7 +4,7 @@ class AutoMultipleChoice < Formula
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   version "1.4.0"
   sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
-  revision 4
+  revision 5
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
@@ -40,7 +40,7 @@ class AutoMultipleChoice < Formula
   depends_on "libffi"
   depends_on "netpbm"
   depends_on "opencv"
-  depends_on "pango"
+  depends_on "amc-pango" # vendored Pango, stuck at v1.42.4
   depends_on "perl"
   depends_on "poppler"
   depends_on "qpdf"
