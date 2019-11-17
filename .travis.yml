@@ -218,11 +218,11 @@ after_script:
     require 'aws-sdk-s3'; s3 = Aws::S3::Resource.new
     Dir["*.{json,tar.gz}"].each { |f| s3.bucket("$BUCKET").put_object(key:"$TRAVIS_BUILD_NUMBER/#{f}").upload_file(f) }
 
-before_cache:
-  # Scrub cache so that travis only caches stuff for installed formulae.
-  - brew cleanup -s
-  # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
-  - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
-  # List the formulae so that I understand why the cache is huge sometimes
-  - brew list
-  - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
+# before_cache:
+#   # Scrub cache so that travis only caches stuff for installed formulae.
+#   - brew cleanup -s
+#   # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
+#   - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
+#   # List the formulae so that I understand why the cache is huge sometimes
+#   - brew list
+#   - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
