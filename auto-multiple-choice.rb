@@ -427,11 +427,16 @@ class AutoMultipleChoice < Formula
     # Why? Because @/TEXDIR/@ is using #{prefix} which changes on each version.
     inreplace "AMC-latex-link.pl.in", "@/TEXDIR/@", opt_share/"texmf-local/tex/latex/AMC"
 
-    # These are needed because Homebrew moved to opencv4 on Dec. 28, 2018 and
-    # it broke things. Now c++11 is needed and I use pkg-config for conveniency.
+    # These are needed because Homebrew moved to opencv4 on Dec. 28, 2018 and it
+    # broke things. Now c++11 is needed and I use pkg-config for conveniency.
+    # And since pkg-config is used, CFLAGS, CXXFLAGS and LDFLAGS aren't needed
+    # anymore.
     inreplace "Makefile", "opencv\)", "opencv4)"
     inreplace "Makefile", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS)", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS) -std=c++11"
     inreplace "Makefile-brew.conf", /^GCC_.*/, ""
+    inreplace "Makefile-brew.conf", /^CFLAGS.*/, ""
+    inreplace "Makefile-brew.conf", /^CXXFLAGS.*/, ""
+    inreplace "Makefile-brew.conf", /^LDFLAGS.*/, ""
 
     # Override three variables that cannot be passed as make variables
     # because they are reset in Makefile.conf.
@@ -665,13 +670,7 @@ class AutoMultipleChoice < Formula
       If you don't have Mactex installed, you will need it:
           brew cask install mactex
 
-      1) If you have an issue of 'Linux Libertine O' not found:
-         If you want to use this font, you should install it:
-             brew cask install caskroom/fonts/font-linux-libertine
-         But the name is 'Linux Libertine' (no 'O'). In your AMC-TXT files:
-             Font: Linux Libertine
-
-      2) If you have an issue of new windows in tabs:
+      1) If you have an issue of new windows in tabs:
          with Gtk3, new windows may open in tabs instead of
          in a new window. This is unwanted because Gtk3 has a bug making it
          hard to click on some buttons. Two workarounds:
@@ -679,17 +678,10 @@ class AutoMultipleChoice < Formula
            when opening documents;
          - Or just un-tab manually by dragging the tab out.
 
-      3) Where is automultiplechoice.sty?
-         After installing, you have to run:
+      2) Where is automultiplechoice.sty? After installing, run:
 
+             sudo auto-multiple-choice latex-link remove
              sudo auto-multiple-choice latex-link
-
-      4) This is the stable version; this version kinda lags behind. If you
-         want the latest development versions, there is a specific formula
-         for that (--devel won't work):
-
-             brew uninstall auto-multiple-choice
-             brew install auto-multiple-choice-devel
 
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvls/homebrew-amc.
