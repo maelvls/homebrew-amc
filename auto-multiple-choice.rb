@@ -4,7 +4,7 @@ class AutoMultipleChoice < Formula
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   version "1.4.0"
   sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
-  revision 5
+  revision 6
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
@@ -413,6 +413,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
     ENV.prepend_path "PATH", Formula["make"].libexec/"gnubin" # system's make (3.81) too old
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
     ENV["PERL_MB_OPT"] = "--install_base '#{libexec}'" # for cpan (Build.PL)
@@ -649,6 +650,11 @@ class AutoMultipleChoice < Formula
             "LIBS=-L#{Formula["imagemagick@6"].lib}"
           inreplace "Makefile", /CCCDLFLAGS *=/, "CCCDLFLAGS = -I#{Formula["imagemagick@6"].include}/ImageMagick-6"
           inreplace "Makefile", /LDDLFLAGS *=/, "LDDLFLAGS = -L#{Formula["gettext"].lib}"
+          system "make"
+          system "make", "install"
+        elsif package == "Pango"
+          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
+          inreplace "Makefile", "-L/usr/local/lib", ""
           system "make"
           system "make", "install"
         elsif File.exist? "Makefile.PL"
