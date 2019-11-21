@@ -34,7 +34,25 @@ check that the bottle is still working.
 
 ## News
 
-## Nov. 2019: Fixed Pango by fixing the version to 1.42.4
+## Nov. 21th, 2019: Annotate & `Bad symbol syntax`
+
+When using the 'annotation' feature, you may get errors like:
+
+```
+Bad symbol syntax: 0-1:circle/hex_red at /usr/local/Cellar/auto-multiple-choice/1.4.0_6/lib/AMC/perl/AMC-annotate.pl line 151.
+```
+
+or
+
+```
+No PDF directory: /Users/mvalais/Projets-QCM/toyP/cr/corrections/pdf at /usr/local/Cellar/auto-multiple-choice/1.4.0_6/lib/AMC/perl/AMC-annotate.pl line 178.
+The file /Users/mvalais/Projets-QCM/toyP/cr/corrections/pdf does not exist.
+```
+
+It might be something off in the settings file `~/.AMC.d/cf.default.xml`. Please try to rename
+it and re-open your project.
+
+## Nov. 18th, 2019: Fixed Pango by fixing the version to 1.42.4
 
 The bug of the '[stacked caracters when
 annotating](https://github.com/maelvls/homebrew-amc/issues/33)' has been fixed
