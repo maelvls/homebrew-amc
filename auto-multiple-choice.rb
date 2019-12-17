@@ -460,6 +460,7 @@ class AutoMultipleChoice < Formula
         # netpbm, poppler and imagemagick@6 must be in the PATH
         :PATH       => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
+
     # Here are all the perl dependencies that we will vendor (= install locally
     # only for this recipe):
     # - Archive::Zip
@@ -493,7 +494,7 @@ class AutoMultipleChoice < Formula
 
     # Note that duplicates are allowed; only the first package from the
     # bottom will be installed.
-    `
+    "
       Pango
         ExtUtils::Depends
         Glib
@@ -603,8 +604,8 @@ class AutoMultipleChoice < Formula
               Net::HTTP
       XML::Writer
       Locale::Language
-    `.each_line.reverse_each do |r|
-      install_perl_package(r.strip, installed) if r.strip != ""
+    ".each_line.reverse_each.map { |l| l.strip }.select { |l| l != "" }.each do |package|
+      install_perl_package(package, installed)
     end
   end
 
