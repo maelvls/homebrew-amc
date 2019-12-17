@@ -120,6 +120,7 @@ jobs:
         # 3) also because it takes a long time to 'brew update' from an old
         #    Homebrew anyway, so why not start fresh.
         - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
+        - git config --global --unset protocol.version # System git is too old
         - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
         # Either xquartz was already installed at its latest version or it has
