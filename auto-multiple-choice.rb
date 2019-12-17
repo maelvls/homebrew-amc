@@ -460,154 +460,152 @@ class AutoMultipleChoice < Formula
         # netpbm, poppler and imagemagick@6 must be in the PATH
         :PATH       => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
         :AMCBASEDIR => prefix
-    # rubocop:disable AlignArray
-    [
-      # Here are all the perl dependencies that we will vendor (= install locally
-      # only for this recipe):
-      # - Archive::Zip
-      # - Clone
-      # - DBD::SQLite
-      # - Digest::MD5
-      # - Email::MIME
-      # - Email::Sender
-      # - File::BaseDir
-      # - File::MimeInfo
-      # - Glib::Object::Introspection
-      # - Gtk3
-      # - Locale::Gettext
-      # - Module::Load::Conditional
-      # - OpenOffice::OODoc
-      # - Image::Magick
-      # - Text::CSV
-      # - XML::Simple
-      # - XML::Writer
+    # Here are all the perl dependencies that we will vendor (= install locally
+    # only for this recipe):
+    # - Archive::Zip
+    # - Clone
+    # - DBD::SQLite
+    # - Digest::MD5
+    # - Email::MIME
+    # - Email::Sender
+    # - File::BaseDir
+    # - File::MimeInfo
+    # - Glib::Object::Introspection
+    # - Gtk3
+    # - Locale::Gettext
+    # - Module::Load::Conditional
+    # - OpenOffice::OODoc
+    # - Image::Magick
+    # - Text::CSV
+    # - XML::Simple
+    # - XML::Writer
 
-      # 1) To create the following array with a hierarchy-like indentation,
-      #    I went to http://deps.cpantesters.org for each package and copied
-      #    the resulting table with the dependency hierarchy and used:
-      # cat deps_archive_zip | sed 's/-\t//g' | sed '/^.*Core module.*$/d' | \
-      #     sed 's/^\(.*\)  Bugreports.*$/\1/g' | sed 's/[ \t]*$//g' | \
-      #     sed 's/^\( *\)\([^ ]*\)$/\1"\2",/g' | sed 's/ "/"/g' | sed 's/    /  /g'
+    # 1) To create the following array with a hierarchy-like indentation,
+    #    I went to http://deps.cpantesters.org for each package and copied
+    #    the resulting table with the dependency hierarchy and used:
+    # cat deps_archive_zip | sed 's/-\t//g' | sed '/^.*Core module.*$/d' | \
+    #     sed 's/^\(.*\)  Bugreports.*$/\1/g' | sed 's/[ \t]*$//g' | \
+    #     sed 's/^\( *\)\([^ ]*\)$/\1"\2",/g' | sed 's/ "/"/g' | sed 's/    /  /g'
 
-      # 2) From this array, I create the 'resource ... do ... end' using:
-      #    ./list_to_resources.pl < ruby_list > resources
-      #    The code of "list_to_resources.pl" is showed at the end of this file.
+    # 2) From this array, I create the 'resource ... do ... end' using:
+    #    ./list_to_resources.pl < ruby_list > resources
+    #    The code of "list_to_resources.pl" is showed at the end of this file.
 
-      # Note that duplicates are allowed; only the first package from the
-      # bottom will be installed.
-      "Pango",
-        "ExtUtils::Depends",
-        "Glib",
-          "ExtUtils::PkgConfig",
-        "Cairo",
-      "Archive::Zip",
-        "Test::MockModule",
-          "Module::Build",
-          "SUPER",
-            "Sub::Identify",
-      "Clone",
-      "DBD::SQLite",
-        "DBI",
-      "Digest::MD5",
-      "Email::MIME",
-        "Email::Simple::Creator",
-          "Email::Date::Format",
-        "Module::Runtime",
-          "Module::Build",
-        "Email::MessageID",
-        "MIME::Types",
-        "Email::Address::XS",
-        "Email::MIME::Encodings",
-          "Capture::Tiny",
-        "Email::MIME::ContentType",
-      "Email::Sender",
-        "Capture::Tiny",
-        "Sub::Exporter",
-          "Params::Util",
-          "Data::OptList",
-            "Sub::Install",
-        "MooX::Types::MooseLike::Base",
-          "Test::Fatal",
-            "Try::Tiny",
-          "Module::Runtime",
-            "Module::Build",
-          "Moo",
-            "Role::Tiny",
-            "Sub::Defer",
-            "Class::Method::Modifiers",
-              "Test::Requires",
-            "Devel::GlobalDestruction",
-              "Sub::Exporter::Progressive",
-        "Email::Abstract",
-          "Email::Simple",
-            "Email::Date::Format",
-          "MRO::Compat",
-          "Module::Pluggable",
-        "Throwable::Error",
-          "Devel::StackTrace",
-        "Email::Address",
-      "File::BaseDir",
-      "File::MimeInfo",
-        "File::BaseDir",
-          "IPC::System::Simple",
-          "File::Which",
-          "Module::Build",
-        "File::DesktopEntry",
-          "URI::Escape",
-            "Test::Needs",
-      "Glib::Object::Introspection",
-      "Gtk3",
-        "Glib::Object::Introspection",
-        "Cairo::GObject",
-          "Cairo",
-          "Glib",
-            "ExtUtils::PkgConfig",
-          "ExtUtils::Depends",
-      "Locale::gettext",
-      "Module::Load::Conditional",
-      "OpenOffice::OODoc",
-        "Archive::Zip",
-          "Test::MockModule",
-            "Module::Build",
-            "SUPER",
-              "Sub::Identify",
-        "XML::Twig",
-          "XML::Parser",
-            "LWP::UserAgent",
-              "Test::RequiresInternet",
-      "Image::Magick",
-      "Text::CSV",
-      "XML::Simple",
-        "XML::SAX",
-          "XML::NamespaceSupport",
-          "XML::SAX::Base",
-        "XML::SAX::Expat",
-          "XML::SAX",
-            "XML::NamespaceSupport",
-            "XML::SAX::Base",
-          "XML::Parser",
-            "LWP::UserAgent",
-              "Test::RequiresInternet",
-              "HTTP::Status",
-              "LWP::MediaTypes",
-                "Encode::Locale",
-                "IO::HTML",
-                "URI",
-                "Test::Needs",
-              "HTTP::Date",
-              "File::Listing",
-                "HTTP::Daemon",
-                "HTML::Tagset",
-              "HTTP::Cookies",
-              "WWW::RobotRules",
-              "HTTP::Negotiate",
-              "Net::HTTP",
-      "XML::Writer",
-      "Locale::Language",
-    ].reverse_each do |r|
-      install_perl_package(r, installed)
+    # Note that duplicates are allowed; only the first package from the
+    # bottom will be installed.
+    `
+      Pango
+        ExtUtils::Depends
+        Glib
+          ExtUtils::PkgConfig
+        Cairo
+      Archive::Zip
+        Test::MockModule
+          Module::Build
+          SUPER
+            Sub::Identify
+      Clone
+      DBD::SQLite
+        DBI
+      Digest::MD5
+      Email::MIME
+        Email::Simple::Creator
+          Email::Date::Format
+        Module::Runtime
+          Module::Build
+        Email::MessageID
+        MIME::Types
+        Email::Address::XS
+        Email::MIME::Encodings
+          Capture::Tiny
+        Email::MIME::ContentType
+      Email::Sender
+        Capture::Tiny
+        Sub::Exporter
+          Params::Util
+          Data::OptList
+            Sub::Install
+        MooX::Types::MooseLike::Base
+          Test::Fatal
+            Try::Tiny
+          Module::Runtime
+            Module::Build
+          Moo
+            Role::Tiny
+            Sub::Defer
+            Class::Method::Modifiers
+              Test::Requires
+            Devel::GlobalDestruction
+              Sub::Exporter::Progressive
+        Email::Abstract
+          Email::Simple
+            Email::Date::Format
+          MRO::Compat
+          Module::Pluggable
+        Throwable::Error
+          Devel::StackTrace
+        Email::Address
+      File::BaseDir
+      File::MimeInfo
+        File::BaseDir
+          IPC::System::Simple
+          File::Which
+          Module::Build
+        File::DesktopEntry
+          URI::Escape
+            Test::Needs
+      Glib::Object::Introspection
+      Gtk3
+        Glib::Object::Introspection
+        Cairo::GObject
+          Cairo
+          Glib
+            ExtUtils::PkgConfig
+          ExtUtils::Depends
+      Locale::gettext
+      Module::Load::Conditional
+      OpenOffice::OODoc
+        Archive::Zip
+          Test::MockModule
+            Module::Build
+            SUPER
+              Sub::Identify
+        XML::Twig
+          XML::Parser
+            LWP::UserAgent
+              Test::RequiresInternet
+      Image::Magick
+      Text::CSV
+      XML::Simple
+        XML::SAX
+          XML::NamespaceSupport
+          XML::SAX::Base
+        XML::SAX::Expat
+          XML::SAX
+            XML::NamespaceSupport
+            XML::SAX::Base
+          XML::Parser
+            LWP::UserAgent
+              Test::RequiresInternet
+              HTTP::Status
+              LWP::MediaTypes
+                Encode::Locale
+                IO::HTML
+                URI
+                Test::Needs
+              HTTP::Date
+              File::Listing
+                HTTP::Daemon
+                HTML::Tagset
+              HTTP::Cookies
+              WWW::RobotRules
+              HTTP::Negotiate
+              Net::HTTP
+      XML::Writer
+      Locale::Language
+    `.each_line.reverse_each do |r|
+      install_perl_package(r.strip, installed) if r.strip != ""
     end
-    # rubocop:enable AlignArray
   end
 
   # WARNING: when installing Cairo from CPAN, make test won't pass because of
