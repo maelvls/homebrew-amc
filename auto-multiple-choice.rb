@@ -604,7 +604,7 @@ class AutoMultipleChoice < Formula
               Net::HTTP
       XML::Writer
       Locale::Language
-    ".each_line.reverse_each.map { |l| l.strip }.select { |l| l != "" }.each do |package|
+    ".each_line.reverse_each.map(&:strip).reject(&:empty?).each do |package|
       install_perl_package(package, installed)
     end
   end
