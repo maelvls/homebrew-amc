@@ -12,7 +12,9 @@ class AutoMultipleChoice < Formula
   bottle do
     root_url "https://dl.bintray.com/maelvls/bottles-amc"
     cellar :any
-    sha256 "140645322e4caaa2bbb10fe4001dca691f075b9960690a5891818ed8577ca745" => :high_sierra
+    sha256 "a0ca81287d68d30f9198ace1f1a07a1716681c152e50b7a99159e2e726fa0d14" => :catalina
+    sha256 "a0ca81287d68d30f9198ace1f1a07a1716681c152e50b7a99159e2e726fa0d14" => :mojave
+    sha256 "50706c4dfc8a97ca77d3caea9da363e0afea04aca86412f81dc87e3d05e23190" => :high_sierra
   end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
