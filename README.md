@@ -371,7 +371,7 @@ my $mcpan  = MetaCPAN::Client->new();
 my %already_seen = ();
 foreach $line ( <STDIN> ) {
     chomp($line);
-    $line =~ s/^.*"([A-Za-z:0-9]*)".*$/\1/;
+    $line =~ s/^\s+|\s+$//g;
     my $package = $mcpan->package($line);
     if (! exists($already_seen{$line})) {
         $already_seen{$line} = 1;
