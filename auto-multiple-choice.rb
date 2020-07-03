@@ -9,13 +9,13 @@ class AutoMultipleChoice < Formula
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
-  bottle do
-    root_url "https://dl.bintray.com/maelvls/bottles-amc"
-    cellar :any
-    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :catalina
-    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :mojave
-    sha256 "40f71fa981dbf345db895fcdc1e347f761bc690beebc6976b1238e1a0a9ae656" => :high_sierra
-  end
+#  bottle do
+#    root_url "https://dl.bintray.com/maelvls/bottles-amc"
+#    cellar :any
+#    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :catalina
+#    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :mojave
+#    sha256 "40f71fa981dbf345db895fcdc1e347f761bc690beebc6976b1238e1a0a9ae656" => :high_sierra
+#  end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
