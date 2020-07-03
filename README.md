@@ -37,7 +37,7 @@ instead of 30 seconds) but it still works perfectly! (see below news)
 
 ## News
 
-## July 3, 2020: ⚠️ I don't have enough time to maintain bottles
+### July 3, 2020: ⚠️ I don't have enough time to maintain bottles
 
 To build bottles (= zipped version of the pre-built auto-multiple-choice formula), I use some
 continous integration ([travis][build-status]). The builds have been failing for a while
@@ -49,7 +49,7 @@ the bottles entirely. That means that the command `brew install auto-multiple-ch
 longer to install (~8 minutes instead of 30 seconds with the bottles), but at least it will work
 all the time!
 
-## Nov. 21th, 2019: Annotate & `Bad symbol syntax`
+### Nov. 21th, 2019: Annotate & `Bad symbol syntax`
 
 When using the 'annotation' feature, you may get errors like:
 
@@ -67,7 +67,7 @@ The file /Users/mvalais/Projets-QCM/toyP/cr/corrections/pdf does not exist.
 It might be something off in the settings file `~/.AMC.d/cf.default.xml`. Please try to rename
 it and re-open your project.
 
-## Nov. 18th, 2019: Fixed Pango by fixing the version to 1.42.4
+### Nov. 18th, 2019: Fixed Pango by fixing the version to 1.42.4
 
 The bug of the '[stacked caracters when
 annotating](https://github.com/maelvls/homebrew-amc/issues/33)' has been fixed
