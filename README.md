@@ -15,10 +15,13 @@
 - **For switching between the `devel` and `stable`**: see [below](#faq)
 
 This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew, an alternative to Macports
-([portfile] for AMC). This tap also features precompiled binaries (called _bottle_) built
+([portfile] for AMC).
+
+~~This tap also features precompiled binaries (called _bottle_) built
 on Travis CI. As for testing, a cron job runs tests the installation of the bottle on Travis
 CI every night (as well as `brew linkage auto-mutiple-choice`) in order to
-check that the bottle is still working.
+check that the bottle is still working.~~ For now the bottles are disabled (build time is 8 minutes
+instead of 30 seconds) but it still works perfectly! (see below news)
 
 [![Build Status][build-status-img]][build-status]
 
@@ -33,6 +36,18 @@ check that the bottle is still working.
 [portfile]: https://github.com/macports/macports-ports/blob/master/x11/auto-multiple-choice/Portfile
 
 ## News
+
+## July 3, 2020: ⚠️ I don't have enough time to maintain bottles
+
+To build bottles (= zipped version of the pre-built auto-multiple-choice formula), I use some
+continous integration ([travis][build-status]). The builds have been failing for a while
+now, and I can't find enough time to fix the while CI system or to move it to Github Actions
+or to Azure Pipelines.
+
+Until I find some time to make the CI work again (or if someone wants to help), I will remove
+the bottles entirely. That means that the command `brew install auto-multiple-choice` will take
+longer to install (~8 minutes instead of 30 seconds with the bottles), but at least it will work
+all the time!
 
 ## Nov. 21th, 2019: Annotate & `Bad symbol syntax`
 
