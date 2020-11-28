@@ -100,8 +100,8 @@ jobs:
   include:
     - &run-osx
       os: osx
-      osx_image: xcode10.1
-      env: OS=high_sierra-10.13
+      osx_image: xcode11.3
+      env: OS=mojave-10.14.6
       # We must use 'rvm: system' because the system ruby doesn't rely on
       # Homebrew, which allows us to reinstall Homebrew without having a
       # damaged ruby. We need ruby because we use the 'aws-sdk-s3' gem.
@@ -137,8 +137,8 @@ jobs:
 
     - <<: *run-osx
       os: osx
-      osx_image: xcode11.2
-      env: OS=mojave-10.14
+      osx_image: xcode12.2
+      env: OS=catalina-10.15.7
 
     - &run-on-linux
       os: linux
@@ -186,7 +186,7 @@ jobs:
         # (2) A trick so that 'prefix' and 'cellar' are removed if they are
         # equal to DEFAULT_PREFIX and DEFAULT_CELLAR even though we run
         # 'brew bottle' on a linux setup.
-        # (3) Travis does not provide a 'catalina' image yet, but I can use the
+        # (3) Travis does not provide a 'big_sur' image yet, but I can use the
         # sierra one and pretend it is a 'mojave' bottle. I test them regularly in
         # case it doesn't work.
         # (4) In 'brew --ci--upload', --git-name is the name of the fork
@@ -195,10 +195,10 @@ jobs:
         - |
           if ls *.{json,tar.gz}; then                                  # (1)
             sed -i 's:/usr/local:/home/linuxbrew/.linuxbrew:g' *.json; # (2)
-            ls *.mojave.bottle.json | while read json; do         # (3)
-              sed 's/mojave/catalina/g' $json > ${json/mojave/catalina};
+            ls *.catalina.bottle.json | while read json; do            # (3)
+              sed 's/catalina/big_sur/g' $json > ${json/catalina/big_sur};
               bottle=`ls ${json/bottle*/}*.tar.gz`;
-              cp ${bottle} ${bottle/mojave/catalina};
+              cp ${bottle} ${bottle/catalina/big_sur};
             done;
             brew test-bot --ci-upload --root-url=$TAP_BOTTLE_ROOT_URL --git-name=$GITHUB_USER --git-email=mael.valais@gmail.com --bintray-org=$TAP_BOTTLE_ORG --verbose;
           else
