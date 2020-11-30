@@ -4,18 +4,13 @@ class AutoMultipleChoice < Formula
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   version "1.4.0"
   sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
-  revision 8
+  revision 7
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
-#  bottle do
-#    root_url "https://dl.bintray.com/maelvls/bottles-amc"
-#    cellar :any
-#    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :catalina
-#    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :mojave
-#    sha256 "40f71fa981dbf345db895fcdc1e347f761bc690beebc6976b1238e1a0a9ae656" => :high_sierra
-#  end
+  bottle do
+  end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
