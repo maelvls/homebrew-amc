@@ -44,8 +44,7 @@ class AutoMultipleChoice < Formula
   depends_on "perl"
   depends_on "poppler"
   depends_on "qpdf"
-
-  depends_on :x11
+  depends_on "libx11"
 
   # conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
 
