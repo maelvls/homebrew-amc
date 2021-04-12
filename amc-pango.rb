@@ -11,9 +11,9 @@ class AmcPango < Formula
   bottle do
     root_url "https://dl.bintray.com/maelvls/bottles-amc"
     rebuild 1
-    sha256 "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c" => :catalina
-    sha256 "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c" => :mojave
-    sha256 "147c6f9eedd3c49afdbe18551d68102f61ec20c9701b4ee28ccb434764a9d221" => :high_sierra
+    sha256 catalina:    "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c"
+    sha256 mojave:      "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c"
+    sha256 high_sierra: "147c6f9eedd3c49afdbe18551d68102f61ec20c9701b4ee28ccb434764a9d221"
   end
 
   head do
@@ -25,6 +25,8 @@ class AmcPango < Formula
     depends_on "libtool" => :build
   end
 
+  keg_only "vendored version of Homebrew's pango"
+
   depends_on "gobject-introspection" => :build
   depends_on "pkg-config" => :build
   depends_on "cairo"
@@ -32,8 +34,6 @@ class AmcPango < Formula
   depends_on "fribidi"
   depends_on "glib"
   depends_on "harfbuzz"
-
-  keg_only "Vendored version of Homebrew's pango"
 
   def install
     system "./autogen.sh" if build.head?
