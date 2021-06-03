@@ -37,6 +37,12 @@ instead of 30 seconds) but it still works perfectly! (see below news)
 
 ## News
 
+### June 3, 2021: added support for M1 chips, Bintray sunset means slower installations
+
+Thanks to the help of MouLam and Nemhome in [#55](https://github.com/maelvls/homebrew-amc/issues/55), we discovered that macOS on M1 chips have a different behaviour with regards to compiling Perl modules (namely, Pango). That has been fixed and you can now install `auto-multiple-choice` on Apple Silicon.
+
+Another change is the removal of bottles (the pre-built binaries) for amc-pango. Bintray was retired in 2020, meaning that the `amd-pango` bottles that Homebrew was trying to download are gone. That means `amc-pango` will have to be recompiled every time... Not great, but that will do for now. I had to "vendor" Pango 1.42.4 because the latest versions of Pango were breaking the annotation mechanism (https://github.com/maelvls/homebrew-amc/issues/33).
+
 ### July 3, 2020: ⚠️ I don't have enough time to maintain bottles
 
 To build bottles (= zipped version of the pre-built auto-multiple-choice formula), I use some
