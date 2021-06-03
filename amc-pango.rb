@@ -8,14 +8,6 @@ class AmcPango < Formula
   sha256 "1d2b74cd63e8bd41961f2f8d952355aa0f9be6002b52c8aa7699d9f5da597c9d"
   revision 0
 
-  bottle do
-    root_url "https://dl.bintray.com/maelvls/bottles-amc"
-    rebuild 1
-    sha256 catalina:    "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c"
-    sha256 mojave:      "d8bd8e27588e0403f248edab1dc2a866c1e96aa1650dd26357e8ded3dd8f855c"
-    sha256 high_sierra: "147c6f9eedd3c49afdbe18551d68102f61ec20c9701b4ee28ccb434764a9d221"
-  end
-
   head do
     url "https://gitlab.gnome.org/GNOME/pango.git"
 
