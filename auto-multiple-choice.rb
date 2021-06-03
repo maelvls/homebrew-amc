@@ -651,7 +651,11 @@ class AutoMultipleChoice < Formula
           system "make", "install"
         elsif package == "Pango"
           system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
-          inreplace "Makefile", "-L/usr/local/lib", ""
+
+          # With the M1 chip, macOS seems to not have /usr/local/lib anymore.
+          # Fixes https://github.com/maelvls/homebrew-amc/issues/55.
+          inreplace "Makefile", "-L/usr/local/lib", "" if Hardware::CPU.intel?
+          
           system "make"
           system "make", "install"
         elsif File.exist? "Makefile.PL"
