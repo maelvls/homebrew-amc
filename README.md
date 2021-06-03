@@ -7,12 +7,9 @@
 
 | Install                                         |                       Version                        |
 | ----------------------------------------------- | :--------------------------------------------------: |
-| `brew install maelvls/amc/auto-multiple-choice` | [![Stable bottle][stable-bottle-img]][stable-bottle] |
-
-<!-- | `brew install maelvls/amc/auto-multiple-choice-devel` |  [![Devel bottle][devel-bottle-img]][devel-bottle]   | -->
+| `brew install maelvls/amc/auto-multiple-choice` |                        1.4.0                         |
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
-- **For switching between the `devel` and `stable`**: see [below](#faq)
 
 This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew, an alternative to Macports
 ([portfile] for AMC).
@@ -20,8 +17,8 @@ This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew, an alternative to
 ~~This tap also features precompiled binaries (called _bottle_) built
 on Travis CI. As for testing, a cron job runs tests the installation of the bottle on Travis
 CI every night (as well as `brew linkage auto-mutiple-choice`) in order to
-check that the bottle is still working.~~ For now the bottles are disabled (build time is 8 minutes
-instead of 30 seconds) but it still works perfectly! (see below news)
+check that the bottle is still working.~~ For now the bottles for both `amc-pango` and `auto-multiple-choice`
+are disabled (build time is 15 minutes instead of 30 seconds) but it still works perfectly! (see below news)
 
 [![Build Status][build-status-img]][build-status]
 
@@ -212,19 +209,6 @@ have a version number lower than the previous ones... **Solution:**
     git -C $(brew --repo maelvls/amc) reset --hard origin/master
 
 ## FAQ
-
-- **How to switch between the `devel` and stable version?** As both formulas
-  are mutually exclusive, one must be **uninstalled** or **unlinked** before the other
-  can be used. For example, from stable to devel:
-
-      brew unlink auto-multiple-choice
-      brew install auto-multiple-choice-devel
-
-  Remember that for both formulas, the command is the same: `auto-multiple-choice`.
-  **IMPORTANT:** You will need to run `latex-link` when switching versions:
-
-      sudo auto-multiple-choice latex-link remove
-      sudo auto-multiple-choice latex-link
 
 - **Why is the _reduce_ button not working?** This issue is discussed
   [here][issue-reduce-button]. In short, it is related to the Glade UI toolkit
