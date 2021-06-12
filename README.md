@@ -34,6 +34,8 @@ Thanks to the help of MouLam and Nemhome in [#55](https://github.com/maelvls/hom
 
 Another change is the removal of bottles (the pre-built binaries) for amc-pango. Bintray was retired in 2020, meaning that the `amd-pango` bottles that Homebrew was trying to download are gone. That means `amc-pango` will have to be recompiled every time... Not great, but that will do for now. I had to "vendor" Pango 1.42.4 because the latest versions of Pango were breaking the annotation mechanism (https://github.com/maelvls/homebrew-amc/issues/33).
 
+I now use https://brew.sh/2020/11/18/homebrew-tap-with-bottles-uploaded-to-github-releases/
+
 ### July 3, 2020: ⚠️ I don't have enough time to maintain bottles
 
 To build bottles (= zipped version of the pre-built auto-multiple-choice formula), I use some
