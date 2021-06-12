@@ -6,7 +6,7 @@ class AmcPango < Formula
   homepage "https://www.pango.org/"
   url "https://download.gnome.org/sources/pango/1.42/pango-1.42.4.tar.xz"
   sha256 "1d2b74cd63e8bd41961f2f8d952355aa0f9be6002b52c8aa7699d9f5da597c9d"
-  revision 0
+  revision 1
 
   head do
     url "https://gitlab.gnome.org/GNOME/pango.git"
