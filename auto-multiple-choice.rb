@@ -705,6 +705,19 @@ class AutoMultipleChoice < Formula
 
           system "make"
           system "make", "install"
+        elsif package == "Authen-SASL"
+          # With Authen-SASL-2.16 and perl v5.34.0, we get the error:
+          #
+          #  Can't locate inc/Module/Install.pm in @INC
+          #
+          # This is because "." was removed from @INC in newer perl versions
+          # (e.g. 5.26.0, 5.27.1), so it has to re-added in Makefile.PL with:
+          #
+          #  use lib ".";
+          inreplace "Makefile.PL", "use inc::Module::Install;", `use lib ".";\nuse inc::Module::Install;`
+          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
+          system "make"
+          system "make", "install"
         elsif File.exist? "Makefile.PL"
           system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
           system "make"
