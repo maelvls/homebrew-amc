@@ -1,5 +1,5 @@
 class AutoMultipleChoice < Formula
-  desc "printable tests for students with OCR marking"
+  desc "Printable tests for students with OCR marking"
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   version "1.4.0"
@@ -9,13 +9,13 @@ class AutoMultipleChoice < Formula
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
-#  bottle do
-#    root_url "https://dl.bintray.com/maelvls/bottles-amc"
-#    cellar :any
-#    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :catalina
-#    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :mojave
-#    sha256 "40f71fa981dbf345db895fcdc1e347f761bc690beebc6976b1238e1a0a9ae656" => :high_sierra
-#  end
+  #  bottle do
+  #    root_url "https://dl.bintray.com/maelvls/bottles-amc"
+  #    cellar :any
+  #    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :catalina
+  #    sha256 "4f9d9743f200d81b483d2cc47b9714e07dbf864d49b42162d5a852145be09bf6" => :mojave
+  #    sha256 "40f71fa981dbf345db895fcdc1e347f761bc690beebc6976b1238e1a0a9ae656" => :high_sierra
+  #  end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
@@ -30,6 +30,7 @@ class AutoMultipleChoice < Formula
   depends_on "librsvg" => :build
   depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
   depends_on "adwaita-icon-theme"
+  depends_on "amc-pango"
   depends_on "cairo"
   depends_on "freetype"
   depends_on "gettext"
@@ -38,13 +39,12 @@ class AutoMultipleChoice < Formula
   depends_on "gtk+3"
   depends_on "imagemagick@6"
   depends_on "libffi"
+  depends_on "libx11"
   depends_on "netpbm"
-  depends_on "opencv"
-  depends_on "amc-pango" # vendored Pango, stuck at v1.42.4
+  depends_on "opencv" # vendored Pango, stuck at v1.42.4
   depends_on "perl"
   depends_on "poppler"
   depends_on "qpdf"
-  depends_on "libx11"
 
   # conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
 
@@ -477,10 +477,11 @@ class AutoMultipleChoice < Formula
     mkdir_p libexec/"bin"
     mv bin/"auto-multiple-choice", libexec/"bin/auto-multiple-choice"
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
-        :PERL5LIB   => ENV["PERL5LIB"],
+        PERL5LIB:   ENV["PERL5LIB"],
         # netpbm, poppler and imagemagick@6 must be in the PATH
-        :PATH       => "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}:#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
-        :AMCBASEDIR => prefix
+        PATH:       "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}"\
+                    ":#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}:$PATH",
+        AMCBASEDIR: prefix
 
     # Here are all the perl dependencies that we will vendor (= install locally
     # only for this recipe):
@@ -699,7 +700,7 @@ class AutoMultipleChoice < Formula
   end
 
   def caveats
-    s = <<~EOS
+    <<~EOS
       If you don't have Mactex installed, you will need it:
 
              brew cask install mactex
@@ -712,7 +713,6 @@ class AutoMultipleChoice < Formula
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvls/homebrew-amc.
     EOS
-    s
   end
 
   test do
