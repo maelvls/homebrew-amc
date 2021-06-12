@@ -5,9 +5,9 @@
   <img width="390" alt="capture d ecran 2018-10-06 a 11 23 47" src="https://user-images.githubusercontent.com/2195781/46569889-0867e180-c95c-11e8-98ad-969735cbb76f.png">
 </p>
 
-| Install                                         |                       Version                        |
-| ----------------------------------------------- | :--------------------------------------------------: |
-| `brew install maelvls/amc/auto-multiple-choice` |                        1.4.0                         |
+| Install                                         | Version |
+| ----------------------------------------------- | :-----: |
+| `brew install maelvls/amc/auto-multiple-choice` |  1.4.0  |
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
 
@@ -39,6 +39,8 @@ are disabled (build time is 15 minutes instead of 30 seconds) but it still works
 Thanks to the help of MouLam and Nemhome in [#55](https://github.com/maelvls/homebrew-amc/issues/55), we discovered that macOS on M1 chips have a different behaviour with regards to compiling Perl modules (namely, Pango). That has been fixed and you can now install `auto-multiple-choice` on Apple Silicon.
 
 Another change is the removal of bottles (the pre-built binaries) for amc-pango. Bintray was retired in 2020, meaning that the `amd-pango` bottles that Homebrew was trying to download are gone. That means `amc-pango` will have to be recompiled every time... Not great, but that will do for now. I had to "vendor" Pango 1.42.4 because the latest versions of Pango were breaking the annotation mechanism (https://github.com/maelvls/homebrew-amc/issues/33).
+
+I now use https://brew.sh/2020/11/18/homebrew-tap-with-bottles-uploaded-to-github-releases/
 
 ### July 3, 2020: ⚠️ I don't have enough time to maintain bottles
 

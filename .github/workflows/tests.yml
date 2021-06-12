@@ -1,31 +1,31 @@
 name: brew test-bot
 on:
   push:
-    branches: main
+    branches:
+      - main
   pull_request:
 jobs:
   test-bot:
     strategy:
       matrix:
-        os:
-          # Re-enable Linux as soon as the qt@5 formula gets a bootle:
-          # https://github.com/Homebrew/linuxbrew-core/pull/23174
-          # - ubuntu-latest
-          - macOS-latest
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - id: set-up-homebrew
+      - name: Set up Homebrew
+        id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - id: cache
+      - name: Cache Homebrew Bundler RubyGems
+        id: cache
         uses: actions/cache@v1
         with:
           path: ${{ steps.set-up-homebrew.outputs.gems-path }}
           key: ${{ runner.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
           restore-keys: ${{ runner.os }}-rubygems-
 
-      - run: brew install-bundler-gems
+      - name: Install Homebrew Bundler RubyGems
         if: steps.cache.outputs.cache-hit != 'true'
+        run: brew install-bundler-gems
 
       - run: brew test-bot --only-cleanup-before
 
@@ -41,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: bottles
-          path: "*.bottle.*"
+          path: '*.bottle.*'
