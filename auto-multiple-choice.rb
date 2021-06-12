@@ -422,6 +422,22 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/A/AR/ARODLAND/Digest-HMAC-1.04.tar.gz"
     sha256 "d6bc8156aa275c44d794b7c18f44cdac4a58140245c959e6b19b2c3838b08ed4"
   end
+  resource "Module::Install" do
+  url "https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Install-1.19.tar.gz"
+  sha256 "1a53a78ddf3ab9e3c03fc5e354b436319a944cba4281baf0b904fa932a13011b"
+end
+resource "Module::ScanDeps" do
+  url "https://cpan.metacpan.org/authors/id/R/RS/RSCHUPP/Module-ScanDeps-1.31.tar.gz"
+  sha256 "fc4d98d2b0015745f3b55b51ddf4445a73b069ad0cb7ec36d8ea781d61074d9d"
+end
+resource "File::Remove" do
+  url "https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/File-Remove-1.60.tar.gz"
+  sha256 "e86e2a40ffedc6d5697d071503fd6ba14a5f9b8220af3af022110d8e724f8ca6"
+end
+resource "YAML::Tiny" do
+  url "https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz"
+  sha256 "bc315fa12e8f1e3ee5e2f430d90b708a5dc7e47c867dba8dce3a6b8fbe257744"
+end
 
   def install
     installed = {} # helps me avoid installing the same perl package twice
@@ -630,6 +646,12 @@ class AutoMultipleChoice < Formula
         Mozilla::CA
       Authen::SASL
         Digest::HMAC_MD5
+        Module::Install
+          Module::ScanDeps
+            Test::Requires
+          Module::Build
+          File::Remove
+          YAML::Tiny
     ".each_line.reverse_each.map(&:strip).reject(&:empty?).each do |package|
       install_perl_package(package, installed)
     end
