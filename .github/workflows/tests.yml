@@ -1,12 +1,8 @@
 name: brew test-bot
 on:
   push:
-<<<<<<< HEAD
     branches:
       - main
-=======
-    branches: main
->>>>>>> e84c791 (move from travis to github actions)
   pull_request:
 jobs:
   test-bot:
