@@ -1,0 +1,44 @@
+name: brew test-bot
+on:
+  push:
+    branches: main
+  pull_request:
+jobs:
+  test-bot:
+    strategy:
+      matrix:
+        os:
+          # Re-enable Linux as soon as the qt@5 formula gets a bootle:
+          # https://github.com/Homebrew/linuxbrew-core/pull/23174
+          # - ubuntu-latest
+          - macOS-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - id: cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: ${{ runner.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ runner.os }}-rubygems-
+
+      - run: brew install-bundler-gems
+        if: steps.cache.outputs.cache-hit != 'true'
+
+      - run: brew test-bot --only-cleanup-before
+
+      - run: brew test-bot --only-setup
+
+      - run: brew test-bot --only-tap-syntax
+
+      - run: brew test-bot --only-formulae
+        if: github.event_name == 'pull_request'
+
+      - name: Upload bottles as artifact
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@main
+        with:
+          name: bottles
+          path: "*.bottle.*"
