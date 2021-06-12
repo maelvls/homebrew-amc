@@ -5,34 +5,28 @@
   <img width="390" alt="capture d ecran 2018-10-06 a 11 23 47" src="https://user-images.githubusercontent.com/2195781/46569889-0867e180-c95c-11e8-98ad-969735cbb76f.png">
 </p>
 
-| Install                                         |                       Version                        |
-| ----------------------------------------------- | :--------------------------------------------------: |
-| `brew install maelvls/amc/auto-multiple-choice` |                        1.4.0                         |
+| Install                                         | Version |
+| ----------------------------------------------- | :-----: |
+| `brew install maelvls/amc/auto-multiple-choice` |  1.4.0  |
 
-- **To run it**: open [terminal](https://www.iterm2.com) and run `auto-multiple-choice`
+- **To run it**: open [terminal](https://www.iterm2.com) and run
+  `auto-multiple-choice`.
 
-This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew, an alternative to Macports
-([portfile] for AMC).
+This tap aims to bring AMC ([homepage], [gitlab]) to Homebrew, an alternative to
+Macports ([portfile] for AMC).
 
-~~This tap also features precompiled binaries (called _bottle_) built
-on Travis CI. As for testing, a cron job runs tests the installation of the bottle on Travis
-CI every night (as well as `brew linkage auto-mutiple-choice`) in order to
-check that the bottle is still working.~~ For now the bottles for both `amc-pango` and `auto-multiple-choice`
-are disabled (build time is 15 minutes instead of 30 seconds) but it still works perfectly! (see below news)
+This tap features precompiled binaries (called _bottle_) built and tested daily
+using GitHub Actions. The bottles are uploaded to GitHub Packages.
 
-[![Build Status][build-status-img]][build-status]
+[![brew test-bot](https://github.com/maelvls/homebrew-amc/actions/workflows/tests.yml/badge.svg)](https://github.com/maelvls/homebrew-amc/actions/workflows/tests.yml)
 
-[build-status-img]: https://travis-ci.org/maelvls/homebrew-amc.svg?branch=master
-[build-status]: https://travis-ci.org/maelvls/homebrew-amc
-[stable-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice.svg?label=bottle
-[stable-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice/_latestVersion
-[devel-bottle-img]: https://img.shields.io/bintray/v/maelvalais/bottles-amc/auto-multiple-choice-devel.svg?label=bottle
-[devel-bottle]: https://bintray.com/maelvalais/bottles-amc/auto-multiple-choice-devel/_latestVersion
 [gitlab]: https://gitlab.com/jojo_boulix/auto-multiple-choice
 [homepage]: https://www.auto-multiple-choice.net/index.en
 [portfile]: https://github.com/macports/macports-ports/blob/master/x11/auto-multiple-choice/Portfile
 
 ## News
+
+### June 12, 2021: support for SMTP over StartTLS and bottles are back!
 
 ### June 3, 2021: added support for M1 chips, Bintray sunset means slower installations
 
