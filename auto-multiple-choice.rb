@@ -403,6 +403,26 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/S/SB/SBECK/Locale-Codes-3.58.tar.gz"
     sha256 "345c0b0170288d74a147fbe218b7c78147aa2baf4e839fe8680a2b0a2d8e505b"
   end
+  resource "IO::Socket::SSL" do
+    url "https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.071.tar.gz"
+    sha256 "40da40948ecc9c787ed39c95715872679eebfd54243721174993a2003e32ab0a"
+  end
+  resource "Net::SSLeay" do
+    url "https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.90.tar.gz"
+    sha256 "f8696cfaca98234679efeedc288a9398fcf77176f1f515dbc589ada7c650dc93"
+  end
+  resource "Mozilla::CA" do
+    url "https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz"
+    sha256 "b3ca0002310bf24a16c0d5920bdea97a2f46e77e7be3e7377e850d033387c726"
+  end
+  resource "Authen::SASL" do
+    url "https://cpan.metacpan.org/authors/id/G/GB/GBARR/Authen-SASL-2.16.tar.gz"
+    sha256 "6614fa7518f094f853741b63c73f3627168c5d3aca89b1d02b1016dc32854e09"
+  end
+  resource "Digest::HMAC_MD5" do
+    url "https://cpan.metacpan.org/authors/id/A/AR/ARODLAND/Digest-HMAC-1.04.tar.gz"
+    sha256 "d6bc8156aa275c44d794b7c18f44cdac4a58140245c959e6b19b2c3838b08ed4"
+  end
 
   def install
     installed = {} # helps me avoid installing the same perl package twice
@@ -605,6 +625,11 @@ class AutoMultipleChoice < Formula
               Net::HTTP
       XML::Writer
       Locale::Language
+      IO::Socket::SSL
+        Net::SSLeay
+        Mozilla::CA
+      Authen::SASL
+        Digest::HMAC_MD5
     ".each_line.reverse_each.map(&:strip).reject(&:empty?).each do |package|
       install_perl_package(package, installed)
     end
@@ -655,7 +680,7 @@ class AutoMultipleChoice < Formula
           # With the M1 chip, macOS seems to not have /usr/local/lib anymore.
           # Fixes https://github.com/maelvls/homebrew-amc/issues/55.
           inreplace "Makefile", "-L/usr/local/lib", "" if Hardware::CPU.intel?
-          
+
           system "make"
           system "make", "install"
         elsif File.exist? "Makefile.PL"
@@ -676,17 +701,10 @@ class AutoMultipleChoice < Formula
   def caveats
     s = <<~EOS
       If you don't have Mactex installed, you will need it:
-          brew cask install mactex
 
-      1) If you have an issue of new windows in tabs:
-         with Gtk3, new windows may open in tabs instead of
-         in a new window. This is unwanted because Gtk3 has a bug making it
-         hard to click on some buttons. Two workarounds:
-         - Either disable tabbing in System preferences > Dock > Prefer tabs
-           when opening documents;
-         - Or just un-tab manually by dragging the tab out.
+             brew cask install mactex
 
-      2) Where is automultiplechoice.sty? After installing, run:
+      Where is automultiplechoice.sty? After installing, run:
 
              sudo auto-multiple-choice latex-link remove
              sudo auto-multiple-choice latex-link

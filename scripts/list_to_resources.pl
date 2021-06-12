@@ -1,12 +1,25 @@
 #!/usr/bin/env perl
+#
+# Before running this script, run:
+#   cpan i MetaCPAN::Client
+#
 # Lines must be of form (spaces and the comma are ignored):
-#     "XML::Simple",
+#  ```
+#      XML::Writer
+#      Locale::Language
+#      IO::Socket::SSL
+#        Net::SSLeay
+#        Mozilla::CA
+#      Authen::SASL
+#        Digest::HMAC_MD5
+#  ```
+
 use MetaCPAN::Client;
 my $mcpan  = MetaCPAN::Client->new();
 my %already_seen = ();
 foreach my $line ( <STDIN> ) {
     chomp($line);
-    $line =~ s/^.*"([A-Za-z:0-9]*)".*$/\1/;
+    $line =~ s/^\s*([A-Za-z:_0-9]*)\s*$/\1/;
     my $package = $mcpan->package($line);
     if (! exists($already_seen{$line})) {
         $already_seen{$line} = 1;
