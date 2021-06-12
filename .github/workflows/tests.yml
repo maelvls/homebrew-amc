@@ -13,8 +13,14 @@ jobs:
     strategy:
       matrix:
         os:
-          # Re-enable Linux as soon as the qt@5 formula gets a bootle:
-          # https://github.com/Homebrew/linuxbrew-core/pull/23174
+          # auto-multiple-choice: Re-enable Linux as soon as the qt@5 formula
+          # gets a bootle: https://github.com/Homebrew/linuxbrew-core/pull/23174
+          #
+          # amc-pango: installation fails on linux with the error:
+          #   /usr/bin/ld: cannot find -lintl
+          #   collect2: error: ld returned 1 exit status
+          # Remember to re-enable it one day.
+          #
           # - ubuntu-latest
           - macOS-latest
     runs-on: ${{ matrix.os }}
