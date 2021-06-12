@@ -8,6 +8,11 @@ class AmcPango < Formula
   sha256 "1d2b74cd63e8bd41961f2f8d952355aa0f9be6002b52c8aa7699d9f5da597c9d"
   revision 1
 
+  bottle do
+    root_url "https://github.com/maelvls/homebrew-amc/releases/download/amc-pango-1.42.4_1"
+    sha256 catalina: "d3a4e36e57e0cb922e9f434be4ce0bb68c1e3809f773791ddf083b501d2b2f3e"
+  end
+
   head do
     url "https://gitlab.gnome.org/GNOME/pango.git"
 
