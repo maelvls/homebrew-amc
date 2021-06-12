@@ -8,6 +8,12 @@ class AutoMultipleChoice < Formula
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
 
+  bottle do
+    root_url "https://github.com/maelvls/homebrew-amc/releases/download/auto-multiple-choice-1.4.0_8"
+    rebuild 1
+    sha256 cellar: :any, catalina: "529159adf67e84c97d6fc0746c4b7c546e287e6e703417d81c851cbec9ba0347"
+  end
+
   #  bottle do
   #    root_url "https://dl.bintray.com/maelvls/bottles-amc"
   #    cellar :any
