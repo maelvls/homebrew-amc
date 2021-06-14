@@ -1,8 +1,8 @@
 class AutoMultipleChoice < Formula
   desc "Printable tests for students with OCR marking"
   homepage "https://www.auto-multiple-choice.net"
-  url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
-  sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
+  url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/50bd66fb8382e3d769deee44cce5a201/auto-multiple-choice_1.5.0_rc2_dist.tar.gz"
+  sha256 "4f1c507ddae8040e1ad71cb1f79ee01881ffb15f634bc26c267af18ad9331be8"
   revision 8
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
