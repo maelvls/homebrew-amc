@@ -26,15 +26,45 @@ using GitHub Actions. The bottles are uploaded to GitHub Packages.
 
 ## News
 
+### June 15, 2021: fixed a regression with GTK, still no support for M1 chip
+
+I introduced a regression in
+[2671b0c](https://github.com/maelvls/homebrew-amc/commit/2671b0cc9aa1da571b2c21bb9838934ace88a1c5)
+where I changed `gtk+3` to `gtk+`, which
+[prevented](https://github.com/maelvls/homebrew-amc/issues/56#issuecomment-860571321)
+people from installing or upgrading the `auto-multiple-choice` formula for
+approximately 24 hours. I fixed it today. My sincerest apologies!
+
+On the 3rd of June, I announced the support for the M1 chips, and little did I
+know that the fix I introduced for
+[#55](https://github.com/maelvls/homebrew-amc/issues/55) would only partially
+fix the issue. Since I don't have access to the Apple Silicon hardware, I cannot
+work out a fix for it.
+
+To follow the news about this issue you can either subscribe to
+[#55](https://github.com/maelvls/homebrew-amc/issues/55). You can also check out
+[this official
+thread](https://project.auto-multiple-choice.net/boards/3/topics/10487?r=11332)
+(in French).
+
 ### June 12, 2021: support for SMTP over StartTLS and bottles are back!
 
-### June 3, 2021: added support for M1 chips, Bintray sunset means slower installations
+It is now possible to use SMTP over TLS. Thanks to mimaoffice for
+[reporting](https://github.com/maelvls/homebrew-amc/issues/56) the issue!
+
+I also re-introduced bottles (pre-built binaries) that should lower the
+installation and upgrade times from approximately 15 minutes to 60 seconds
+depending on the internet speed.
+
+To understand what the `pr-pull` label works, you can take a look at the
+Homebrew post [Homebrew tap with bottles uploaded to GitHub
+Releases](https://brew.sh/2020/11/18/homebrew-tap-with-bottles-uploaded-to-github-releases/).
+
+### June 3, 2021: ~~added support for M1 chips~~, Bintray sunset means slower installations
 
 Thanks to the help of MouLam and Nemhome in [#55](https://github.com/maelvls/homebrew-amc/issues/55), we discovered that macOS on M1 chips have a different behaviour with regards to compiling Perl modules (namely, Pango). That has been fixed and you can now install `auto-multiple-choice` on Apple Silicon.
 
 Another change is the removal of bottles (the pre-built binaries) for amc-pango. Bintray was retired in 2020, meaning that the `amd-pango` bottles that Homebrew was trying to download are gone. That means `amc-pango` will have to be recompiled every time... Not great, but that will do for now. I had to "vendor" Pango 1.42.4 because the latest versions of Pango were breaking the annotation mechanism (https://github.com/maelvls/homebrew-amc/issues/33).
-
-I now use https://brew.sh/2020/11/18/homebrew-tap-with-bottles-uploaded-to-github-releases/
 
 ### July 3, 2020: ⚠️ I don't have enough time to maintain bottles
 

@@ -41,7 +41,7 @@ class AutoMultipleChoice < Formula
   depends_on "gettext"
   depends_on "glib"
   depends_on "gobject-introspection"
-  depends_on "gtk+"
+  depends_on "gtk+3"
   depends_on "imagemagick@6"
   depends_on "libffi"
   depends_on "libx11"
