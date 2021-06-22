@@ -3,7 +3,7 @@ class AutoMultipleChoice < Formula
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/ae5e224c2490bfcdec676a32b1b476f6/auto-multiple-choice_1.4.0_dist.tar.gz"
   sha256 "d3fba7346043f5dcd392ad24472dcb27f1ee785f1141555a8dbf6d5cd9e78490"
-  revision 8
+  revision 9
   # I had to remove the 'head' as we cannot compile using latex in Homebrew.
   # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
   # which already contain the doc and doc/sty. See (1) for details.
