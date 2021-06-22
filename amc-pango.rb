@@ -9,8 +9,9 @@ class AmcPango < Formula
   revision 2
 
   bottle do
-    root_url "https://github.com/maelvls/homebrew-amc/releases/download/amc-pango-1.42.4_1"
-    sha256 catalina: "d3a4e36e57e0cb922e9f434be4ce0bb68c1e3809f773791ddf083b501d2b2f3e"
+    root_url "https://github.com/maelvls/homebrew-amc/releases/download/amc-pango-1.42.4_2"
+    sha256 big_sur:  "f368cc6c6e45310d77104f6ea070dfef663a08a8de2fde0ed203d25f5e24b1bc"
+    sha256 catalina: "e44ae5b473c17c5ecbfabb38aa6c8648f3d81938eddddaf9b0728d92de685038"
   end
 
   head do
