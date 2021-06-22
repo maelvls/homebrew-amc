@@ -55,3 +55,7 @@ jobs:
         with:
           name: bottles
           path: "*.bottle.*"
+      # Since I use a self-hosted runner, I need to make sure to leave
+      # no trace so that "brew doctor" does not break on the next build.
+      - name: Clean up Homebrew
+        run: git clean -d -f -C /usr/local/Homebrew
