@@ -6,7 +6,7 @@ class AmcPango < Formula
   homepage "https://www.pango.org/"
   url "https://download.gnome.org/sources/pango/1.42/pango-1.42.4.tar.xz"
   sha256 "1d2b74cd63e8bd41961f2f8d952355aa0f9be6002b52c8aa7699d9f5da597c9d"
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://github.com/maelvls/homebrew-amc/releases/download/amc-pango-1.42.4_1"
