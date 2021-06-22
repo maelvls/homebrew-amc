@@ -60,4 +60,4 @@ jobs:
       # no trace so that "brew doctor" does not break on the next build.
       - name: Clean up Homebrew
         if: always()
-        run: git clean -d -f -C /usr/local/Homebrew
+        run: git -C /usr/local/Homebrew clean -d -f
