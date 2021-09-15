@@ -3,15 +3,9 @@ class AutoMultipleChoice < Formula
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/3262cbab3161e5e63239a281e9a2ce23/auto-multiple-choice_1.5.0_dist.tar.gz"
   sha256 "2e48ebb11a215c7882212c46f31d9013bb488c32899104008b0840e67f716948"
-  revision 8
-  # I had to remove the 'head' as we cannot compile using latex in Homebrew.
-  # Instead, we use the 'distributed' tarballs from the Bitbucket's Downloads
-  # which already contain the doc and doc/sty. See (1) for details.
-
+  revision 0
+ 
   bottle do
-    root_url "https://github.com/maelvls/homebrew-amc/releases/download/auto-multiple-choice-1.4.0_8"
-    rebuild 1
-    sha256 cellar: :any, catalina: "529159adf67e84c97d6fc0746c4b7c546e287e6e703417d81c851cbec9ba0347"
   end
 
   #  bottle do
@@ -487,6 +481,8 @@ class AutoMultipleChoice < Formula
       DOCBOOK_DTD = #{Formula["docbook"].prefix}/docbook/xml/4.5/docbookx.dtd
       PERLPATH=#{Formula["perl"].bin}/perl
       PERLDIR=#{libexec}/lib/perl5
+      DESKTOPDIR=
+      METAINFODIR=
     EOS
 
     # The actual build
