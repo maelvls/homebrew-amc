@@ -7,7 +7,7 @@
 
 | Install                                         | Version |
 | ----------------------------------------------- | :-----: |
-| `brew install maelvls/amc/auto-multiple-choice` |  1.4.0  |
+| `brew install maelvls/amc/auto-multiple-choice` |  1.5.0  |
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run
   `auto-multiple-choice`.
