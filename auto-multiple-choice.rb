@@ -5,6 +5,12 @@ class AutoMultipleChoice < Formula
   sha256 "2e48ebb11a215c7882212c46f31d9013bb488c32899104008b0840e67f716948"
   revision 0
 
+  bottle do
+    root_url "https://github.com/maelvls/homebrew-amc/releases/download/auto-multiple-choice-1.5.0"
+    sha256 cellar: :any, big_sur:  "414a5f88bd047252fcd6418b08ccab991fdf2ceb183dd59f3f7a21e04809a554"
+    sha256 cellar: :any, catalina: "e9b4004189e1a2c54a11ccf438a06ba4e04316cce7ee85e862ed726af34154c2"
+  end
+
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
   # the Homebrew core repository. On the contrary, x11 is well handled (it is
   # installed by default on their test-bot runs) and can be used as a default
