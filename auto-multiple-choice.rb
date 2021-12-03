@@ -36,8 +36,9 @@ class AutoMultipleChoice < Formula
   depends_on "libx11"
   depends_on "netpbm"
   depends_on "opencv" # vendored Pango, stuck at v1.42.4
+  depends_on "openssl@1.1"
   depends_on "perl"
-  depends_on "poppler"
+  depends_on "poppler" # https://github.com/maelvls/homebrew-amc/pull/69
   depends_on "qpdf"
 
   # conflicts_with "auto-multiple-choice-devel", :because => "both install `bin/auto-multiple-choice`"
@@ -712,6 +713,11 @@ class AutoMultipleChoice < Formula
           #
           #  use lib ".";
           inreplace "Makefile.PL", "use inc::Module::Install;", `use lib ".";\nuse inc::Module::Install;`
+          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
+          system "make"
+          system "make", "install"
+        elsif package == "Net::SSLeay"
+          ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
           system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
           system "make"
           system "make", "install"
