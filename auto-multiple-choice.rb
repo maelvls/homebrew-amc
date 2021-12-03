@@ -25,12 +25,12 @@ class AutoMultipleChoice < Formula
   depends_on "librsvg" => :build
   depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
   depends_on "adwaita-icon-theme"
+  depends_on "amc-gobject-introspection"
   depends_on "amc-pango"
   depends_on "cairo"
   depends_on "freetype"
   depends_on "gettext"
   depends_on "glib"
-  depends_on "gobject-introspection"
   depends_on "gtk+3"
   depends_on "imagemagick@6"
   depends_on "libffi"
@@ -270,6 +270,10 @@ class AutoMultipleChoice < Formula
   resource "Glib::Object::Introspection" do
     url "https://cpan.metacpan.org/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.045.tar.gz"
     sha256 "5f0b88d5cf9b9d5d60c90ea9d411076bea54a2c0757c8f4d527520e5f332e7bb"
+    patch do
+      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/8ea64c625d1ab4785a4a3395cf5580e3df7c47ad/glib-gobject-introspection-0.045.diff"
+      sha256 "407bcb53fe1538b51b52598d010e6c5737efe422993e61f68adfd4e3d15ae76f"
+    end
   end
   resource "Gtk3" do
     url "https://cpan.metacpan.org/authors/id/X/XA/XAOC/Gtk3-0.034.tar.gz"
@@ -443,6 +447,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
     ENV.prepend_path "PATH", Formula["make"].libexec/"gnubin" # system's make (3.81) too old
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-gobject-introspection"].lib}/pkgconfig" # Same
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
@@ -720,6 +725,15 @@ class AutoMultipleChoice < Formula
         elsif package == "Net::SSLeay"
           ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
           system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
+          system "make"
+          system "make", "install"
+        elsif package == "Glib::Object::Introspection"
+          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
+
+          # We don't want Homebrew's gobject-introspection; we want our own
+          # amc-gobject-introspection instead.
+          inreplace "Makefile", "-L/usr/local/lib", ""
+
           system "make"
           system "make", "install"
         elsif File.exist? "Makefile.PL"
