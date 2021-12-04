@@ -271,7 +271,11 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.045.tar.gz"
     sha256 "5f0b88d5cf9b9d5d60c90ea9d411076bea54a2c0757c8f4d527520e5f332e7bb"
     patch do
-      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/8ea64c625d1ab4785a4a3395cf5580e3df7c47ad/glib-gobject-introspection-0.045.diff"
+      # Patch to be removed as soon as Glib::Object::Introspection starts using
+      # the new API, but that may never happen since it means it would start
+      # breaking compatibility with older versions of the gobject-introspection
+      # library.
+      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/ccb51de782d742f8c3f3a5aacd4dc85c35ff04d8/glib-gobject-introspection-0.045.diff"
       sha256 "407bcb53fe1538b51b52598d010e6c5737efe422993e61f68adfd4e3d15ae76f"
     end
   end
@@ -410,6 +414,12 @@ class AutoMultipleChoice < Formula
   resource "Net::SSLeay" do
     url "https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.90.tar.gz"
     sha256 "f8696cfaca98234679efeedc288a9398fcf77176f1f515dbc589ada7c650dc93"
+    patch do
+      # To be removed as soon as Net::SSLeay is patched with a fix. See:
+      # https://trac.macports.org/ticket/63415
+      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/ccb51de782d742f8c3f3a5aacd4dc85c35ff04d8/net-ssleay-1.90.diff"
+      sha256 "e1f44054e95aa0bb0a8d9285461eed041bea905a17a567402c48457bd3f17d97"
+    end
   end
   resource "Mozilla::CA" do
     url "https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz"
@@ -450,6 +460,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-gobject-introspection"].lib}/pkgconfig" # Same
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
+    ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
     ENV["PERL_MB_OPT"] = "--install_base '#{libexec}'" # for cpan (Build.PL)
     ENV["PERL_MM_USE_DEFAULT"] = "1" # for always saying "yes" in Makefile.PL
@@ -720,20 +731,6 @@ class AutoMultipleChoice < Formula
           #  use lib ".";
           inreplace "Makefile.PL", "use inc::Module::Install;", `use lib ".";\nuse inc::Module::Install;`
           system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
-          system "make"
-          system "make", "install"
-        elsif package == "Net::SSLeay"
-          ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
-          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
-          system "make"
-          system "make", "install"
-        elsif package == "Glib::Object::Introspection"
-          system "perl", "Makefile.PL", "INSTALL_BASE=#{libexec}", "INSTALLMAN1DIR=none", "INSTALLMAN3DIR=none"
-
-          # We don't want Homebrew's gobject-introspection; we want our own
-          # amc-gobject-introspection instead.
-          inreplace "Makefile", "-L/usr/local/lib", ""
-
           system "make"
           system "make", "install"
         elsif File.exist? "Makefile.PL"
