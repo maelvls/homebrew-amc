@@ -270,14 +270,6 @@ class AutoMultipleChoice < Formula
   resource "Glib::Object::Introspection" do
     url "https://cpan.metacpan.org/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.045.tar.gz"
     sha256 "5f0b88d5cf9b9d5d60c90ea9d411076bea54a2c0757c8f4d527520e5f332e7bb"
-    patch do
-      # Patch to be removed as soon as Glib::Object::Introspection starts using
-      # the new API, but that may never happen since it means it would start
-      # breaking compatibility with older versions of the gobject-introspection
-      # library.
-      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/ccb51de782d742f8c3f3a5aacd4dc85c35ff04d8/glib-gobject-introspection-0.045.diff"
-      sha256 "407bcb53fe1538b51b52598d010e6c5737efe422993e61f68adfd4e3d15ae76f"
-    end
   end
   resource "Gtk3" do
     url "https://cpan.metacpan.org/authors/id/X/XA/XAOC/Gtk3-0.034.tar.gz"
@@ -417,8 +409,8 @@ class AutoMultipleChoice < Formula
     patch do
       # To be removed as soon as Net::SSLeay is patched with a fix. See:
       # https://trac.macports.org/ticket/63415
-      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/ccb51de782d742f8c3f3a5aacd4dc85c35ff04d8/net-ssleay-1.90.diff"
-      sha256 "e1f44054e95aa0bb0a8d9285461eed041bea905a17a567402c48457bd3f17d97"
+      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/e32a76eb40321de66bc40d5adff491267a907a0a/net-ssleay-1.90.diff"
+      sha256 "d4db9007ac4551a9f618e42e86d4b3484f8eca871bbf803668eb99a7ac0c1cdb"
     end
   end
   resource "Mozilla::CA" do
