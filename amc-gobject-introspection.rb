@@ -14,6 +14,12 @@ class AmcGobjectIntrospection < Formula
   license all_of: ["GPL-2.0-or-later", "LGPL-2.0-or-later", "MIT"]
   revision 0
 
+  bottle do
+    root_url "https://github.com/maelvls/homebrew-amc/releases/download/amc-gobject-introspection-1.70.0-16"
+    sha256 big_sur:  "d2b76a071979b875f3f7d6f93303a5ec977fe1feb68104fc55688fcb5f49fbda"
+    sha256 catalina: "a51d3e0fe5787a0429518a2848e9d5729a05558f1e7d17b40057aa3ca27a965c"
+  end
+
   keg_only "vendored version of Homebrew's gobject-introspection"
 
   depends_on "bison" => :build
