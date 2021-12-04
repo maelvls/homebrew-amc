@@ -26,6 +26,12 @@ using GitHub Actions. The bottles are uploaded to GitHub Packages.
 
 ## News
 
+### Dec 4, 2021: M1 support, 1083 installations in 2021!
+
+The formula finally supports M1 macs! Note that prebuilt bottles (= faster install time) are not available since it would require renting an M1 mac. I have enable GitHub sponsoring for that reason.
+
+Also I looked at the number of installations and it is surprisingly high! The formula `maelvls/amc/auto-multiple-choice` is #2852 in terms of number of installations	over the last year for a total of	1083 installations!!
+
 ### June 15, 2021: fixed a regression with GTK, still no support for M1 chip
 
 I introduced a regression in
