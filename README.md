@@ -9,6 +9,15 @@
 | ----------------------------------------------- | :-----: |
 | `brew install maelvls/amc/auto-multiple-choice` |  1.5.0  |
 
+|           macOS version           | Support | Prebuilt binaries (bottles) |
+|-----------------------------------|:-------:|:---------------------------:|
+| macOS 12 Monterey (Intel)         |   ✔️    |              ❌              |
+| macOS 12 Monterey (Apple Silicon) |   ✔️    |              ❌              |
+| macOS 11 Big Sur (Intel)          |   ✔️    |             ✔️              |
+| macOS 11 Big Sur (Apple Silicon)  |   ✔️    |              ❌              |
+| macOS 10 Mojave (Intel)           |   ✔️    |             ✔️              |
+| linux (x86_64)                    |    ❌    |              ❌              |
+
 - **To run it**: open [terminal](https://www.iterm2.com) and run
   `auto-multiple-choice`.
 
@@ -259,7 +268,7 @@ have a version number lower than the previous ones... **Solution:**
    the one you installed using `MacTeX.pkg`), you are ready to go!!
   **You don't need to install a specific Homebrew version of Mactex**.
   But if you don't have latex installed at all, you can install it using
-  `brew cask install mactex`.
+  `brew install mactex`.
 - **How come there has never been an official formula for Homebrew?** This
   is mainly because of the complexity of auto-multiple-choice. It has an
   insane number of Perl dependencies (~70 packages). Perl dependencies are not
@@ -282,7 +291,7 @@ have a version number lower than the previous ones... **Solution:**
   perl packages and pdftk (also dblatex but it is only used during build).
   Nothing is installed outside of the Homebrew environment so you don't
   have to worry with messing your system. The **only prerequisite** is to
-  have Mactex (if you don't have it: `brew cask install mactex`).
+  have Mactex (if you don't have it: `brew install mactex`).
 - **Can I use the latest version (--devel, --HEAD) from mercurial?**
   At first, I had enabled the possibility for compiling using the
   `--HEAD` flag (so that it compiles using the latest sources from [mercurial]).
@@ -322,7 +331,7 @@ have a version number lower than the previous ones... **Solution:**
 
 - **The font _Linux Libertine_ is not found!** Install Libertine using brew:
 
-      brew cask install caskroom/fonts/font-linux-libertine
+      brew install homebrew/cask-fonts/font-linux-libertine
 
   Note that you must **drop the ending 'O'** in your AMC-TXT and tex files.
   The command to use in tex files is:
