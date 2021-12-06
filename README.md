@@ -15,7 +15,7 @@
 | macOS 12 Monterey (Apple Silicon) |   ✔️    |              ❌              |
 | macOS 11 Big Sur (Intel)          |   ✔️    |             ✔️              |
 | macOS 11 Big Sur (Apple Silicon)  |   ✔️    |              ❌              |
-| macOS 10 Mojave (Intel)           |   ✔️    |             ✔️              |
+| macOS 10 catalina (Intel)         |   ✔️    |             ✔️              |
 | linux (x86_64)                    |    ❌    |              ❌              |
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run
