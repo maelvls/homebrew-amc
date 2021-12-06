@@ -746,7 +746,7 @@ class AutoMultipleChoice < Formula
     <<~EOS
       If you don't have Mactex installed, you will need it:
 
-             brew install mactex
+             brew install homebrew/cask/mactex
 
       Where is automultiplechoice.sty? After installing, run:
 
