@@ -268,7 +268,7 @@ have a version number lower than the previous ones... **Solution:**
    the one you installed using `MacTeX.pkg`), you are ready to go!!
   **You don't need to install a specific Homebrew version of Mactex**.
   But if you don't have latex installed at all, you can install it using
-  `brew install mactex`.
+  `brew install homebrew/cask/mactex`.
 - **How come there has never been an official formula for Homebrew?** This
   is mainly because of the complexity of auto-multiple-choice. It has an
   insane number of Perl dependencies (~70 packages). Perl dependencies are not
@@ -291,7 +291,7 @@ have a version number lower than the previous ones... **Solution:**
   perl packages and pdftk (also dblatex but it is only used during build).
   Nothing is installed outside of the Homebrew environment so you don't
   have to worry with messing your system. The **only prerequisite** is to
-  have Mactex (if you don't have it: `brew install mactex`).
+  have Mactex (if you don't have it: `brew install homebrew/cask/mactex`).
 - **Can I use the latest version (--devel, --HEAD) from mercurial?**
   At first, I had enabled the possibility for compiling using the
   `--HEAD` flag (so that it compiles using the latest sources from [mercurial]).
