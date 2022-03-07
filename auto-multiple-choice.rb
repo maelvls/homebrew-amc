@@ -25,12 +25,12 @@ class AutoMultipleChoice < Formula
   depends_on "librsvg" => :build
   depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
   depends_on "adwaita-icon-theme"
-  depends_on "amc-gobject-introspection"
   depends_on "amc-pango"
   depends_on "cairo"
   depends_on "freetype"
   depends_on "gettext"
   depends_on "glib"
+  depends_on "gobject-introspection"
   depends_on "gtk+3"
   depends_on "imagemagick@6"
   depends_on "libffi"
@@ -448,9 +448,9 @@ class AutoMultipleChoice < Formula
     ENV.prepend_create_path "PERL5LIB", libexec/"lib/perl5"
     ENV.prepend_path "PATH", Formula["gettext"].bin # for msgfmt during build
     ENV.prepend_path "PATH", Formula["make"].libexec/"gnubin" # system's make (3.81) too old
-    ENV.prepend_path "PATH", Formula["amc-gobject-introspection"].bin
+    ENV.prepend_path "PATH", Formula["gobject-introspection"].bin
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
-    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-gobject-introspection"].lib}/pkgconfig" # Same
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["gobject-introspection"].lib}/pkgconfig" # Same
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
     ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
@@ -504,7 +504,7 @@ class AutoMultipleChoice < Formula
         # netpbm, poppler and imagemagick@6 must be in the PATH
         PATH:       "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}"\
                     ":#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}"\
-                    ":#{Formula["amc-gobject-introspection"].bin}:$PATH",
+                    ":#{Formula["gobject-introspection"].bin}:$PATH",
         AMCBASEDIR: prefix
 
     # Here are all the perl dependencies that we will vendor (= install locally
