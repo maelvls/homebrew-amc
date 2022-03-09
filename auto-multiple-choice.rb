@@ -7,9 +7,9 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://github.com/maelvls/homebrew-amc/releases/download/auto-multiple-choice-1.5.0"
-    rebuild 3
-    sha256 cellar: :any, big_sur:  "40194202018cd4f582861d413c10d7e3601269596e63dfe0d003e2e2beed1e0b"
-    sha256 cellar: :any, catalina: "ce029b7f81e34ef047bb62a4fc920de7f25cf39ecee01b23033ff90a53a6e59e"
+    rebuild 4
+    sha256 cellar: :any, big_sur:  "b11c13d339181ccf4f3c45f2ce843a5c37084ffa8d19e9d3f3b439a47b33c754"
+    sha256 cellar: :any, catalina: "15bf997331a7b9077307be24edd1d30c419e1e79e5f1ede4c73eef0f9ee28102"
   end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
