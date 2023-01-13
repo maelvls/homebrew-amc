@@ -3,7 +3,7 @@ class AutoMultipleChoice < Formula
   homepage "https://www.auto-multiple-choice.net"
   url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/3262cbab3161e5e63239a281e9a2ce23/auto-multiple-choice_1.5.0_dist.tar.gz"
   sha256 "2e48ebb11a215c7882212c46f31d9013bb488c32899104008b0840e67f716948"
-  revision 0
+  revision 1
 
   bottle do
     root_url "https://github.com/maelvls/homebrew-amc/releases/download/auto-multiple-choice-1.5.0"
@@ -472,7 +472,7 @@ class AutoMultipleChoice < Formula
     # broke things. Now c++11 is needed and I use pkg-config for conveniency.
     # And since pkg-config is used, CFLAGS, CXXFLAGS and LDFLAGS aren't needed
     # anymore.
-    inreplace "Makefile", "opencv\)", "opencv4)"
+    inreplace "Makefile", "opencv)", "opencv4)"
     inreplace "Makefile", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS)", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS) -std=c++11"
     inreplace "Makefile-brew.conf", /^GCC_.*/, ""
     inreplace "Makefile-brew.conf", /^CFLAGS.*/, ""
@@ -502,8 +502,8 @@ class AutoMultipleChoice < Formula
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
         PERL5LIB:   ENV["PERL5LIB"],
         # netpbm, poppler and imagemagick@6 must be in the PATH
-        PATH:       "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}"\
-                    ":#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}"\
+        PATH:       "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}" \
+                    ":#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}" \
                     ":#{Formula["gobject-introspection"].bin}:$PATH",
         AMCBASEDIR: prefix
 
