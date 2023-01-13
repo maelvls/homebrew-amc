@@ -26,6 +26,7 @@ class AutoMultipleChoice < Formula
   depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
   depends_on "adwaita-icon-theme"
   depends_on "amc-pango"
+  depends_on "libpthread_stubs"
   depends_on "cairo"
   depends_on "freetype"
   depends_on "gettext"
