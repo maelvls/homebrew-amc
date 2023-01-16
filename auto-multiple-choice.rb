@@ -24,7 +24,22 @@ class AutoMultipleChoice < Formula
 
   depends_on "librsvg" => :build
   depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
+  
+  # Although libpthread-stubs isn't actually needed on macOS, libxcb
+  # used to require lib libpthread-stubs. Because Homebrew doesn't
+  # systematically upgrade dependencies anymore, users may hit the
+  # error:
+  #
+  #   Package 'pthread-stubs', required by 'xcb', not found"
+  #
+  # To prevent further upgrade problems of auto-multiple-choice,
+  # we force-require libpthread-stubs, so that anyone who hasn't
+  # yet upgraded to the latest libxcb version will still be able
+  # to install auto-multiple-choice. We can remove this hack in
+  # a few months.
+  # See: https://github.com/maelvls/homebrew-amc/issues/82#issuecomment-1383690536
   depends_on "libpthread-stubs" => :build
+  
   depends_on "adwaita-icon-theme"
   depends_on "amc-pango"
   depends_on "cairo"
