@@ -469,7 +469,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["gobject-introspection"].lib}/pkgconfig" # Same
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
-    ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
+    ENV["OPENSSL_PREFIX"] = Formula["openssl@3"].prefix.to_s
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
     ENV["PERL_MB_OPT"] = "--install_base '#{libexec}'" # for cpan (Build.PL)
     ENV["PERL_MM_USE_DEFAULT"] = "1" # for always saying "yes" in Makefile.PL
