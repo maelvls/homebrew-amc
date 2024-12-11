@@ -37,7 +37,7 @@ class AutoMultipleChoice < Formula
   depends_on "libx11"
   depends_on "netpbm"
   depends_on "opencv" # vendored Pango, stuck at v1.42.4
-  depends_on "openssl@1.1" # required by Net::SSLeay
+  depends_on "openssl@3" # required by Net::SSLeay
   depends_on "perl"
   depends_on "poppler"
   depends_on "qpdf"
@@ -453,7 +453,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["gobject-introspection"].lib}/pkgconfig" # Same
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
-    ENV["OPENSSL_PREFIX"] = Formula["openssl@1.1"].prefix.to_s
+    ENV["OPENSSL_PREFIX"] = Formula["openssl@3"].prefix.to_s
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
     ENV["PERL_MB_OPT"] = "--install_base '#{libexec}'" # for cpan (Build.PL)
     ENV["PERL_MM_USE_DEFAULT"] = "1" # for always saying "yes" in Makefile.PL
