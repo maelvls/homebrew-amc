@@ -7,7 +7,7 @@
 
 | Install                                         | Version |
 | ----------------------------------------------- | :-----: |
-| `brew install maelvls/amc/auto-multiple-choice` |  1.5.0  |
+| `brew install FMuro/amc/auto-multiple-choice` |  1.5.0  |
 
 |           macOS version           | Support | Prebuilt binaries (bottles) |
 |-----------------------------------|:-------:|:---------------------------:|
