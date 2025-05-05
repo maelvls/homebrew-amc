@@ -37,7 +37,7 @@ class AutoMultipleChoice < Formula
   depends_on "libx11"
   depends_on "netpbm"
   depends_on "opencv" # vendored Pango, stuck at v1.42.4
-  depends_on "openssl@1.1" # required by Net::SSLeay
+  depends_on "openssl@3" # required by Net::SSLeay
   depends_on "perl"
   depends_on "poppler"
   depends_on "qpdf"
