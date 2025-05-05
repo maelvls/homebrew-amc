@@ -1,9 +1,8 @@
 class AutoMultipleChoice < Formula
   desc "Printable tests for students with OCR marking"
   homepage "https://www.auto-multiple-choice.net"
-  url "https://gitlab.com/jojo_boulix/auto-multiple-choice/uploads/3262cbab3161e5e63239a281e9a2ce23/auto-multiple-choice_1.5.0_dist.tar.gz"
-  sha256 "2e48ebb11a215c7882212c46f31d9013bb488c32899104008b0840e67f716948"
-  revision 0
+  url "https://download.auto-multiple-choice.net/amc_1.7.0_dist.tar.gz"
+  sha256 "dfb916aa076f668a6f35253a2c0fc5998db07d2273deb45295a405d8749b7660"
 
   bottle do
     root_url "https://github.com/maelvls/homebrew-amc/releases/download/auto-multiple-choice-1.5.0"
@@ -41,19 +40,21 @@ class AutoMultipleChoice < Formula
   depends_on "libpthread-stubs" => :build
   
   depends_on "adwaita-icon-theme"
-  depends_on "amc-pango"
   depends_on "cairo"
+  depends_on "expat"
   depends_on "freetype"
   depends_on "gettext"
   depends_on "glib"
   depends_on "gobject-introspection"
   depends_on "gtk+3"
+  depends_on "harfbuzz"
   depends_on "imagemagick@6"
   depends_on "libffi"
   depends_on "libx11"
   depends_on "netpbm"
-  depends_on "opencv" # vendored Pango, stuck at v1.42.4
+  depends_on "opencv"
   depends_on "openssl@3" # required by Net::SSLeay
+  depends_on "pango"
   depends_on "perl"
   depends_on "poppler"
   depends_on "qpdf"
@@ -467,7 +468,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PATH", Formula["gobject-introspection"].bin
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["gobject-introspection"].lib}/pkgconfig" # Same
-    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["amc-pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
 
     ENV["OPENSSL_PREFIX"] = Formula["openssl@3"].prefix.to_s
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
@@ -488,7 +489,7 @@ class AutoMultipleChoice < Formula
     # broke things. Now c++11 is needed and I use pkg-config for conveniency.
     # And since pkg-config is used, CFLAGS, CXXFLAGS and LDFLAGS aren't needed
     # anymore.
-    inreplace "Makefile", "opencv\)", "opencv4)"
+    inreplace "Makefile", "opencv)", "opencv4)"
     inreplace "Makefile", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS)", "$(GCC_OPENCV) $(GCC_OPENCV_LIBS) -std=c++11"
     inreplace "Makefile-brew.conf", /^GCC_.*/, ""
     inreplace "Makefile-brew.conf", /^CFLAGS.*/, ""
@@ -518,8 +519,8 @@ class AutoMultipleChoice < Formula
     (bin/"auto-multiple-choice").write_env_script libexec/"bin/auto-multiple-choice",
         PERL5LIB:   ENV["PERL5LIB"],
         # netpbm, poppler and imagemagick@6 must be in the PATH
-        PATH:       "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}"\
-                    ":#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}"\
+        PATH:       "#{libexec}/bin:#{Formula["qpdf"].bin}:#{Formula["netpbm"].bin}" \
+                    ":#{Formula["poppler"].bin}:#{Formula["imagemagick@6"].bin}" \
                     ":#{Formula["gobject-introspection"].bin}:$PATH",
         AMCBASEDIR: prefix
 

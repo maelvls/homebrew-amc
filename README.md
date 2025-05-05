@@ -390,7 +390,7 @@ think the whole idea of a formula that vendors everything is insane.
 I went to <http://deps.cpantesters.org> and I copy-pasted the tree of dependencies
 (except for 'Core modules') into a Ruby array. For example:
 
-```ruby
+```text
       "XML::Simple",
         "XML::SAX",
           "XML::NamespaceSupport",
