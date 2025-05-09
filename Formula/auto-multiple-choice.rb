@@ -422,7 +422,7 @@ class AutoMultipleChoice < Formula
   end
   resource "Net::SSLeay" do
     url "https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.94.tar.gz"
-    sha256 "f8696cfaca98234679efeedc288a9398fcf77176f1f515dbc589ada7c650dc93"
+    sha256 "9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d"
   end
   resource "Mozilla::CA" do
     url "https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz"
@@ -452,6 +452,14 @@ class AutoMultipleChoice < Formula
     url "https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz"
     sha256 "bc315fa12e8f1e3ee5e2f430d90b708a5dc7e47c867dba8dce3a6b8fbe257744"
   end
+  resource "Hash::Merge" do
+    url "https://cpan.metacpan.org/authors/id/H/HE/HERMES/Hash-Merge-0.302.tar.gz"
+    sha256 "ae0522f76539608b61dde14670e79677e0f391036832f70a21f31adde2538644"
+  end
+  resource "Clone::Choose" do
+    url "https://cpan.metacpan.org/authors/id/H/HE/HERMES/Clone-Choose-0.010.tar.gz"
+    sha256 "5623481f58cee8edb96cd202aad0df5622d427e5f748b253851dfd62e5123632"
+  end
 
   def install
     installed = {} # helps me avoid installing the same perl package twice
@@ -470,7 +478,7 @@ class AutoMultipleChoice < Formula
     ENV["PERL_MM_USE_DEFAULT"] = "1" # for always saying "yes" in Makefile.PL
 
     # The Libertine font provided by 'brew cask' is 'Linux Libertine' (no O)
-    inreplace ["AMC-annotate.pl", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
+    inreplace ["AMC-annotate.pl.in", "AMC-perl/AMC/Annotate.pm", "AMC-perl/AMC/Config.pm",
                "AMC-perl/AMC/Filter/plain.pm", "buildpdf.cc"], "Linux Libertine O", "Linux Libertine"
 
     # When using 'sudo auto-multiple-choice latex-link', make sure that the
@@ -503,6 +511,7 @@ class AutoMultipleChoice < Formula
       PERLDIR=#{libexec}/lib/perl5
       DESKTOPDIR=
       METAINFODIR=
+      CSSDIR=#{prefix}/share/auto-multiple-choice/gtk
     EOS
 
     # The actual build
@@ -623,6 +632,8 @@ class AutoMultipleChoice < Formula
           Glib
             ExtUtils::PkgConfig
           ExtUtils::Depends
+      Hash::Merge
+        Clone::Choose
       Locale::gettext
       Module::Load::Conditional
       OpenOffice::OODoc
@@ -760,12 +771,12 @@ class AutoMultipleChoice < Formula
     <<~EOS
       If you don't have Mactex installed, you will need it:
 
-             brew install homebrew/cask/mactex
+             brew install mactex
 
       Where is automultiplechoice.sty? After installing, run:
 
-             sudo auto-multiple-choice latex-link remove
-             sudo auto-multiple-choice latex-link
+             sudo env PATH="$PATH" auto-multiple-choice latex-link remove
+             sudo env PATH="$PATH" auto-multiple-choice latex-link
 
       If you have any problem/remark regarding this formula, you can submit
       an issue to https://github.com/maelvls/homebrew-amc.
