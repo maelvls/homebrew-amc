@@ -496,8 +496,11 @@ class AutoMultipleChoice < Formula
     inreplace "Makefile-brew.conf", /^CXXFLAGS.*/, ""
     inreplace "Makefile-brew.conf", /^LDFLAGS.*/, ""
 
-    # Override three variables that cannot be passed as make variables
-    # because they are reset in Makefile.conf.
+    # Override three variables that cannot be passed as make variables because
+    # they are reset in Makefile.conf.
+    #
+    # The CSSDIR should have been added directly to Makefile-brew.conf upstream
+    # before the 1.7.0 release. But since it wasn't, let's just set it here.
     (buildpath/"Makefile-brew.conf").append_lines <<~EOS
       DOCBOOK_MAN_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/manpages/docbook.xsl
       DOCBOOK_XHTML_XSL = #{Formula["docbook-xsl"].prefix}/docbook-xsl/xhtml/docbook.xsl
