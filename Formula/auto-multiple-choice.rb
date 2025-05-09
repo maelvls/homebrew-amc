@@ -21,9 +21,10 @@ class AutoMultipleChoice < Formula
   # to remove the original PATH of the user so that the latex binaries can be
   # found.
 
+  depends_on "libpthread-stubs" => :build
   depends_on "librsvg" => :build
   depends_on "make" => :build # macOS system make (3.81) breaks vars-subs.pl
-  
+
   # Although libpthread-stubs isn't actually needed on macOS, libxcb
   # used to require lib libpthread-stubs. Because Homebrew doesn't
   # systematically upgrade dependencies anymore, users may hit the
@@ -37,8 +38,7 @@ class AutoMultipleChoice < Formula
   # to install auto-multiple-choice. We can remove this hack in
   # a few months.
   # See: https://github.com/maelvls/homebrew-amc/issues/82#issuecomment-1383690536
-  depends_on "libpthread-stubs" => :build
-  
+
   depends_on "adwaita-icon-theme"
   depends_on "cairo"
   depends_on "expat"
