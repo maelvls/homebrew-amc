@@ -400,9 +400,14 @@ I went to <http://deps.cpantesters.org> and I copy-pasted the tree of dependenci
 I then gather all the ruby array with all dependencies (for example the
 previous example) into a file `list_of_deps`.
 
-Then I run
+Then I run:
 
-    ./list_to_resources.pl < list_of_deps > resources
+```bash
+# Without tests
+brew install cpanm
+cpanm --notest MetaCPAN::Client
+./list_to_resources.pl < list_of_deps > resources
+```
 
 and I copy everything in `resources` to the formula.
 
