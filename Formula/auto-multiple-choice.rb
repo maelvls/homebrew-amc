@@ -421,14 +421,8 @@ class AutoMultipleChoice < Formula
     sha256 "40da40948ecc9c787ed39c95715872679eebfd54243721174993a2003e32ab0a"
   end
   resource "Net::SSLeay" do
-    url "https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.90.tar.gz"
+    url "https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.94.tar.gz"
     sha256 "f8696cfaca98234679efeedc288a9398fcf77176f1f515dbc589ada7c650dc93"
-    patch do
-      # To be removed as soon as Net::SSLeay is patched with a fix. See:
-      # https://trac.macports.org/ticket/63415
-      url "https://gist.githubusercontent.com/maelvls/9a4890e7c5adf2309a453d0cdbffaa19/raw/e32a76eb40321de66bc40d5adff491267a907a0a/net-ssleay-1.90.diff"
-      sha256 "d4db9007ac4551a9f618e42e86d4b3484f8eca871bbf803668eb99a7ac0c1cdb"
-    end
   end
   resource "Mozilla::CA" do
     url "https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz"
