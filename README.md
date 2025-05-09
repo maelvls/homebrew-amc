@@ -7,16 +7,20 @@
 
 | Install                                         | Version |
 | ----------------------------------------------- | :-----: |
-| `brew install maelvls/amc/auto-multiple-choice` |  1.5.0  |
+| `brew install maelvls/amc/auto-multiple-choice` |  1.7.0  |
 
-|           macOS version           | Support | Prebuilt binaries (bottles) |
-|-----------------------------------|:-------:|:---------------------------:|
-| macOS 12 Monterey (Intel)         |   ✔️    |              ❌              |
-| macOS 12 Monterey (Apple Silicon) |   ✔️    |              ❌              |
-| macOS 11 Big Sur (Intel)          |   ✔️    |             ✔️              |
-| macOS 11 Big Sur (Apple Silicon)  |   ✔️    |              ❌              |
-| macOS 10 catalina (Intel)         |   ✔️    |             ✔️              |
-| linux (x86_64)                    |    ❌    |              ❌              |
+|   macOS version   | Build from source | Bottle (Intel)\* | Bottle (Apple Silicon)\* |
+|-------------------|:-----------------:|:----------------:|:------------------------:|
+| macOS 15 Sequoia  |        ✔️         |        ❌         |            ❌             |
+| macOS 14 Sonoma   |        ✔️         |        ❌         |            ✔️            |
+| macOS 13 Ventura  |        ✔️         |        ❌         |            ❌             |
+| macOS 12 Monterey |        ✔️         |        ❌         |            ❌             |
+| macOS 11 Big Sur  |        ✔️         |        ❌         |            ❌             |
+| macOS 10 catalina |        ✔️         |        ❌         |            ❌             |
+
+Regarding Linux, bottles are built for x86_64, but not for arm64.
+
+> \*Bottles are precompiled binaries that are faster to install.
 
 - **To run it**: open [terminal](https://www.iterm2.com) and run
   `auto-multiple-choice`.
@@ -34,6 +38,17 @@ using GitHub Actions. The bottles are uploaded to GitHub Packages.
 [portfile]: https://github.com/macports/macports-ports/blob/master/x11/auto-multiple-choice/Portfile
 
 ## News
+
+### May 9, 2025: 1.7.0 released!
+
+The new version of `auto-multiple-choice` is out! Bottles are now available for
+macOS 14 Sonoma (Apple Silicon only). Bottles for macOS 15 Sequoia will come
+soon ([as soon as opencv gets a bottle for
+Sequoia](https://github.com/maelvls/homebrew-amc/pull/96)).
+
+Looking at the analytics, the number of installations went down to 570 for the
+past year, which makes sense since I haven't been keeping up with issues and
+releases.
 
 ### Dec 4, 2021: M1 support, 1083 installations in 2021!
 
