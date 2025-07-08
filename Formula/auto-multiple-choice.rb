@@ -12,7 +12,8 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/maelvls/amc"
-    sha256 arm64_sonoma: "2e82cac916e00b387a7ed5ca25c5e1b4aba37ef71c0a9a9039672886f6bce062"
+    rebuild 1
+    sha256 arm64_sonoma: "346f952af55928d2fd2fcdcca6ab605369b9861b89ce375d3452c709c1d94f3c"
   end
 
   # (1) I cannot set 'tex' as a default dependency as it is not handled by
