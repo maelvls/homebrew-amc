@@ -4,6 +4,12 @@ class AutoMultipleChoice < Formula
   url "https://download.auto-multiple-choice.net/amc_1.7.0_dist.tar.gz"
   sha256 "dfb916aa076f668a6f35253a2c0fc5998db07d2273deb45295a405d8749b7660"
 
+  livecheck do
+    url "https://download.auto-multiple-choice.net"
+    strategy :page_match
+    regex(/amc_(\d+(?:\.\d+)+)_dist\.t/i)
+  end
+
   bottle do
     root_url "https://ghcr.io/v2/maelvls/amc"
     sha256 arm64_sonoma: "2e82cac916e00b387a7ed5ca25c5e1b4aba37ef71c0a9a9039672886f6bce062"
