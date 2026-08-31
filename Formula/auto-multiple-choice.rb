@@ -57,7 +57,7 @@ class AutoMultipleChoice < Formula
   depends_on "libffi"
   depends_on "libx11"
   depends_on "netpbm"
-  depends_on "opencv"
+  depends_on "opencv@4"
   depends_on "openssl@3" # required by Net::SSLeay
   depends_on "pango"
   depends_on "perl"
@@ -476,6 +476,7 @@ class AutoMultipleChoice < Formula
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["libffi"].lib}/pkgconfig" # for Glib::Object::Introspection
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["gobject-introspection"].lib}/pkgconfig" # Same
     ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["pango"].lib}/pkgconfig" # for Pango & AMC-buildpdf
+    ENV.prepend_path "PKG_CONFIG_PATH", "#{Formula["opencv@4"].lib}/pkgconfig"
 
     ENV["OPENSSL_PREFIX"] = Formula["openssl@3"].prefix.to_s
     ENV["PERL_MM_OPT"] = "INSTALL_BASE=#{libexec}" # for cpan (Makefile.PL)
