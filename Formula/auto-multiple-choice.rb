@@ -12,7 +12,7 @@ class AutoMultipleChoice < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/maelvls/amc"
-    rebuild 3
+    rebuild 4
     sha256 cellar: :any, arm64_sequoia: "9622d22752944fece0301be997def5fe3cb02fe417199df4133ef0932fa1e5cb"
   end
 
